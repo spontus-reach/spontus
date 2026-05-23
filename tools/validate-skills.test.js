@@ -6,8 +6,10 @@ const test = require("node:test");
 
 const { validateSkills } = require("./validate-skills");
 
-function makeFixture() {
-  return fs.mkdtempSync(path.join(os.tmpdir(), "spontus-skills-"));
+function makeFixture(t) {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "spontus-skills-"));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  return root;
 }
 
 function writeSkill(root, directory, content) {
@@ -16,8 +18,8 @@ function writeSkill(root, directory, content) {
   fs.writeFileSync(path.join(skillDir, "SKILL.md"), content);
 }
 
-test("valid skill directories pass and produce inventory rows", () => {
-  const root = makeFixture();
+test("valid skill directories pass and produce inventory rows", (t) => {
+  const root = makeFixture(t);
 
   writeSkill(
     root,
@@ -42,8 +44,21 @@ test("valid skill directories pass and produce inventory rows", () => {
   );
 });
 
-test("missing SKILL.md fails", () => {
-  const root = makeFixture();
+test("front matter can close at end of file", (t) => {
+  const root = makeFixture(t);
+  writeSkill(root, "alpha", "---\nname: alpha\ndescription: Alpha skill\n---");
+
+  const result = validateSkills(root);
+
+  assert.equal(result.ok, true);
+  assert.deepEqual(
+    result.rows.map((row) => [row.directory, row.name, row.status]),
+    [["alpha", "alpha", "ok"]],
+  );
+});
+
+test("missing SKILL.md fails", (t) => {
+  const root = makeFixture(t);
   fs.mkdirSync(path.join(root, "empty"), { recursive: true });
 
   const result = validateSkills(root);
@@ -52,8 +67,8 @@ test("missing SKILL.md fails", () => {
   assert.match(result.failures.join("\n"), /Missing .*SKILL\.md/);
 });
 
-test("missing front matter fails", () => {
-  const root = makeFixture();
+test("missing front matter fails", (t) => {
+  const root = makeFixture(t);
   writeSkill(root, "alpha", "# Alpha\n");
 
   const result = validateSkills(root);
@@ -62,8 +77,8 @@ test("missing front matter fails", () => {
   assert.match(result.failures.join("\n"), /missing YAML front matter/);
 });
 
-test("missing required front matter fields fail", () => {
-  const root = makeFixture();
+test("missing required front matter fields fail", (t) => {
+  const root = makeFixture(t);
   writeSkill(root, "alpha", "---\nname: alpha\n---\nBody\n");
 
   const result = validateSkills(root);
@@ -72,8 +87,8 @@ test("missing required front matter fields fail", () => {
   assert.match(result.failures.join("\n"), /missing description/);
 });
 
-test("duplicate skill names fail", () => {
-  const root = makeFixture();
+test("duplicate skill names fail and mark inventory rows", (t) => {
+  const root = makeFixture(t);
   writeSkill(
     root,
     "alpha",
@@ -89,4 +104,11 @@ test("duplicate skill names fail", () => {
 
   assert.equal(result.ok, false);
   assert.match(result.failures.join("\n"), /Duplicate skill name "duplicate"/);
+  assert.deepEqual(
+    result.rows.map((row) => [row.directory, row.status]),
+    [
+      ["alpha", "duplicate name"],
+      ["beta", "duplicate name"],
+    ],
+  );
 });

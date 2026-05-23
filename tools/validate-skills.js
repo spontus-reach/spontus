@@ -2,7 +2,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 function parseFrontMatter(content) {
-  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/);
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/);
   if (!match) return null;
 
   const fields = {};
@@ -17,14 +17,13 @@ function parseFrontMatter(content) {
 }
 
 function validateSkills(root = ".agents/skills") {
-  const rows = [];
+  const records = [];
   const failures = [];
-  const names = new Map();
 
   if (!fs.existsSync(root)) {
     return {
       ok: false,
-      rows,
+      rows: [],
       failures: [`Missing skills directory: ${root}`],
     };
   }
@@ -37,10 +36,10 @@ function validateSkills(root = ".agents/skills") {
 
     if (!fs.existsSync(skillFile)) {
       failures.push(`Missing ${skillFile}`);
-      rows.push({
+      records.push({
         directory: entry.name,
         name: "",
-        status: "missing SKILL.md",
+        statusParts: ["missing SKILL.md"],
       });
       continue;
     }
@@ -50,10 +49,10 @@ function validateSkills(root = ".agents/skills") {
 
     if (!fields) {
       failures.push(`${skillFile} is missing YAML front matter`);
-      rows.push({
+      records.push({
         directory: entry.name,
         name: "",
-        status: "missing front matter",
+        statusParts: ["missing front matter"],
       });
       continue;
     }
@@ -62,27 +61,47 @@ function validateSkills(root = ".agents/skills") {
     if (!fields.name) missing.push("name");
     if (!fields.description) missing.push("description");
 
-    if (fields.name) {
-      const duplicate = names.get(fields.name);
-      if (duplicate) {
-        failures.push(
-          `Duplicate skill name "${fields.name}" in ${duplicate} and ${skillFile}`,
-        );
-      } else {
-        names.set(fields.name, skillFile);
-      }
-    }
-
     if (missing.length > 0) {
       failures.push(`${skillFile} is missing ${missing.join(", ")}`);
     }
 
-    rows.push({
+    records.push({
       directory: entry.name,
       name: fields.name || "",
-      status: missing.length > 0 ? `missing ${missing.join(", ")}` : "ok",
+      skillFile,
+      statusParts: missing.length > 0 ? [`missing ${missing.join(", ")}`] : [],
     });
   }
+
+  const names = new Map();
+  for (const record of records) {
+    if (!record.name) continue;
+
+    const matchingRecords = names.get(record.name) || [];
+    matchingRecords.push(record);
+    names.set(record.name, matchingRecords);
+  }
+
+  for (const [name, matchingRecords] of names.entries()) {
+    if (matchingRecords.length < 2) continue;
+
+    failures.push(
+      `Duplicate skill name "${name}" in ${matchingRecords
+        .map((record) => record.skillFile)
+        .join(" and ")}`,
+    );
+
+    for (const record of matchingRecords) {
+      record.statusParts.push("duplicate name");
+    }
+  }
+
+  const rows = records.map((record) => ({
+    directory: record.directory,
+    name: record.name,
+    status:
+      record.statusParts.length > 0 ? record.statusParts.join("; ") : "ok",
+  }));
 
   rows.sort((a, b) => a.directory.localeCompare(b.directory));
 
