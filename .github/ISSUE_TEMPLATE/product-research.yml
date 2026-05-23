@@ -1,0 +1,60 @@
+name: Product research
+description: Capture a research question, market insight, or source to investigate.
+title: "research: "
+labels:
+  - research
+  - product
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for research that affects Spontus product direction, market understanding, or deal workflow assumptions.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Research area
+      options:
+        - Team-side demand
+        - Sponsor-side demand
+        - Competitive landscape
+        - Go-to-market
+        - Deal workflow
+        - Pricing or revenue
+        - Compliance or legal
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: Research question
+      description: What do we need to learn or verify?
+      placeholder: "Example: Which sponsor categories are most likely to sponsor Cal Poly club teams first?"
+    validations:
+      required: true
+  - type: textarea
+    id: current-evidence
+    attributes:
+      label: Current evidence
+      description: Add known facts, links, notes, or related Notion pages.
+      placeholder: Summarize what we already know.
+    validations:
+      required: false
+  - type: textarea
+    id: decision-impact
+    attributes:
+      label: Decision impact
+      description: What product, GTM, or prioritization decision depends on this?
+      placeholder: This will affect whether we prioritize sponsor listings, team profiles, or concierge matching.
+    validations:
+      required: true
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: Urgency
+      options:
+        - Now
+        - This week
+        - Later
+    validations:
+      required: true

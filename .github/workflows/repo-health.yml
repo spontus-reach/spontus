@@ -1,0 +1,53 @@
+name: Repo Health
+
+on:
+  schedule:
+    - cron: "0 16 * * 5"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docs:
+    name: Documentation health
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run markdownlint
+        run: npx --yes markdownlint-cli2
+
+      - name: Check links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --config .lychee.toml "**/*.md"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  skills:
+    name: Skill structure
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate skill structure
+        run: npm run validate:skills

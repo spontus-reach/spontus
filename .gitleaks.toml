@@ -1,0 +1,10 @@
+title = "spontus gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Repository-specific allowlist"
+paths = [
+  '''(^|/)README\.md$''',
+]

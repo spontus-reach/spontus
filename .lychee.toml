@@ -1,0 +1,8 @@
+exclude_path = [
+  ".git",
+  "node_modules",
+]
+
+max_retries = 2
+timeout = 20
+accept = [200, 206, 429]

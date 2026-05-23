@@ -1,0 +1,60 @@
+name: Feature idea
+description: Propose a product feature for teams, sponsors, or admins.
+title: "feat: "
+labels:
+  - feature
+  - product
+body:
+  - type: dropdown
+    id: user-side
+    attributes:
+      label: Who is this for?
+      options:
+        - Team
+        - Sponsor
+        - Admin or operator
+        - Multiple sides
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user pain or business risk does this solve?
+      placeholder: "Example: Sponsor relationships die when team officers graduate."
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed solution
+      placeholder: Describe the smallest useful version of the feature.
+    validations:
+      required: true
+  - type: textarea
+    id: success
+    attributes:
+      label: Success criteria
+      placeholder: How would we know this worked?
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - Must have for MVP
+        - Should have soon
+        - Later
+        - Research first
+    validations:
+      required: true
+  - type: checkboxes
+    id: impact
+    attributes:
+      label: Product impact
+      options:
+        - label: Improves team discovery or profile quality
+        - label: Improves sponsor discovery or deal confidence
+        - label: Improves deal structure, fulfillment, or renewal
+        - label: Supports manual concierge workflow

@@ -1,0 +1,52 @@
+max-files-changed: 100
+
+github-actions:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/workflows/**"
+          - ".github/actions/**"
+          - ".github/ISSUE_TEMPLATE/**"
+          - "renovate.json"
+
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "renovate.json"
+          - "package.json"
+
+docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.md"
+
+skills:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".agents/skills/**"
+
+agent-config:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "AGENTS.md"
+          - ".agents/**"
+
+agents:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".agents/agents/**"
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/workflows/**"
+          - ".markdownlint-cli2.yaml"
+          - ".lychee.toml"
+
+security:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/workflows/secrets.yml"
+          - ".github/workflows/dependency-review.yml"
+          - ".github/dependency-review-config.yml"
+          - ".gitleaks.toml"
+          - "SECURITY.md"

@@ -1,0 +1,91 @@
+name: Decision Log
+
+on:
+  issues:
+    types:
+      - opened
+      - edited
+      - labeled
+      - closed
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate decision log
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Fetch issue with comments
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+        run: gh issue view "$NUMBER" --json body,comments,labels,title > issue.json
+
+      - name: Analyze decision log
+        run: node tools/decision-log.js issue.json > decision-log.json
+
+      - name: Ensure decision labels exist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh label create "decision" --color "5319e7" --description "Requires an explicit decision log" 2>/dev/null || true
+          gh label create "needs-decision-log" --color "fbca04" --description "Decision issue is missing required decision-log sections" 2>/dev/null || true
+
+      - name: Update labels
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+        run: |
+          add_labels="$(node -e "const r=require('./decision-log.json'); console.log(r.labelsToAdd.join(','))")"
+          remove_labels="$(node -e "const r=require('./decision-log.json'); console.log(r.labelsToRemove.join(','))")"
+
+          if [[ -n "$add_labels" ]]; then
+            gh issue edit "$NUMBER" --add-label "$add_labels"
+          fi
+
+          if [[ -n "$remove_labels" ]]; then
+            IFS=',' read -ra labels <<< "$remove_labels"
+            for label in "${labels[@]}"; do
+              gh issue edit "$NUMBER" --remove-label "$label" || true
+            done
+          fi
+
+      - name: Comment with decision-log template
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+        run: |
+          needs_comment="$(node -e "const r=require('./decision-log.json'); console.log(r.needsComment ? 'yes' : 'no')")"
+          if [[ "$needs_comment" == "yes" ]]; then
+            node -e "const fs=require('fs'); const r=require('./decision-log.json'); fs.writeFileSync('decision-comment.md', r.comment)"
+            gh issue comment "$NUMBER" --body-file decision-comment.md
+          fi
+
+      - name: Fail closed issues missing decision log
+        if: ${{ github.event.action == 'closed' }}
+        run: |
+          complete="$(node -e "const r=require('./decision-log.json'); console.log(r.complete ? 'yes' : 'no')")"
+          applies="$(node -e "const r=require('./decision-log.json'); console.log(r.applies ? 'yes' : 'no')")"
+          if [[ "$applies" == "yes" && "$complete" != "yes" ]]; then
+            echo "Decision issue was closed without a complete decision log." >&2
+            exit 1
+          fi
