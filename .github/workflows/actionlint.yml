@@ -30,6 +30,6 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Run actionlint
-        uses: docker://rhysd/actionlint:latest
+        uses: docker://rhysd/actionlint:1.7.12
         with:
           args: -color
