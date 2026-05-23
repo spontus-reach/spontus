@@ -1,0 +1,70 @@
+name: Pull Request Quality
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+      - ready_for_review
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  metadata:
+    name: Validate metadata
+    if: ${{ github.event.pull_request.draft == false }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check title and body
+        shell: bash
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          set -euo pipefail
+
+          title_pattern='^(feat|fix|docs|chore|ci|refactor|test|build|perf)(\([a-z0-9._-]+\))?: .+'
+
+          if [[ ! "$PR_TITLE" =~ $title_pattern ]]; then
+            {
+              echo "Pull request title must use one of these prefixes:"
+              echo "feat, fix, docs, chore, ci, refactor, test, build, perf"
+              echo
+              echo "Example: docs(skills): add figma review guide"
+            } >&2
+            exit 1
+          fi
+
+          if [[ -z "${PR_BODY//[[:space:]]/}" ]]; then
+            echo "Pull request body must not be empty." >&2
+            exit 1
+          fi
+
+          if [[ "$PR_BODY" != *"## Summary"* ]]; then
+            echo "Pull request body must include a '## Summary' section." >&2
+            exit 1
+          fi
+
+          if [[ "$PR_BODY" != *"## Verification"* ]]; then
+            echo "Pull request body must include a '## Verification' section." >&2
+            exit 1
+          fi
+
+          if [[ "$PR_BODY" == *"Describe the change"* ]]; then
+            echo "Replace the placeholder text in the Summary section." >&2
+            exit 1
+          fi
+
+          if [[ "$PR_BODY" == *"List the checks you ran"* ]]; then
+            echo "Replace the placeholder text in the Verification section." >&2
+            exit 1
+          fi

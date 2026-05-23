@@ -1,0 +1,8 @@
+{
+  "name": "spontus",
+  "private": true,
+  "scripts": {
+    "test": "node --test",
+    "validate:skills": "node tools/validate-skills.js"
+  }
+}

@@ -1,0 +1,55 @@
+name: Issue Auto Triage
+
+on:
+  issues:
+    types:
+      - opened
+      - edited
+      - reopened
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  triage:
+    name: Apply issue labels
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Build label list
+        env:
+          ISSUE_JSON: ${{ toJson(github.event.issue) }}
+        run: |
+          printf '%s' "$ISSUE_JSON" > issue.json
+          labels="$(node tools/issue-triage.js issue.json)"
+          echo "labels=$labels" >> "$GITHUB_ENV"
+
+      - name: Ensure labels exist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          IFS=',' read -ra labels <<< "$labels"
+          for label in "${labels[@]}"; do
+            gh label create "$label" --color "ededed" --description "Auto-managed by issue triage" 2>/dev/null || true
+          done
+
+      - name: Apply labels
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+        run: gh issue edit "$NUMBER" --add-label "$labels"

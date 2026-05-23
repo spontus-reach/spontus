@@ -1,0 +1,64 @@
+name: Sponsor lead
+description: Track a sponsor or brand that could participate in the Spontus marketplace.
+title: "sponsor: "
+labels:
+  - sponsor
+  - lead
+body:
+  - type: input
+    id: sponsor-name
+    attributes:
+      label: Sponsor or brand name
+      placeholder: "Example: Fluid Nutrition"
+    validations:
+      required: true
+  - type: dropdown
+    id: sponsor-type
+    attributes:
+      label: Sponsor category
+      options:
+        - Nutrition or beverage
+        - Apparel
+        - Equipment
+        - Recovery or wellness
+        - Local business
+        - Agency or sports marketing
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: fit
+    attributes:
+      label: Why this sponsor fits Spontus
+      placeholder: Explain the match with club sports, local teams, events, or student audiences.
+    validations:
+      required: true
+  - type: textarea
+    id: known-connections
+    attributes:
+      label: Known connections or source
+      description: Mention alumni, team referrals, prior sponsorships, or how this lead was found.
+      placeholder: "Example: Triathlon already has a relationship through an alumni contact."
+    validations:
+      required: false
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Pipeline stage
+      options:
+        - Lead identified
+        - Contact found
+        - Outreach sent
+        - Discovery scheduled
+        - Offer discussed
+        - Deal agreed
+        - Not a fit
+    validations:
+      required: true
+  - type: textarea
+    id: next-step
+    attributes:
+      label: Next step
+      placeholder: "Example: Find regional marketing contact and send intro email."
+    validations:
+      required: true

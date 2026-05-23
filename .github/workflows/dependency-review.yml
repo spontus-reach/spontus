@@ -1,0 +1,41 @@
+name: Dependency Review
+
+on:
+  pull_request:
+    paths:
+      - "**/package.json"
+      - "**/package-lock.json"
+      - "**/npm-shrinkwrap.json"
+      - "**/pnpm-lock.yaml"
+      - "**/yarn.lock"
+      - "**/bun.lockb"
+      - "renovate.json"
+      - ".github/dependency-review-config.yml"
+      - ".github/workflows/dependency-review.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  dependency-review:
+    name: Review dependency changes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Skip unsupported private repository
+        if: ${{ github.event.repository.private }}
+        run: |
+          echo "::notice::GitHub dependency review requires Dependency Graph and GitHub Advanced Security for private repositories. Skipping until those repository features are enabled."
+
+      - name: Dependency Review
+        if: ${{ github.event.repository.private == false }}
+        uses: actions/dependency-review-action@v4
+        with:
+          config-file: ./.github/dependency-review-config.yml

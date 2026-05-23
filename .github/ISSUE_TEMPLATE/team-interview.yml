@@ -1,0 +1,63 @@
+name: Team interview
+description: Track a team-side interview, sponsorship debrief, or outreach target.
+title: "interview: "
+labels:
+  - research
+  - team-side
+body:
+  - type: input
+    id: team
+    attributes:
+      label: Team or organization
+      placeholder: "Example: Cal Poly Men's Rugby"
+    validations:
+      required: true
+  - type: input
+    id: contact
+    attributes:
+      label: Contact person or role
+      placeholder: "Example: Sponsorship coordinator, president, treasurer"
+    validations:
+      required: false
+  - type: dropdown
+    id: interview-status
+    attributes:
+      label: Interview status
+      options:
+        - Target identified
+        - Outreach sent
+        - Scheduled
+        - Completed
+        - Follow-up needed
+        - Closed
+    validations:
+      required: true
+  - type: textarea
+    id: questions
+    attributes:
+      label: Questions to answer
+      placeholder: What do we need to learn from this team?
+      value: |
+        - Does the team currently have sponsors?
+        - How did they get them?
+        - What did sponsors provide?
+        - What did the team promise in return?
+        - What breaks when officers graduate?
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes or transcript summary
+      description: Add findings after the conversation.
+      placeholder: Capture concrete deal examples, quotes, sponsor names, and follow-up tasks.
+    validations:
+      required: false
+  - type: textarea
+    id: product-implications
+    attributes:
+      label: Product implications
+      description: What should this change about Spontus?
+      placeholder: "Example: Hosted events should be first-class assets on team profiles."
+    validations:
+      required: false

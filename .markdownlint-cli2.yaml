@@ -1,0 +1,29 @@
+config:
+  default: true
+
+  # Skill files use YAML front matter, long prompt text, XML-like examples,
+  # and compact templates that do not map cleanly to prose-style Markdown.
+  MD013: false # line length
+  MD022: false # blanks around headings
+  MD031: false # blanks around fenced code blocks
+  MD032: false # blanks around lists
+  MD033: false # inline HTML
+  MD036: false # emphasis used as heading
+  MD040: false # fenced code block language
+  MD041: false # first line heading
+  MD047: false # final newline
+  MD049: false # emphasis style
+  MD029: false # ordered list item prefix
+  MD034: false # bare URL
+  MD060: false # table column style
+
+globs:
+  - "**/*.md"
+
+ignores:
+  - "**/node_modules/**"
+  - "**/.git/**"
+
+gitignore: true
+noBanner: true
+noProgress: true

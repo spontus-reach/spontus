@@ -1,0 +1,22 @@
+# Default owner for repository changes.
+* @BrianLiDesign
+
+# GitHub automation and repository governance.
+/.github/ @BrianLiDesign
+/.github/dependency-review-config.yml @BrianLiDesign
+
+# Agent and team-skill instructions.
+/.agents/ @BrianLiDesign
+/AGENTS.md @BrianLiDesign
+
+# Local validation tooling.
+/tools/ @BrianLiDesign
+/package.json @BrianLiDesign
+/renovate.json @BrianLiDesign
+
+# Documentation and security policy.
+*.md @BrianLiDesign
+/SECURITY.md @BrianLiDesign
+/.gitleaks.toml @BrianLiDesign
+/.lychee.toml @BrianLiDesign
+/.markdownlint-cli2.yaml @BrianLiDesign
