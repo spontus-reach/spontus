@@ -16,6 +16,9 @@ config:
   MD029: false # ordered list item prefix
   MD034: false # bare URL
   MD060: false # table column style
+  MD007: false # migrated Notion lists often preserve four-space nesting
+  MD024: false # imported docs can repeat section names across page fragments
+  MD025: false # imported long-form docs can include multiple top-level source pages
 
 globs:
   - "**/*.md"

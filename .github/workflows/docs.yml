@@ -3,6 +3,7 @@ name: Documentation CI
 on:
   pull_request:
     paths:
+      - "docs/**/*.md"
       - "**/*.md"
       - ".github/workflows/docs.yml"
       - ".markdownlint-cli2.yaml"
@@ -11,6 +12,7 @@ on:
     branches:
       - main
     paths:
+      - "docs/**/*.md"
       - "**/*.md"
       - ".github/workflows/docs.yml"
       - ".markdownlint-cli2.yaml"

@@ -16,6 +16,7 @@
 
 # Documentation and security policy.
 *.md @BrianLiDesign
+/docs/ @BrianLiDesign @joshnaim1
 /SECURITY.md @BrianLiDesign
 /.gitleaks.toml @BrianLiDesign
 /.lychee.toml @BrianLiDesign
