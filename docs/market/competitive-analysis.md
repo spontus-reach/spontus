@@ -1,5 +1,13 @@
 # Competitive Analysis
 
+**Status:** Reference
+**Owner:** Brian + Joshua
+**Last reviewed:** 2026-05-24
+**Source:** Migrated Notion competitive analysis
+**Use this for:** Competitive and alternative-market context.
+
+Back to [Documentation Hub](../README.md).
+
 ## Core Differentiation
 
 Spontus focuses on verified club sports teams, persistent team profiles, season-long sponsorship relationships, and structured deal follow-through.

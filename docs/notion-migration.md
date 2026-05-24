@@ -1,10 +1,18 @@
 # Notion Migration Guide
 
-Use this guide when moving future Notion pages into the Obsidian vault.
+**Status:** Canonical
+**Owner:** Brian + Joshua
+**Last reviewed:** 2026-05-24
+**Source:** Notion migration process
+**Use this for:** Moving future Notion pages into the documentation system consistently.
+
+Back to [Documentation Hub](./README.md).
+
+Use this guide when moving future Notion pages into the repository documentation.
 
 ## Target Folders
 
-| Notion content | Vault folder |
+| Notion content | Documentation folder |
 | --- | --- |
 | Product requirements, UX flows, onboarding, design systems | `product/` |
 | Product vision, positioning, definitions, audits, progress logs | `strategy/` |
@@ -19,10 +27,10 @@ Use this guide when moving future Notion pages into the Obsidian vault.
 2. Convert content to clean markdown.
 3. Remove Notion UUIDs from filenames.
 4. Use lowercase dash-separated filenames.
-5. Convert internal Notion links to Obsidian wikilinks.
+5. Convert internal Notion links to standard relative Markdown links.
 6. Keep tables as markdown tables when possible.
 7. Convert callouts into blockquotes or short sections.
-8. Add the migrated page to [[home]] or another relevant index.
+8. Add the migrated page to [Documentation Hub](./README.md) or another relevant index.
 9. Run markdown and link checks before merging.
 
 ## Cleanup Rules
@@ -38,7 +46,7 @@ Use this guide when moving future Notion pages into the Obsidian vault.
 - [ ] File lives in the right folder.
 - [ ] Filename has no UUID.
 - [ ] Top heading matches the page title.
-- [ ] Internal references use wikilinks.
+- [ ] Internal references use standard relative Markdown links.
 - [ ] Tables render cleanly.
-- [ ] [[home]] or another index links to the page.
+- [ ] [Documentation Hub](./README.md) or another index links to the page.
 - [ ] Markdown and link checks pass.

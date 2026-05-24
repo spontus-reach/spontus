@@ -1,5 +1,13 @@
 # Market Research
 
+**Status:** Reference
+**Owner:** Brian + Joshua
+**Last reviewed:** 2026-05-24
+**Source:** Migrated Notion market research
+**Use this for:** Market evidence and category context.
+
+Back to [Documentation Hub](../README.md).
+
 ## Market Thesis
 
 Grassroots sports sponsorship is fragmented. Demand exists on both sides, but the market lacks shared infrastructure for discovery, verification, deal structure, and continuity.

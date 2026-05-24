@@ -1,7 +1,16 @@
 # Conversational Onboarding
 
-**Status:** Future feature — not MVP
+**Status:** Reference
+**Owner:** Brian + Joshua
+**Last reviewed:** 2026-05-24
 **Source:** Advisor conversation, May 23 2026
+**Use this for:** Future onboarding concept exploration, not current MVP scope.
+
+Back to [Documentation Hub](../README.md).
+
+## Summary / Why This Matters
+
+This is a future-feature reference. It captures why conversational onboarding could improve profile creation later, but [MVP Overview](./mvp-overview.md) remains the source of truth for MVP scope.
 
 ## The Idea
 

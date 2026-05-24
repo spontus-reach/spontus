@@ -1,5 +1,13 @@
 # Day 1 Brainstorming
 
+**Status:** Reference
+**Owner:** Brian + Joshua
+**Last reviewed:** 2026-05-24
+**Source:** Migrated Notion meeting notes
+**Use this for:** Raw brainstorm context from the first working session.
+
+Back to [Documentation Hub](../README.md).
+
 **Date:** 2026-05-18
 **Attendees:** Joshua Naim
 **Category:** Standup

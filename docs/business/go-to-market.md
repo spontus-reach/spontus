@@ -1,5 +1,13 @@
 # Go-To-Market Strategy
 
+**Status:** Reference
+**Owner:** Brian + Joshua
+**Last reviewed:** 2026-05-24
+**Source:** Migrated Notion GTM notes
+**Use this for:** Historical GTM context and outreach ideas.
+
+Back to [Documentation Hub](../README.md).
+
 ## Phase 1: Learn Manually
 
 Interview team officers, sponsorship coordinators, and sponsors. Focus on how deals are sourced, what sponsors provide, what teams promise, and where relationships break during officer turnover.

@@ -1,5 +1,17 @@
 # Platform Concepts: Clubs & Brands Definition
 
+**Status:** Canonical
+**Owner:** Brian + Joshua
+**Last reviewed:** 2026-05-24
+**Source:** Migrated Notion platform definitions
+**Use this for:** Core entity definitions and platform relationship language.
+
+Back to [Documentation Hub](../README.md).
+
+## Summary / Why This Matters
+
+This page defines the two sides of the marketplace: verified club teams and brand sponsors. Use it when naming product objects, writing specs, designing onboarding, or deciding whether a workflow belongs to the team side, sponsor side, or shared platform layer.
+
 *Last Updated: 2026-05-24*
 
 *This document defines the core entities in the Spontus ecosystem: Club Teams and Brand Sponsors. It outlines their definitions, capabilities, responsibilities, and how they interact within the platform.*

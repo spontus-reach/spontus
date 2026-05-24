@@ -1,5 +1,13 @@
 # Grassroots Sports Sponsorship Platform — Research & Strategy Summary
 
+**Status:** Reference
+**Owner:** Brian + Joshua
+**Last reviewed:** 2026-05-24
+**Source:** Migrated Notion meeting notes
+**Use this for:** Research strategy context from the first working session.
+
+Back to [Documentation Hub](../README.md).
+
 **Date:** 2026-05-18
 
 ## The Idea

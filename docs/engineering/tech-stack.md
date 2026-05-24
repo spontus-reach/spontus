@@ -1,5 +1,13 @@
 # Tech Stack
 
+**Status:** Reference
+**Owner:** Brian + Joshua
+**Last reviewed:** 2026-05-24
+**Source:** Migrated Notion tech stack notes
+**Use this for:** Current technical planning context.
+
+Back to [Documentation Hub](../README.md).
+
 This page tracks product and engineering assumptions. It should stay lightweight until the manual workflow proves what needs to be automated.
 
 ## Product Modules To Validate First

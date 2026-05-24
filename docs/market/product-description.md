@@ -1,5 +1,13 @@
 # Product Description
 
+**Status:** Reference
+**Owner:** Brian + Joshua
+**Last reviewed:** 2026-05-24
+**Source:** Migrated Notion product description
+**Use this for:** Product framing and descriptive language.
+
+Back to [Documentation Hub](../README.md).
+
 Spontus is a sponsorship operating system for grassroots teams and the brands that want to reach them.
 
 ## Core Problem

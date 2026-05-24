@@ -1,5 +1,13 @@
 # Progress Log
 
+**Status:** Draft
+**Owner:** Brian + Joshua
+**Last reviewed:** 2026-05-24
+**Source:** Migrated Notion progress log
+**Use this for:** Ongoing operating history and work log.
+
+Back to [Documentation Hub](../README.md).
+
 ## Day 1 — May 19, 2026
 
 ### Conversations

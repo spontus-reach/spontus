@@ -1,5 +1,17 @@
 # Competitive Research
 
+**Status:** Reference
+**Owner:** Brian + Joshua
+**Last reviewed:** 2026-05-24
+**Source:** Migrated Notion competitive research
+**Use this for:** Understanding competitor gaps, alternatives, and positioning evidence.
+
+Back to [Documentation Hub](../README.md).
+
+## Summary / Why This Matters
+
+This page supports Spontus positioning by showing that existing sports and sponsorship tools either target larger youth programs, D1 athletics, individual NIL, or generic sponsorship markets. Use it as evidence for why college club sports remain underserved, not as the current product spec.
+
 ## TeamSnap - Primary US Competitor
 
 ### Company Overview

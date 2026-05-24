@@ -1,5 +1,17 @@
 # Product Vision
 
+**Status:** Canonical
+**Owner:** Brian + Joshua
+**Last reviewed:** 2026-05-24
+**Source:** Migrated Notion product vision
+**Use this for:** Product thesis, marketplace model, strategic tradeoffs, and feature priority.
+
+Back to [Documentation Hub](../README.md).
+
+## Summary / Why This Matters
+
+This page explains the strategic model behind Spontus: a verified sponsorship marketplace where brands post opportunities and college club teams apply with standardized profiles. Use [MVP Overview](../product/mvp-overview.md) for current MVP scope; use this page for the deeper product thesis and tradeoffs.
+
 ## The Model: LinkedIn for Sponsorships
 
 Brands post sponsorship listings with specific criteria. Verified club teams browse and apply. Platform handles verification, standardized profiles, and deal facilitation.
