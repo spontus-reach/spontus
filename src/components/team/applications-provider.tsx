@@ -43,11 +43,6 @@ export function ApplicationsProvider({
 
   const createApplication = useCallback(
     (listingId: string, teamId: string, fitNote?: string): Application | null => {
-      const existing = applications.find(
-        (a) => a.teamId === teamId && a.listingId === listingId
-      );
-      if (existing) return null;
-
       const newApp: Application = {
         id: `app-${Date.now()}`,
         listingId,
@@ -57,10 +52,19 @@ export function ApplicationsProvider({
         submittedAt: new Date().toISOString().split("T")[0],
       };
 
-      setApplications((prev) => [...prev, newApp]);
-      return newApp;
+      let created = false;
+      setApplications((prev) => {
+        const duplicate = prev.some(
+          (a) => a.teamId === teamId && a.listingId === listingId
+        );
+        if (duplicate) return prev;
+        created = true;
+        return [...prev, newApp];
+      });
+
+      return created ? newApp : null;
     },
-    [applications]
+    []
   );
 
   return (
