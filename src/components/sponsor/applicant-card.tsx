@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { VerificationStatusBadge } from "@/components/team/verification-status-badge";
 import { AssetOverlapSummary } from "./asset-overlap-summary";
 import { getAssetOverlap } from "@/lib/asset-overlap";
-import { APPLICATION_STATUS_LABELS } from "@/lib/constants";
+import { APPLICATION_STATUS_LABELS, getDeclineReasonLabel } from "@/lib/constants";
 import { getTeamById } from "@/lib/mock-data";
 import type { Application, SponsorshipListing } from "@/lib/types";
 
@@ -109,6 +109,15 @@ export function ApplicantCard({
           style={{ background: "#f0efeb", color: "#6b6960" }}
         >
           &ldquo;{application.fitNote}&rdquo;
+        </p>
+      )}
+
+      {application.status === "declined" && application.declineReason && (
+        <p
+          className="mt-2 rounded-md px-3 py-1.5 text-xs"
+          style={{ background: "#fef2f2", color: "#dc2626" }}
+        >
+          Reason: {getDeclineReasonLabel(application.declineReason)}
         </p>
       )}
 

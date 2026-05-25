@@ -116,6 +116,10 @@ export const DECLINE_REASONS = [
   { value: 'other', label: 'Other' },
 ] as const;
 
+export function getDeclineReasonLabel(reason: string): string {
+  return DECLINE_REASONS.find((r) => r.value === reason)?.label ?? reason;
+}
+
 export const APPLICATION_STATUS_LABELS: Record<string, string> = {
   draft: 'Draft',
   submitted: 'Submitted',

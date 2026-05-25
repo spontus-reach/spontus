@@ -2,7 +2,9 @@
 
 import { createContext, useContext, useState, useCallback, useRef } from "react";
 import type { Application, ApplicationStatus, DeclineReason } from "@/lib/types";
-import { MOCK_SEED_APPLICATIONS } from "@/lib/mock-data";
+import { MOCK_SEED_APPLICATIONS, getSeedListingById } from "@/lib/mock-data";
+
+export type AcceptResult = { ok: true } | { ok: false; reason: string };
 
 interface ApplicationsContextValue {
   applications: Application[];
@@ -18,7 +20,7 @@ interface ApplicationsContextValue {
   ) => Application | undefined;
   getApplicationsByListingId: (listingId: string) => Application[];
   getApplicationById: (applicationId: string) => Application | undefined;
-  acceptApplication: (applicationId: string) => void;
+  acceptApplication: (applicationId: string) => AcceptResult;
   declineApplication: (applicationId: string, reason: DeclineReason) => void;
 }
 
@@ -88,7 +90,27 @@ export function ApplicationsProvider({
   );
 
   const acceptApplication = useCallback(
-    (applicationId: string) => {
+    (applicationId: string): AcceptResult => {
+      const app = applications.find((a) => a.id === applicationId);
+      if (!app) return { ok: false, reason: "Application not found" };
+      if (TERMINAL_STATUSES.includes(app.status)) {
+        return { ok: false, reason: "Application already resolved" };
+      }
+
+      // Spot-cap enforcement (review item #1)
+      const listing = getSeedListingById(app.listingId);
+      if (listing && listing.numberOfTeams != null) {
+        const acceptedCount = applications.filter(
+          (a) => a.listingId === app.listingId && a.status === "accepted"
+        ).length;
+        if (acceptedCount >= listing.numberOfTeams) {
+          return {
+            ok: false,
+            reason: `All ${listing.numberOfTeams} spots are filled. Decline or remove an accepted team first.`,
+          };
+        }
+      }
+
       setApplications((prev) =>
         prev.map((a) => {
           if (a.id !== applicationId) return a;
@@ -100,8 +122,9 @@ export function ApplicationsProvider({
           };
         })
       );
+      return { ok: true };
     },
-    []
+    [applications]
   );
 
   const declineApplication = useCallback(

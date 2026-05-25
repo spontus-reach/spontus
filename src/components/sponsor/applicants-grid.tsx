@@ -24,6 +24,7 @@ export function ApplicantsGrid({ listing }: { listing: SponsorshipListing }) {
   );
   const [acceptingId, setAcceptingId] = useState<string | null>(null);
   const [decliningId, setDecliningId] = useState<string | null>(null);
+  const [acceptError, setAcceptError] = useState<string | null>(null);
 
   const applications = getApplicationsByListingId(listing.id);
 
@@ -75,8 +76,13 @@ export function ApplicantsGrid({ listing }: { listing: SponsorshipListing }) {
 
   function handleAcceptConfirm() {
     if (acceptingId) {
-      acceptApplication(acceptingId);
-      setAcceptingId(null);
+      const result = acceptApplication(acceptingId);
+      if (result.ok) {
+        setAcceptingId(null);
+        setAcceptError(null);
+      } else {
+        setAcceptError(result.reason);
+      }
     }
   }
 
@@ -174,7 +180,11 @@ export function ApplicantsGrid({ listing }: { listing: SponsorshipListing }) {
         <AcceptApplicationModal
           teamName={acceptingTeam.name}
           onConfirm={handleAcceptConfirm}
-          onClose={() => setAcceptingId(null)}
+          onClose={() => {
+            setAcceptingId(null);
+            setAcceptError(null);
+          }}
+          error={acceptError}
         />
       )}
 

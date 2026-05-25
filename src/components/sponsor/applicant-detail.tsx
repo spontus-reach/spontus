@@ -12,7 +12,7 @@ import { AcceptApplicationModal } from "./accept-application-modal";
 import { DeclineReasonModal } from "./decline-reason-modal";
 import { useApplications } from "@/components/providers/applications-provider";
 import { getAssetOverlap } from "@/lib/asset-overlap";
-import { APPLICATION_STATUS_LABELS, ACTIVE_SPONSOR_ID } from "@/lib/constants";
+import { APPLICATION_STATUS_LABELS, ACTIVE_SPONSOR_ID, getDeclineReasonLabel } from "@/lib/constants";
 import {
   getTeamById,
   getSeedListingById,
@@ -32,6 +32,7 @@ export function ApplicantDetail({
   } = useApplications();
   const [showAccept, setShowAccept] = useState(false);
   const [showDecline, setShowDecline] = useState(false);
+  const [acceptError, setAcceptError] = useState<string | null>(null);
 
   const application = getApplicationById(applicationId);
   if (!application) {
@@ -163,6 +164,11 @@ export function ApplicantDetail({
             <div className="text-sm" style={{ color: "#6b6960" }}>
               Declined
               {application.reviewedAt && ` on ${application.reviewedAt}`}
+              {application.declineReason && (
+                <span style={{ color: "#dc2626" }}>
+                  {" "}— {getDeclineReasonLabel(application.declineReason)}
+                </span>
+              )}
             </div>
           )}
         </div>
@@ -295,10 +301,19 @@ export function ApplicantDetail({
         <AcceptApplicationModal
           teamName={team.name}
           onConfirm={() => {
-            acceptApplication(application.id);
-            setShowAccept(false);
+            const result = acceptApplication(application.id);
+            if (result.ok) {
+              setShowAccept(false);
+              setAcceptError(null);
+            } else {
+              setAcceptError(result.reason);
+            }
           }}
-          onClose={() => setShowAccept(false)}
+          onClose={() => {
+            setShowAccept(false);
+            setAcceptError(null);
+          }}
+          error={acceptError}
         />
       )}
 
