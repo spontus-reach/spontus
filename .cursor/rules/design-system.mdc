@@ -1,0 +1,31 @@
+---
+description: Spontus design system guidance
+alwaysApply: true
+---
+
+Design style:
+- Clean, modern, athletic, and premium.
+- Dark charcoal or navy base.
+- Bright green accent unless the design system says otherwise.
+- Generous spacing.
+- Strong cards.
+- Clear stats.
+- One obvious primary action per screen.
+
+The product should feel like a mix of Linear, Wellfound, Faire, and modern sports trading cards.
+
+Use Tailwind and shadcn/ui components when possible after the app scaffold exists.
+
+Avoid:
+- Generic SaaS gradients.
+- Dense enterprise dashboards.
+- Fake-looking placeholder data.
+- Overly complex onboarding.
+- Making messaging/chat the center of the product.
+- Designing for D1 athletics, NIL, or youth sports management.
+
+Accessibility and responsiveness:
+- Team officers may use the product on mobile after practice.
+- Sponsor users are likely desktop-first.
+- Use semantic buttons and labels.
+- Keep forms readable and low-friction.

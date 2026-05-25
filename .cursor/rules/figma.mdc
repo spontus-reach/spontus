@@ -1,0 +1,21 @@
+---
+description: Figma implementation rule
+alwaysApply: true
+---
+
+Before implementing any screen or component, inspect the relevant Figma frame using the connected Figma MCP server.
+
+Use Figma for layout, visual hierarchy, component structure, spacing, responsive behavior, and interaction cues.
+Use the repo docs for product logic, terminology, entity relationships, statuses, and MVP scope.
+
+Workflow before coding:
+1. Identify the route or component being built.
+2. Read docs/figma-map.md for the matching Figma frame.
+3. Inspect that frame through Figma MCP.
+4. Read the relevant docs from docs/product and docs/engineering.
+5. Propose a short implementation plan.
+6. Code only the requested slice.
+
+Do not guess visual details when the Figma prototype contains the answer.
+Do not convert the Figma prototype into a static visual clone. Build reusable components and data structures that match the domain model.
+If Figma conflicts with docs/domain-glossary.md or docs/product/domain-model.md, pause and ask before changing product behavior.

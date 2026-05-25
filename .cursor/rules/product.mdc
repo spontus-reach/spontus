@@ -1,0 +1,28 @@
+---
+description: Spontus product context
+alwaysApply: true
+---
+
+You are building Spontus, a sponsorship marketplace for college club sports teams.
+
+Core product:
+- Verified teams create standardized profiles.
+- Verified sponsors create sponsorship listings.
+- Teams browse listings and apply with their existing profile.
+- Sponsors review standardized applicants and accept, message, or decline.
+- Accepted applications become deals with deliverables and proof.
+
+Initial wedge:
+- Cal Poly club sports.
+- Manual deal facilitation first, then productize the repeated workflow.
+- The MVP should preserve structured team and sponsor data from manual deals.
+
+Core insight:
+Every team has different sponsorship assets and preferences. Do not assume every team wants jersey logo placement.
+Examples:
+- Soccer may prefer livestream ads and highlight-video logo placement.
+- Rugby may accept jersey logos, banners, and social posts.
+- Triathlon may offer event booths, packet stuffing, podium prizes, and on-course nutrition.
+- Swim may offer nationals exposure, team photos, product posts, and event content.
+
+The sponsorship asset menu is a first-class product feature. Treat it as core infrastructure, not a secondary form section.
