@@ -122,11 +122,18 @@ export default function TeamOnboardingPage() {
             Build your team profile
           </p>
         </div>
-        <Link href="/teams/cal-poly-triathlon">
-          <Button style={{ background: "#1a3a6e", color: "#f0efeb" }}>
-            Preview profile
-          </Button>
-        </Link>
+        <div className="flex gap-2">
+          <Link href="/team/listings">
+            <Button variant="outline" style={{ borderColor: "#d5d3cd" }}>
+              Browse listings
+            </Button>
+          </Link>
+          <Link href="/teams/cal-poly-triathlon">
+            <Button style={{ background: "#1a3a6e", color: "#f0efeb" }}>
+              Preview profile
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-[260px_1fr]">
