@@ -1,0 +1,145 @@
+"use client";
+
+import { createContext, useContext, useState, useCallback } from "react";
+import type { Application, ApplicationStatus, DeclineReason } from "@/lib/types";
+import { MOCK_SEED_APPLICATIONS } from "@/lib/mock-data";
+
+interface ApplicationsContextValue {
+  applications: Application[];
+  createApplication: (
+    listingId: string,
+    teamId: string,
+    fitNote?: string
+  ) => Application | null;
+  getApplicationsForTeam: (teamId: string) => Application[];
+  getApplicationForListing: (
+    teamId: string,
+    listingId: string
+  ) => Application | undefined;
+  getApplicationsByListingId: (listingId: string) => Application[];
+  getApplicationById: (applicationId: string) => Application | undefined;
+  acceptApplication: (applicationId: string) => void;
+  declineApplication: (applicationId: string, reason: DeclineReason) => void;
+}
+
+const ApplicationsContext = createContext<ApplicationsContextValue | null>(null);
+
+const TERMINAL_STATUSES: ApplicationStatus[] = ["accepted", "declined", "withdrawn"];
+
+export function ApplicationsProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [applications, setApplications] =
+    useState<Application[]>(MOCK_SEED_APPLICATIONS);
+
+  const getApplicationsForTeam = useCallback(
+    (teamId: string) => applications.filter((a) => a.teamId === teamId),
+    [applications]
+  );
+
+  const getApplicationForListing = useCallback(
+    (teamId: string, listingId: string) =>
+      applications.find(
+        (a) => a.teamId === teamId && a.listingId === listingId
+      ),
+    [applications]
+  );
+
+  const getApplicationsByListingId = useCallback(
+    (listingId: string) =>
+      applications.filter((a) => a.listingId === listingId),
+    [applications]
+  );
+
+  const getApplicationById = useCallback(
+    (applicationId: string) =>
+      applications.find((a) => a.id === applicationId),
+    [applications]
+  );
+
+  const createApplication = useCallback(
+    (listingId: string, teamId: string, fitNote?: string): Application | null => {
+      const existing = applications.find(
+        (a) => a.teamId === teamId && a.listingId === listingId
+      );
+      if (existing) return null;
+
+      const newApp: Application = {
+        id: `app-${Date.now()}`,
+        listingId,
+        teamId,
+        status: "submitted",
+        fitNote: fitNote || undefined,
+        submittedAt: new Date().toISOString().split("T")[0],
+      };
+
+      setApplications((prev) => [...prev, newApp]);
+      return newApp;
+    },
+    [applications]
+  );
+
+  const acceptApplication = useCallback(
+    (applicationId: string) => {
+      setApplications((prev) =>
+        prev.map((a) => {
+          if (a.id !== applicationId) return a;
+          if (TERMINAL_STATUSES.includes(a.status)) return a;
+          return {
+            ...a,
+            status: "accepted" as const,
+            reviewedAt: new Date().toISOString().split("T")[0],
+          };
+        })
+      );
+    },
+    []
+  );
+
+  const declineApplication = useCallback(
+    (applicationId: string, reason: DeclineReason) => {
+      setApplications((prev) =>
+        prev.map((a) => {
+          if (a.id !== applicationId) return a;
+          if (TERMINAL_STATUSES.includes(a.status)) return a;
+          return {
+            ...a,
+            status: "declined" as const,
+            declineReason: reason,
+            reviewedAt: new Date().toISOString().split("T")[0],
+          };
+        })
+      );
+    },
+    []
+  );
+
+  return (
+    <ApplicationsContext.Provider
+      value={{
+        applications,
+        createApplication,
+        getApplicationsForTeam,
+        getApplicationForListing,
+        getApplicationsByListingId,
+        getApplicationById,
+        acceptApplication,
+        declineApplication,
+      }}
+    >
+      {children}
+    </ApplicationsContext.Provider>
+  );
+}
+
+export function useApplications(): ApplicationsContextValue {
+  const ctx = useContext(ApplicationsContext);
+  if (!ctx) {
+    throw new Error(
+      "useApplications must be used within an ApplicationsProvider"
+    );
+  }
+  return ctx;
+}

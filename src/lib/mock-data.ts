@@ -441,6 +441,30 @@ export const MOCK_SEED_APPLICATIONS: Application[] = [
     submittedAt: '2026-05-01',
     reviewedAt: '2026-05-10',
   },
+  // Seed applications for sponsor review (Slice 4) — submitted to the open Fluid Nutrition listing
+  {
+    id: 'app-seed-fluid-tri',
+    listingId: 'lst-fluid-fall',
+    teamId: 'cp-tri',
+    status: 'submitted',
+    fitNote: 'We host the MTS with 500+ athletes and can offer on-course sampling, packet stuffing, and podium prizes.',
+    submittedAt: '2026-05-22',
+  },
+  {
+    id: 'app-seed-fluid-rugby',
+    listingId: 'lst-fluid-fall',
+    teamId: 'cp-rugby',
+    status: 'submitted',
+    fitNote: 'Strong sideline crowd at home matches. We can offer jersey logos and game-day banners.',
+    submittedAt: '2026-05-23',
+  },
+  {
+    id: 'app-seed-fluid-swim',
+    listingId: 'lst-fluid-fall',
+    teamId: 'cp-swim',
+    status: 'submitted',
+    submittedAt: '2026-05-24',
+  },
 ];
 
 export function getSeedSponsorById(id: string): SponsorProfile | undefined {
@@ -453,4 +477,8 @@ export function getSeedListingById(id: string): SponsorshipListing | undefined {
 
 export function getOpenListings(): SponsorshipListing[] {
   return MOCK_LISTINGS.filter((l) => l.status === 'open');
+}
+
+export function getTeamById(teamId: string): TeamProfile | undefined {
+  return MOCK_TEAMS.find((t) => t.id === teamId);
 }
