@@ -199,7 +199,7 @@ export function ListingPreview({
               Deadline {listing.applicationDeadline}
             </span>
           )}
-          {listing.numberOfTeams && (
+          {listing.numberOfTeams != null && (
             <span className="flex items-center gap-1">
               <Users className="h-3.5 w-3.5" />
               {listing.numberOfTeams} spots
@@ -209,10 +209,10 @@ export function ListingPreview({
           {listing.sportPreferences && listing.sportPreferences.length > 0 && (
             <span>Sports: {listing.sportPreferences.join(", ")}</span>
           )}
-          {listing.teamSizeMin && (
+          {listing.teamSizeMin != null && (
             <span>{listing.teamSizeMin}+ athletes</span>
           )}
-          {listing.socialReachMin && (
+          {listing.socialReachMin != null && (
             <span>{listing.socialReachMin.toLocaleString()}+ reach</span>
           )}
         </div>

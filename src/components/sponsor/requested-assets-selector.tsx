@@ -154,6 +154,7 @@ export function RequestedAssetsSelector({ selectedAssets, onChange }: Props) {
                         {sel.required ? "Required" : "Optional"}
                       </button>
                       <Input
+                        aria-label={`${def.label} note`}
                         placeholder="Note"
                         value={sel.notes ?? ""}
                         onChange={(e) => updateNotes(def.id, e.target.value)}

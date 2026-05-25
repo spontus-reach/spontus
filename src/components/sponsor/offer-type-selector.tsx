@@ -2,7 +2,7 @@
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+import { Field } from "@/components/forms/form-field";
 import { DEAL_TYPES } from "@/lib/constants";
 import type { ListingDraft } from "@/lib/types";
 
@@ -46,15 +46,14 @@ export function OfferTypeSelector({ data, onUpdate }: Props) {
         ))}
       </div>
       <div className="mt-4">
-        <Label className="mb-1.5 block text-sm">
-          Offer details (specifics)
-        </Label>
-        <Textarea
-          rows={2}
-          value={data.offerSummary ?? ""}
-          onChange={(e) => onUpdate({ offerSummary: e.target.value })}
-          placeholder="e.g. Product allocation (6-month supply per athlete) + $300 cash per team"
-        />
+        <Field label="Offer details (specifics)">
+          <Textarea
+            rows={2}
+            value={data.offerSummary ?? ""}
+            onChange={(e) => onUpdate({ offerSummary: e.target.value })}
+            placeholder="e.g. Product allocation (6-month supply per athlete) + $300 cash per team"
+          />
+        </Field>
       </div>
     </div>
   );

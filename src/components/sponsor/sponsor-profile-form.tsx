@@ -1,9 +1,9 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Field } from "@/components/forms/form-field";
 import {
   Select,
   SelectContent,
@@ -66,7 +66,8 @@ export function SponsorProfileForm({ data, onUpdate }: Props) {
                 placeholder="https://fluidnutrition.com"
               />
             </Field>
-            <Field label="Logo">
+            <div>
+              <div className="mb-1.5 block text-sm font-medium">Logo</div>
               <div
                 className="flex h-10 items-center gap-2 rounded-md px-3"
                 style={{ border: "0.5px solid #d5d3cd" }}
@@ -79,7 +80,7 @@ export function SponsorProfileForm({ data, onUpdate }: Props) {
                   Upload coming soon
                 </span>
               </div>
-            </Field>
+            </div>
           </div>
           <Field label="One-liner">
             <Input
@@ -192,21 +193,6 @@ export function SponsorProfileForm({ data, onUpdate }: Props) {
           </Field>
         </div>
       </Card>
-    </div>
-  );
-}
-
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <Label className="mb-1.5 block text-sm">{label}</Label>
-      {children}
     </div>
   );
 }

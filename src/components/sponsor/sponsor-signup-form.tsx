@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Field } from "@/components/forms/form-field";
 import {
   Select,
   SelectContent,
@@ -33,8 +33,14 @@ export function SponsorSignupForm() {
     router.push("/sponsor/onboarding");
   }
 
-  const isValid =
-    companyName && contactName && role && email && websiteUrl && industryCategory;
+  const isValid = Boolean(
+    companyName.trim() &&
+      contactName.trim() &&
+      role &&
+      email.trim() &&
+      websiteUrl.trim() &&
+      industryCategory
+  );
 
   return (
     <div className="mx-auto max-w-xl px-6 py-16">
@@ -139,21 +145,6 @@ export function SponsorSignupForm() {
           </div>
         </form>
       </Card>
-    </div>
-  );
-}
-
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <Label className="mb-1.5 block text-sm">{label}</Label>
-      {children}
     </div>
   );
 }

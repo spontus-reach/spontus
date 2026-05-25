@@ -1,7 +1,7 @@
 "use client";
 
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Field } from "@/components/forms/form-field";
 import { ImageIcon } from "lucide-react";
 import type { TeamProfileDraft } from "@/lib/types";
 
@@ -44,21 +44,6 @@ export function MediaUploadForm({ data, onUpdate }: Props) {
         Teams with 5+ photos get 3x more sponsor interest. Real file upload
         coming in a future slice.
       </p>
-    </div>
-  );
-}
-
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <Label className="mb-1.5 block text-sm">{label}</Label>
-      {children}
     </div>
   );
 }

@@ -1,4 +1,9 @@
-import type { SponsorshipAssetDefinition, SponsorshipAssetCategory } from './types';
+import type {
+  SponsorshipAssetDefinition,
+  SponsorshipAssetCategory,
+  VerificationStatus,
+  ListingStatus,
+} from './types';
 
 export const SPONSORSHIP_ASSET_DEFINITIONS: SponsorshipAssetDefinition[] = [
   // Brand visibility
@@ -93,14 +98,14 @@ export const SPONSOR_MEMBER_ROLES = [
   { value: 'viewer', label: 'Viewer' },
 ] as const;
 
-export const LISTING_STATUS_LABELS: Record<string, string> = {
+export const LISTING_STATUS_LABELS: Record<ListingStatus, string> = {
   draft: 'Draft',
   open: 'Open',
   paused: 'Paused',
   closed: 'Closed',
 };
 
-export const VERIFICATION_STATUS_LABELS: Record<string, string> = {
+export const VERIFICATION_STATUS_LABELS: Record<VerificationStatus, string> = {
   draft: 'Draft',
   submitted_for_verification: 'Submitted for verification',
   verified: 'Verified',

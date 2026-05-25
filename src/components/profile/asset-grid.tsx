@@ -2,7 +2,11 @@ import {
   SPONSORSHIP_ASSET_DEFINITIONS,
   CATEGORY_LABELS,
 } from "@/lib/constants";
-import type { TeamSponsorshipAsset, SponsorshipAssetCategory } from "@/lib/types";
+import type {
+  TeamSponsorshipAsset,
+  SponsorshipAssetCategory,
+  SponsorshipAssetStatus,
+} from "@/lib/types";
 
 const CATEGORIES: SponsorshipAssetCategory[] = [
   "brand_visibility",
@@ -10,7 +14,10 @@ const CATEGORIES: SponsorshipAssetCategory[] = [
   "product_event_activation",
 ];
 
-const statusStyles: Record<string, { bg: string; text: string; border: string }> = {
+const statusStyles: Record<
+  SponsorshipAssetStatus,
+  { bg: string; text: string; border: string }
+> = {
   preferred: { bg: "rgba(26,58,110,0.08)", text: "#1a3a6e", border: "rgba(26,58,110,0.3)" },
   available: { bg: "white", text: "#1a1a18", border: "#d5d3cd" },
   limited: { bg: "#fef3c7", text: "#92400e", border: "#fcd34d" },
@@ -50,7 +57,7 @@ export function AssetGrid({ assets }: { assets: TeamSponsorshipAsset[] }) {
                   (d) => d.id === a.assetId
                 );
                 if (!def) return null;
-                const s = statusStyles[a.status] ?? statusStyles.available;
+                const s = statusStyles[a.status];
 
                 return (
                   <div
