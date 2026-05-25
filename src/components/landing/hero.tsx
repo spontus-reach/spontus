@@ -89,9 +89,9 @@ export function Hero() {
           I&apos;m a team
           <ArrowRight className="ml-2 h-4 w-4" strokeWidth={2} />
         </Link>
-        <button
-          disabled
-          className="inline-flex cursor-not-allowed items-center justify-center opacity-50"
+        <Link
+          href="/signup/sponsor"
+          className="inline-flex items-center justify-center transition-colors hover:bg-[#e8e6e0]"
           style={{
             height: 48,
             padding: "0 22px",
@@ -104,7 +104,7 @@ export function Hero() {
           }}
         >
           I&apos;m a sponsor
-        </button>
+        </Link>
       </motion.div>
     </section>
   );
