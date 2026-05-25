@@ -1,4 +1,8 @@
-import type { SponsorshipAssetDefinition, SponsorshipAssetCategory } from './types';
+import type {
+  SponsorshipAssetDefinition,
+  SponsorshipAssetCategory,
+  VerificationStatus,
+} from './types';
 
 export const SPONSORSHIP_ASSET_DEFINITIONS: SponsorshipAssetDefinition[] = [
   // Brand visibility
@@ -121,7 +125,7 @@ export const APPLICATION_STATUS_LABELS: Record<string, string> = {
   withdrawn: 'Withdrawn',
 };
 
-export const VERIFICATION_STATUS_LABELS: Record<string, string> = {
+export const VERIFICATION_STATUS_LABELS: Record<VerificationStatus, string> = {
   draft: 'Draft',
   submitted_for_verification: 'Submitted for verification',
   verified: 'Verified',

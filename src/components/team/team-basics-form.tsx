@@ -1,8 +1,9 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Field } from "@/components/team/form-field";
+import { optionalInteger } from "@/lib/form-values";
 import type { TeamProfileDraft } from "@/lib/types";
 
 type Props = {
@@ -56,7 +57,7 @@ export function TeamBasicsForm({ data, onUpdate }: Props) {
             type="number"
             value={data.rosterSize ?? ""}
             onChange={(e) =>
-              onUpdate({ rosterSize: parseInt(e.target.value) || undefined })
+              onUpdate({ rosterSize: optionalInteger(e.target.value) })
             }
             placeholder="80"
           />
@@ -66,7 +67,7 @@ export function TeamBasicsForm({ data, onUpdate }: Props) {
             type="number"
             value={data.yearFounded ?? ""}
             onChange={(e) =>
-              onUpdate({ yearFounded: parseInt(e.target.value) || undefined })
+              onUpdate({ yearFounded: optionalInteger(e.target.value) })
             }
             placeholder="2005"
           />
@@ -80,21 +81,6 @@ export function TeamBasicsForm({ data, onUpdate }: Props) {
           placeholder="Cal Poly's largest club sport — 80 athletes competing at collegiate nationals..."
         />
       </Field>
-    </div>
-  );
-}
-
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <Label className="mb-1.5 block text-sm">{label}</Label>
-      {children}
     </div>
   );
 }

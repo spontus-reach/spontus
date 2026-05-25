@@ -18,18 +18,19 @@ import { MediaUploadForm } from "@/components/team/media-upload-form";
 import { VerificationStatusBadge } from "@/components/team/verification-status-badge";
 import type { TeamProfileDraft, TeamSponsorshipAsset } from "@/lib/types";
 
-function computeCompleteness(draft: TeamProfileDraft): number {
+function computeCompleteness(
+  draft: TeamProfileDraft,
+  hostedEventsReviewed: boolean
+): number {
   let filled = 0;
   const total = 7;
   if (draft.name && draft.university && draft.sport) filled++;
   if (draft.instagramUrl || draft.combinedReach) filled++;
   if (draft.league || draft.season) filled++;
   if ((draft.sponsorshipAssets ?? []).length > 0) filled++;
-  if (
-    (draft.hostedEvents ?? []).length > 0 ||
-    draft.hostedEvents !== undefined
-  )
+  if ((draft.hostedEvents ?? []).length > 0 || hostedEventsReviewed) {
     filled++;
+  }
   if ((draft.preferredSponsorCategories ?? []).length > 0) filled++;
   if (draft.photo) filled++;
   return Math.round((filled / total) * 100);
@@ -37,7 +38,8 @@ function computeCompleteness(draft: TeamProfileDraft): number {
 
 function computeSectionComplete(
   sectionId: string,
-  draft: TeamProfileDraft
+  draft: TeamProfileDraft,
+  hostedEventsReviewed: boolean
 ): boolean {
   switch (sectionId) {
     case "basics":
@@ -49,7 +51,7 @@ function computeSectionComplete(
     case "assets":
       return (draft.sponsorshipAssets ?? []).length > 0;
     case "hosted":
-      return true;
+      return (draft.hostedEvents ?? []).length > 0 || hostedEventsReviewed;
     case "looking":
       return (draft.preferredSponsorCategories ?? []).length > 0;
     case "media":
@@ -72,21 +74,32 @@ export default function TeamOnboardingPage() {
     pastSponsors: [],
   });
   const [activeSection, setActiveSection] = useState("basics");
+  const [hostedEventsReviewed, setHostedEventsReviewed] = useState(false);
 
   function updateDraft(patch: Partial<TeamProfileDraft>) {
     setDraft((prev) => ({ ...prev, ...patch }));
   }
 
-  const completeness = useMemo(() => computeCompleteness(draft), [draft]);
+  const completeness = useMemo(
+    () => computeCompleteness(draft, hostedEventsReviewed),
+    [draft, hostedEventsReviewed]
+  );
   const completedSections = useMemo(() => {
     const result: Record<string, boolean> = {};
     for (const s of BUILDER_SECTIONS) {
-      result[s.id] = computeSectionComplete(s.id, draft);
+      result[s.id] = computeSectionComplete(
+        s.id,
+        draft,
+        hostedEventsReviewed
+      );
     }
     return result;
-  }, [draft]);
+  }, [draft, hostedEventsReviewed]);
 
   function handleMarkComplete() {
+    if (activeSection === "hosted") {
+      setHostedEventsReviewed(true);
+    }
     const idx = BUILDER_SECTIONS.findIndex((s) => s.id === activeSection);
     if (idx < BUILDER_SECTIONS.length - 1) {
       setActiveSection(BUILDER_SECTIONS[idx + 1].id);
