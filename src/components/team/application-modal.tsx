@@ -42,7 +42,7 @@ function computeAssetOverlap(
 type Props = {
   listing: SponsorshipListing;
   team: TeamProfile;
-  onSubmit: (fitNote?: string) => void;
+  onSubmit: (fitNote?: string) => boolean;
   onClose: () => void;
 };
 
@@ -54,15 +54,26 @@ export function ApplicationModal({
 }: Props) {
   const [fitNote, setFitNote] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState(false);
   const overlap = computeAssetOverlap(listing, team);
 
   function handleSubmit() {
-    onSubmit(fitNote.trim() || undefined);
-    setSubmitted(true);
+    const success = onSubmit(fitNote.trim() || undefined);
+    if (success) {
+      setSubmitted(true);
+      setError(false);
+    } else {
+      setError(true);
+    }
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="application-modal-title"
+    >
       <div
         className="relative mx-4 w-full max-w-lg overflow-hidden rounded-xl shadow-xl"
         style={{ background: "white", border: "0.5px solid #d5d3cd" }}
@@ -71,10 +82,17 @@ export function ApplicationModal({
           className="flex items-center justify-between px-6 py-4"
           style={{ borderBottom: "0.5px solid #d5d3cd" }}
         >
-          <h2 style={{ fontSize: 18, fontWeight: 600, color: "#1a1a18" }}>
+          <h2
+            id="application-modal-title"
+            style={{ fontSize: 18, fontWeight: 600, color: "#1a1a18" }}
+          >
             {submitted ? "Application sent" : `Apply: ${listing.title}`}
           </h2>
-          <button onClick={onClose} style={{ color: "#6b6960" }}>
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            style={{ color: "#6b6960" }}
+          >
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -152,6 +170,12 @@ export function ApplicationModal({
               >
                 Send Application
               </Button>
+
+              {error && (
+                <p className="text-center text-sm" style={{ color: "#dc2626" }}>
+                  You have already applied to this listing.
+                </p>
+              )}
             </div>
           ) : (
             <div className="py-6 text-center">
@@ -170,7 +194,7 @@ export function ApplicationModal({
               </p>
               <div className="mt-5">
                 <Button variant="outline" onClick={onClose}>
-                  Back to listings
+                  Close
                 </Button>
               </div>
             </div>

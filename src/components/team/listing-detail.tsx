@@ -69,8 +69,9 @@ export function ListingDetail({ listing }: { listing: SponsorshipListing }) {
     listing.applicationDeadline &&
     new Date(listing.applicationDeadline) < new Date();
 
-  function handleApply(fitNote?: string) {
-    createApplication(listing.id, ACTIVE_TEAM_ID, fitNote);
+  function handleApply(fitNote?: string): boolean {
+    const result = createApplication(listing.id, ACTIVE_TEAM_ID, fitNote);
+    return result !== null;
   }
 
   return (
