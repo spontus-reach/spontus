@@ -60,6 +60,7 @@ Spontus helps grassroots teams and sponsors find each other, structure credible 
 4. [MVP Build Slices](./product/mvp-build-slices.md)
 5. [MVP Overview](./product/mvp-overview.md)
 6. [Tech Stack](./engineering/tech-stack.md)
+7. [Deployment](./engineering/deployment.md)
 
 ### Designers
 
