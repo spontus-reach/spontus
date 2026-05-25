@@ -16,6 +16,7 @@ May 24, 2026
 - Non-blocking visual/issues: Listing feed count includes an unverified sponsor listing, declined application detail does not display the selected canned reason, sponsor listing preview still shows stale "Team application flow coming in Slice 3" copy, `npm run typecheck` script is missing, and known `<img>` lint warnings remain.
 
 ## Route Results
+
 | Route | Result | Notes |
 | --- | --- | --- |
 | `/` | Pass | Landing page loads, headline visible, team and sponsor CTAs navigate correctly. |
@@ -40,6 +41,7 @@ May 24, 2026
 | `/teams/not-a-real-team` | Pass | Graceful 404 page; browser logs expected 404 resource error. |
 
 ## Flow Results
+
 | Flow | Result | Notes |
 | --- | --- | --- |
 | 1. Landing and navigation | Pass | Main nav links work. `My Applications` appears in team context, not on the landing page. |

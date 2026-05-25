@@ -13,7 +13,7 @@ import { DeclineReasonModal } from "./decline-reason-modal";
 import { useApplications } from "@/components/providers/applications-provider";
 import { useVerification } from "@/components/providers/verification-provider";
 import { getAssetOverlap } from "@/lib/asset-overlap";
-import { APPLICATION_STATUS_LABELS } from "@/lib/constants";
+import { APPLICATION_STATUS_LABELS, ACTIVE_SPONSOR_ID, getDeclineReasonLabel } from "@/lib/constants";
 import { getSeedListingById } from "@/lib/mock-data";
 import type { DeclineReason } from "@/lib/types";
 
@@ -48,6 +48,26 @@ export function ApplicantDetail({
     return (
       <div className="mx-auto max-w-5xl px-6 py-16 text-center">
         <p style={{ color: "#6b6960" }}>Application data incomplete.</p>
+      </div>
+    );
+  }
+
+  if (
+    listing.sponsorId !== ACTIVE_SPONSOR_ID ||
+    sponsor?.verificationStatus !== "verified"
+  ) {
+    return (
+      <div className="mx-auto max-w-5xl px-6 py-16 text-center">
+        <p style={{ color: "#6b6960", fontSize: 15 }}>
+          You do not have access to review this application.
+        </p>
+        <Link
+          href="/sponsor/onboarding"
+          className="mt-4 inline-block text-sm underline"
+          style={{ color: "#1a3a6e" }}
+        >
+          Back to sponsor profile
+        </Link>
       </div>
     );
   }
@@ -144,6 +164,13 @@ export function ApplicantDetail({
             <div className="text-sm" style={{ color: "#6b6960" }}>
               Declined
               {application.reviewedAt && ` on ${application.reviewedAt}`}
+              {application.declineReason && (
+                <span>
+                  {" "}
+                  &middot; Reason:{" "}
+                  {getDeclineReasonLabel(application.declineReason)}
+                </span>
+              )}
             </div>
           )}
         </div>

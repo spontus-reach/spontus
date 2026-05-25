@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { getSeedListingById, getSeedSponsorById } from "@/lib/mock-data";
+import { getDeclineReasonLabel } from "@/lib/constants";
 import type { Application } from "@/lib/types";
 
 const statusStyles: Record<string, { bg: string; text: string }> = {
@@ -64,6 +65,11 @@ export function ApplicationCard({ application }: { application: Application }) {
         {application.submittedAt && (
           <span className="text-[10px]" style={{ color: "#6b6960" }}>
             {application.submittedAt}
+          </span>
+        )}
+        {application.status === "declined" && application.declineReason && (
+          <span className="text-[10px]" style={{ color: "#6b6960" }}>
+            {getDeclineReasonLabel(application.declineReason)}
           </span>
         )}
       </div>

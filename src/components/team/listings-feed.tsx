@@ -9,6 +9,7 @@ import {
 } from "./listing-filters";
 import { useApplications } from "@/components/providers/applications-provider";
 import { useVerification } from "@/components/providers/verification-provider";
+import { isListingFromVerifiedSponsor } from "@/lib/marketplace-gating";
 import { getOpenListings, ACTIVE_TEAM_ID } from "@/lib/mock-data";
 
 export function ListingsFeed() {
@@ -17,10 +18,16 @@ export function ListingsFeed() {
   const { getSponsorById } = useVerification();
   const openListings = getOpenListings();
 
+  const verifiedOpenListings = useMemo(
+    () =>
+      openListings.filter((listing) =>
+        isListingFromVerifiedSponsor(listing, getSponsorById),
+      ),
+    [openListings, getSponsorById],
+  );
+
   const filtered = useMemo(() => {
-    return openListings.filter((l) => {
-      const sponsor = getSponsorById(l.sponsorId);
-      if (!sponsor || sponsor.verificationStatus !== "verified") return false;
+    return verifiedOpenListings.filter((l) => {
 
       if (
         filters.sport &&
@@ -54,10 +61,27 @@ export function ListingsFeed() {
 
       return true;
     });
-  }, [openListings, filters, getApplicationForListing, getSponsorById]);
+  }, [verifiedOpenListings, filters, getApplicationForListing]);
 
   return (
     <div>
+      <div className="mb-6">
+        <h1
+          style={{
+            fontSize: 28,
+            fontWeight: 600,
+            letterSpacing: "-0.01em",
+            color: "#1a1a18",
+          }}
+        >
+          Sponsorship listings
+        </h1>
+        <p className="mt-1" style={{ color: "#6b6960" }}>
+          {verifiedOpenListings.length} open listing
+          {verifiedOpenListings.length !== 1 ? "s" : ""} matched to your team
+        </p>
+      </div>
+
       <ListingFilters
         filters={filters}
         onChange={setFilters}

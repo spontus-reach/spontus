@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { Users } from "lucide-react";
 import { VerificationStatusBadge } from "./verification-status-badge";
@@ -25,9 +26,11 @@ export function TeamProfilePreview({ team }: { team: TeamProfile }) {
       style={{ border: "0.5px solid #d5d3cd", background: "#f0efeb" }}
     >
       {team.photo ? (
-        <img
+        <Image
           src={team.photo}
           alt={team.name}
+          width={56}
+          height={56}
           className="h-14 w-14 flex-shrink-0 rounded-lg object-cover"
         />
       ) : (

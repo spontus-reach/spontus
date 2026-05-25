@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback } from "react";
+import { createContext, useContext, useState, useCallback, useRef } from "react";
 import type { Application, ApplicationStatus, DeclineReason } from "@/lib/types";
 import { MOCK_SEED_APPLICATIONS } from "@/lib/mock-data";
 
@@ -33,6 +33,7 @@ export function ApplicationsProvider({
 }) {
   const [applications, setApplications] =
     useState<Application[]>(MOCK_SEED_APPLICATIONS);
+  const createdRef = useRef<Application | null>(null);
 
   const getApplicationsForTeam = useCallback(
     (teamId: string) => applications.filter((a) => a.teamId === teamId),
@@ -61,11 +62,6 @@ export function ApplicationsProvider({
 
   const createApplication = useCallback(
     (listingId: string, teamId: string, fitNote?: string): Application | null => {
-      const existing = applications.find(
-        (a) => a.teamId === teamId && a.listingId === listingId
-      );
-      if (existing) return null;
-
       const newApp: Application = {
         id: `app-${Date.now()}`,
         listingId,
@@ -75,10 +71,20 @@ export function ApplicationsProvider({
         submittedAt: new Date().toISOString().split("T")[0],
       };
 
-      setApplications((prev) => [...prev, newApp]);
-      return newApp;
+      createdRef.current = null;
+
+      setApplications((prev) => {
+        const duplicate = prev.some(
+          (a) => a.teamId === teamId && a.listingId === listingId,
+        );
+        if (duplicate) return prev;
+        createdRef.current = newApp;
+        return [...prev, newApp];
+      });
+
+      return createdRef.current;
     },
-    [applications]
+    [],
   );
 
   const acceptApplication = useCallback(

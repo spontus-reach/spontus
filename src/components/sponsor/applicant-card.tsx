@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -49,9 +50,11 @@ export function ApplicantCard({
     >
       <div className="flex items-start gap-4">
         {team.photo ? (
-          <img
+          <Image
             src={team.photo}
             alt={team.name}
+            width={64}
+            height={64}
             className="h-16 w-16 flex-shrink-0 rounded-lg object-cover"
           />
         ) : (

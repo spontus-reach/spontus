@@ -11,7 +11,7 @@ import type { TeamProfile, SponsorshipListing } from "@/lib/types";
 type Props = {
   listing: SponsorshipListing;
   team: TeamProfile;
-  onSubmit: (fitNote?: string) => void;
+  onSubmit: (fitNote?: string) => boolean;
   onClose: () => void;
 };
 
@@ -23,11 +23,17 @@ export function ApplicationModal({
 }: Props) {
   const [fitNote, setFitNote] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState(false);
   const overlap = getAssetOverlap(listing.requestedAssets, team.sponsorshipAssets);
 
   function handleSubmit() {
-    onSubmit(fitNote.trim() || undefined);
-    setSubmitted(true);
+    const success = onSubmit(fitNote.trim() || undefined);
+    if (success) {
+      setSubmitted(true);
+      setError(false);
+    } else {
+      setError(true);
+    }
   }
 
   return (
@@ -121,6 +127,12 @@ export function ApplicationModal({
               >
                 Send Application
               </Button>
+
+              {error && (
+                <p className="text-center text-sm" style={{ color: "#dc2626" }}>
+                  You have already applied to this listing.
+                </p>
+              )}
             </div>
           ) : (
             <div className="py-6 text-center">
@@ -139,7 +151,7 @@ export function ApplicationModal({
               </p>
               <div className="mt-5">
                 <Button variant="outline" onClick={onClose}>
-                  Back to listings
+                  Close
                 </Button>
               </div>
             </div>

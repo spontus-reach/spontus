@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useApplications } from "@/components/providers/applications-provider";
+import { useVerification } from "@/components/providers/verification-provider";
 import { ApplicantCard } from "./applicant-card";
 import {
   ApplicantFilters,
@@ -10,7 +11,6 @@ import {
 } from "./applicant-filters";
 import { AcceptApplicationModal } from "./accept-application-modal";
 import { DeclineReasonModal } from "./decline-reason-modal";
-import { getTeamById } from "@/lib/mock-data";
 import type { SponsorshipListing, DeclineReason } from "@/lib/types";
 
 export function ApplicantsGrid({ listing }: { listing: SponsorshipListing }) {
@@ -19,6 +19,8 @@ export function ApplicantsGrid({ listing }: { listing: SponsorshipListing }) {
     acceptApplication,
     declineApplication,
   } = useApplications();
+  const { getTeamById, getSponsorById } = useVerification();
+  const sponsor = getSponsorById(listing.sponsorId);
   const [filters, setFilters] = useState<ApplicantFilterState>(
     DEFAULT_APPLICANT_FILTERS
   );
@@ -51,7 +53,17 @@ export function ApplicantsGrid({ listing }: { listing: SponsorshipListing }) {
 
       return true;
     });
-  }, [applications, filters]);
+  }, [applications, filters, getTeamById]);
+
+  if (!sponsor || sponsor.verificationStatus !== "verified") {
+    return (
+      <div className="rounded-lg p-8 text-center" style={{ border: "0.5px solid #d5d3cd" }}>
+        <p style={{ color: "#6b6960", fontSize: 15 }}>
+          Your sponsor profile must be verified before you can review applicants.
+        </p>
+      </div>
+    );
+  }
 
   const acceptedCount = applications.filter(
     (a) => a.status === "accepted"

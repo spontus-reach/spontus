@@ -44,8 +44,9 @@ export function ListingDetail({ listing }: { listing: SponsorshipListing }) {
     listing.applicationDeadline &&
     new Date(listing.applicationDeadline) < new Date();
 
-  function handleApply(fitNote?: string) {
-    createApplication(listing.id, ACTIVE_TEAM_ID, fitNote);
+  function handleApply(fitNote?: string): boolean {
+    if (teamStatus !== "verified" || !sponsorVerified) return false;
+    return createApplication(listing.id, ACTIVE_TEAM_ID, fitNote) !== null;
   }
 
   return (

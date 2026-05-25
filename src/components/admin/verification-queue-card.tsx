@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Users, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { VerificationStatusBadge } from "@/components/team/verification-status-badge";
@@ -24,9 +25,11 @@ export function VerificationQueueCard({ entityType, entity, onReview }: Props) {
       >
         <div className="flex items-center gap-4">
           {entity.photo ? (
-            <img
+            <Image
               src={entity.photo}
               alt={entity.name}
+              width={48}
+              height={48}
               className="h-12 w-12 flex-shrink-0 rounded-lg object-cover"
             />
           ) : (
