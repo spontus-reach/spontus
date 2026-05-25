@@ -49,9 +49,17 @@ export function TopNav() {
           >
             For Teams
           </Link>
-          <span className="cursor-not-allowed text-sm text-[#6b6960]/50">
+          <Link
+            href="/signup/sponsor"
+            className={`text-sm transition-colors ${
+              pathname.startsWith("/signup/sponsor") ||
+              pathname.startsWith("/sponsor")
+                ? "text-[#1a1a18]"
+                : "text-[#6b6960] hover:text-[#1a1a18]"
+            }`}
+          >
             For Sponsors
-          </span>
+          </Link>
           <span className="cursor-not-allowed text-sm text-[#6b6960]/50">
             Browse
           </span>
