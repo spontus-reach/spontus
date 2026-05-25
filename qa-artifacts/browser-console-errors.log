@@ -1,0 +1,10 @@
+Total messages: 3 (Errors: 1, Warnings: 0)
+Returning 4 messages for level "error"
+
+[ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/team/listings/lst-does-not-exist:0
+[ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/sponsor/listings/lst-does-not-exist:0
+[ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/teams/not-a-real-team:0
+TypeError: Failed to execute 'measure' on 'Performance': '​ListingPreviewPage' cannot have a negative time stamp.
+    at flushComponentPerformance (http://localhost:3000/_next/static/chunks/08.h_next_dist_compiled_react-server-dom-turbopack_01z2xq9._.js:2184:45)
+    at flushComponentPerformance (http://localhost:3000/_next/static/chunks/08.h_next_dist_compiled_react-server-dom-turbopack_01z2xq9._.js:2156:31)
+    at flushInitialRenderPerformance (http://localhost:3000/_next/static/chunks/08.h_next_dist_compiled_react-server-dom-turbopack_01z2xq9._.js:2346:74)

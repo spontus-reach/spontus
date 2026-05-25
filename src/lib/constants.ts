@@ -2,6 +2,7 @@ import type {
   SponsorshipAssetDefinition,
   SponsorshipAssetCategory,
   VerificationStatus,
+  DeclineReason,
 } from './types';
 
 export const SPONSORSHIP_ASSET_DEFINITIONS: SponsorshipAssetDefinition[] = [
@@ -116,8 +117,10 @@ export const DECLINE_REASONS = [
   { value: 'other', label: 'Other' },
 ] as const;
 
-export function getDeclineReasonLabel(reason: string): string {
-  return DECLINE_REASONS.find((r) => r.value === reason)?.label ?? reason;
+export function getDeclineReasonLabel(reason: DeclineReason): string {
+  return (
+    DECLINE_REASONS.find((entry) => entry.value === reason)?.label ?? reason
+  );
 }
 
 export const APPLICATION_STATUS_LABELS: Record<string, string> = {

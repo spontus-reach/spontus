@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { MapPin, Calendar, Users, CheckCircle2 } from "lucide-react";
 import { SPONSORSHIP_ASSET_DEFINITIONS } from "@/lib/constants";
-import { getSponsorById } from "@/lib/mock-data";
+import { useVerification } from "@/components/providers/verification-provider";
 import { VerificationStatusBadge } from "@/components/team/verification-status-badge";
 import type { SponsorshipListing } from "@/lib/types";
 
@@ -21,6 +21,7 @@ export function ListingCard({
   listing: SponsorshipListing;
   isApplied: boolean;
 }) {
+  const { getSponsorById } = useVerification();
   const sponsor = getSponsorById(listing.sponsorId);
   const initials = (sponsor?.brandName ?? sponsor?.companyName ?? "??")
     .split(" ")

@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { Users } from "lucide-react";
 import { VerificationStatusBadge } from "./verification-status-badge";
 import { SPONSORSHIP_ASSET_DEFINITIONS } from "@/lib/constants";

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { ApplicantsGrid } from "@/components/sponsor/applicants-grid";
-import { getListingById, getSponsorById } from "@/lib/mock-data";
+import { getListingById } from "@/lib/mock-data";
 import { ACTIVE_SPONSOR_ID } from "@/lib/constants";
 
 type PageProps = {
@@ -11,9 +11,8 @@ type PageProps = {
 export default async function ApplicantsPage({ params }: PageProps) {
   const { id } = await params;
   const listing = getListingById(id);
-  const sponsor = listing ? getSponsorById(listing.sponsorId) : undefined;
 
-  if (!listing || !sponsor || listing.sponsorId !== ACTIVE_SPONSOR_ID) {
+  if (!listing || listing.sponsorId !== ACTIVE_SPONSOR_ID) {
     return (
       <div className="mx-auto max-w-5xl px-6 py-16 text-center">
         <p style={{ color: "#6b6960", fontSize: 15 }}>

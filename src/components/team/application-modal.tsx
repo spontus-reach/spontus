@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,37 +25,34 @@ export function ApplicationModal({
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
   const overlap = getAssetOverlap(listing.requestedAssets, team.sponsorshipAssets);
-
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const previousActiveElement = document.activeElement as HTMLElement | null;
     modalRef.current?.focus();
 
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
         onClose();
+        return;
       }
 
-      if (e.key === "Tab" && modalRef.current) {
-        const focusableElements = modalRef.current.querySelectorAll<HTMLElement>(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-        if (focusableElements.length === 0) return;
-        const firstElement = focusableElements[0];
-        const lastElement = focusableElements[focusableElements.length - 1];
+      if (event.key !== "Tab" || !modalRef.current) return;
 
-        if (e.shiftKey) {
-          if (document.activeElement === firstElement) {
-            lastElement.focus();
-            e.preventDefault();
-          }
-        } else {
-          if (document.activeElement === lastElement) {
-            firstElement.focus();
-            e.preventDefault();
-          }
-        }
+      const focusableElements = modalRef.current.querySelectorAll<HTMLElement>(
+        'button, [href], textarea, [tabindex]:not([tabindex="-1"])',
+      );
+      if (focusableElements.length === 0) return;
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (event.shiftKey && document.activeElement === firstElement) {
+        lastElement.focus();
+        event.preventDefault();
+      } else if (!event.shiftKey && document.activeElement === lastElement) {
+        firstElement.focus();
+        event.preventDefault();
       }
     }
 
@@ -63,9 +60,7 @@ export function ApplicationModal({
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
-      if (previousActiveElement) {
-        previousActiveElement.focus();
-      }
+      previousActiveElement?.focus();
     };
   }, [onClose]);
 
@@ -83,8 +78,8 @@ export function ApplicationModal({
     <div
       ref={modalRef}
       tabIndex={-1}
-      onClick={(e) => {
-        if (e.target === modalRef.current) {
+      onClick={(event) => {
+        if (event.target === modalRef.current) {
           onClose();
         }
       }}
@@ -107,11 +102,7 @@ export function ApplicationModal({
           >
             {submitted ? "Application sent" : `Apply: ${listing.title}`}
           </h2>
-          <button
-            onClick={onClose}
-            aria-label="Close"
-            style={{ color: "#6b6960" }}
-          >
+          <button onClick={onClose} aria-label="Close" style={{ color: "#6b6960" }}>
             <X className="h-5 w-5" />
           </button>
         </div>

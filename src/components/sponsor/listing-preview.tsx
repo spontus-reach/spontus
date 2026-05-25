@@ -234,7 +234,7 @@ export function ListingPreview({
           Apply
         </button>
         <p className="mt-3 text-xs" style={{ color: "#6b6960" }}>
-          Team application flow coming in Slice 3
+          Teams apply from the listings feed once your profile and listing are verified.
         </p>
       </Card>
     </div>

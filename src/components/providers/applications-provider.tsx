@@ -2,9 +2,7 @@
 
 import { createContext, useContext, useState, useCallback, useRef } from "react";
 import type { Application, ApplicationStatus, DeclineReason } from "@/lib/types";
-import { MOCK_SEED_APPLICATIONS, getSeedListingById } from "@/lib/mock-data";
-
-export type AcceptResult = { ok: true } | { ok: false; reason: string };
+import { MOCK_SEED_APPLICATIONS } from "@/lib/mock-data";
 
 interface ApplicationsContextValue {
   applications: Application[];
@@ -20,7 +18,7 @@ interface ApplicationsContextValue {
   ) => Application | undefined;
   getApplicationsByListingId: (listingId: string) => Application[];
   getApplicationById: (applicationId: string) => Application | undefined;
-  acceptApplication: (applicationId: string) => AcceptResult;
+  acceptApplication: (applicationId: string) => void;
   declineApplication: (applicationId: string, reason: DeclineReason) => void;
 }
 
@@ -77,7 +75,7 @@ export function ApplicationsProvider({
 
       setApplications((prev) => {
         const duplicate = prev.some(
-          (a) => a.teamId === teamId && a.listingId === listingId
+          (a) => a.teamId === teamId && a.listingId === listingId,
         );
         if (duplicate) return prev;
         createdRef.current = newApp;
@@ -86,31 +84,11 @@ export function ApplicationsProvider({
 
       return createdRef.current;
     },
-    []
+    [],
   );
 
   const acceptApplication = useCallback(
-    (applicationId: string): AcceptResult => {
-      const app = applications.find((a) => a.id === applicationId);
-      if (!app) return { ok: false, reason: "Application not found" };
-      if (TERMINAL_STATUSES.includes(app.status)) {
-        return { ok: false, reason: "Application already resolved" };
-      }
-
-      // Spot-cap enforcement (review item #1)
-      const listing = getSeedListingById(app.listingId);
-      if (listing && listing.numberOfTeams != null) {
-        const acceptedCount = applications.filter(
-          (a) => a.listingId === app.listingId && a.status === "accepted"
-        ).length;
-        if (acceptedCount >= listing.numberOfTeams) {
-          return {
-            ok: false,
-            reason: `All ${listing.numberOfTeams} spots are filled. Decline or remove an accepted team first.`,
-          };
-        }
-      }
-
+    (applicationId: string) => {
       setApplications((prev) =>
         prev.map((a) => {
           if (a.id !== applicationId) return a;
@@ -122,9 +100,8 @@ export function ApplicationsProvider({
           };
         })
       );
-      return { ok: true };
     },
-    [applications]
+    []
   );
 
   const declineApplication = useCallback(

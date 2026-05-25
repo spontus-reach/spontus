@@ -11,13 +11,10 @@ import { EligibilitySummary } from "./eligibility-summary";
 import { AcceptApplicationModal } from "./accept-application-modal";
 import { DeclineReasonModal } from "./decline-reason-modal";
 import { useApplications } from "@/components/providers/applications-provider";
+import { useVerification } from "@/components/providers/verification-provider";
 import { getAssetOverlap } from "@/lib/asset-overlap";
 import { APPLICATION_STATUS_LABELS, ACTIVE_SPONSOR_ID, getDeclineReasonLabel } from "@/lib/constants";
-import {
-  getTeamById,
-  getSeedListingById,
-  getSponsorById,
-} from "@/lib/mock-data";
+import { getSeedListingById } from "@/lib/mock-data";
 import type { DeclineReason } from "@/lib/types";
 
 export function ApplicantDetail({
@@ -30,9 +27,9 @@ export function ApplicantDetail({
     acceptApplication,
     declineApplication,
   } = useApplications();
+  const { getTeamById, getSponsorById } = useVerification();
   const [showAccept, setShowAccept] = useState(false);
   const [showDecline, setShowDecline] = useState(false);
-  const [acceptError, setAcceptError] = useState<string | null>(null);
 
   const application = getApplicationById(applicationId);
   if (!application) {
@@ -55,7 +52,10 @@ export function ApplicantDetail({
     );
   }
 
-  if (listing.sponsorId !== ACTIVE_SPONSOR_ID) {
+  if (
+    listing.sponsorId !== ACTIVE_SPONSOR_ID ||
+    sponsor?.verificationStatus !== "verified"
+  ) {
     return (
       <div className="mx-auto max-w-5xl px-6 py-16 text-center">
         <p style={{ color: "#6b6960", fontSize: 15 }}>
@@ -165,8 +165,10 @@ export function ApplicantDetail({
               Declined
               {application.reviewedAt && ` on ${application.reviewedAt}`}
               {application.declineReason && (
-                <span style={{ color: "#dc2626" }}>
-                  {" "}— {getDeclineReasonLabel(application.declineReason)}
+                <span>
+                  {" "}
+                  &middot; Reason:{" "}
+                  {getDeclineReasonLabel(application.declineReason)}
                 </span>
               )}
             </div>
@@ -301,19 +303,10 @@ export function ApplicantDetail({
         <AcceptApplicationModal
           teamName={team.name}
           onConfirm={() => {
-            const result = acceptApplication(application.id);
-            if (result.ok) {
-              setShowAccept(false);
-              setAcceptError(null);
-            } else {
-              setAcceptError(result.reason);
-            }
-          }}
-          onClose={() => {
+            acceptApplication(application.id);
             setShowAccept(false);
-            setAcceptError(null);
           }}
-          error={acceptError}
+          onClose={() => setShowAccept(false)}
         />
       )}
 

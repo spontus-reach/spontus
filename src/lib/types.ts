@@ -189,3 +189,17 @@ export type Application = {
   submittedAt?: string;
   reviewedAt?: string;
 };
+
+// --- Verification types (Slice 5) ---
+
+export type VerificationEntityType = 'team' | 'sponsor';
+
+export type VerificationReviewNote = {
+  id: string;
+  entityType: VerificationEntityType;
+  entityId: string;
+  status: VerificationStatus;
+  note?: string;
+  reviewedAt: string;
+  reviewedBy: string;
+};

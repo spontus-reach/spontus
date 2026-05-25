@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useApplications } from "@/components/providers/applications-provider";
+import { useVerification } from "@/components/providers/verification-provider";
 import { ApplicantCard } from "./applicant-card";
 import {
   ApplicantFilters,
@@ -10,7 +11,6 @@ import {
 } from "./applicant-filters";
 import { AcceptApplicationModal } from "./accept-application-modal";
 import { DeclineReasonModal } from "./decline-reason-modal";
-import { getTeamById } from "@/lib/mock-data";
 import type { SponsorshipListing, DeclineReason } from "@/lib/types";
 
 export function ApplicantsGrid({ listing }: { listing: SponsorshipListing }) {
@@ -19,12 +19,13 @@ export function ApplicantsGrid({ listing }: { listing: SponsorshipListing }) {
     acceptApplication,
     declineApplication,
   } = useApplications();
+  const { getTeamById, getSponsorById } = useVerification();
+  const sponsor = getSponsorById(listing.sponsorId);
   const [filters, setFilters] = useState<ApplicantFilterState>(
     DEFAULT_APPLICANT_FILTERS
   );
   const [acceptingId, setAcceptingId] = useState<string | null>(null);
   const [decliningId, setDecliningId] = useState<string | null>(null);
-  const [acceptError, setAcceptError] = useState<string | null>(null);
 
   const applications = getApplicationsByListingId(listing.id);
 
@@ -52,7 +53,17 @@ export function ApplicantsGrid({ listing }: { listing: SponsorshipListing }) {
 
       return true;
     });
-  }, [applications, filters]);
+  }, [applications, filters, getTeamById]);
+
+  if (!sponsor || sponsor.verificationStatus !== "verified") {
+    return (
+      <div className="rounded-lg p-8 text-center" style={{ border: "0.5px solid #d5d3cd" }}>
+        <p style={{ color: "#6b6960", fontSize: 15 }}>
+          Your sponsor profile must be verified before you can review applicants.
+        </p>
+      </div>
+    );
+  }
 
   const acceptedCount = applications.filter(
     (a) => a.status === "accepted"
@@ -76,13 +87,8 @@ export function ApplicantsGrid({ listing }: { listing: SponsorshipListing }) {
 
   function handleAcceptConfirm() {
     if (acceptingId) {
-      const result = acceptApplication(acceptingId);
-      if (result.ok) {
-        setAcceptingId(null);
-        setAcceptError(null);
-      } else {
-        setAcceptError(result.reason);
-      }
+      acceptApplication(acceptingId);
+      setAcceptingId(null);
     }
   }
 
@@ -102,9 +108,7 @@ export function ApplicantsGrid({ listing }: { listing: SponsorshipListing }) {
           { label: "Accepted", value: acceptedCount, color: "#16a34a" },
           {
             label: "Spots left",
-            value: listing.numberOfTeams != null
-              ? Math.max(0, listing.numberOfTeams - acceptedCount)
-              : "?",
+            value: (listing.numberOfTeams ?? 0) - acceptedCount,
           },
           { label: "Declined", value: declinedCount },
         ].map((s) => (
@@ -180,11 +184,7 @@ export function ApplicantsGrid({ listing }: { listing: SponsorshipListing }) {
         <AcceptApplicationModal
           teamName={acceptingTeam.name}
           onConfirm={handleAcceptConfirm}
-          onClose={() => {
-            setAcceptingId(null);
-            setAcceptError(null);
-          }}
-          error={acceptError}
+          onClose={() => setAcceptingId(null)}
         />
       )}
 

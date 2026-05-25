@@ -1,19 +1,16 @@
+"use client";
+
+import { use } from "react";
 import { notFound } from "next/navigation";
 import { ListingDetail } from "@/components/team/listing-detail";
-import { getListingById, MOCK_LISTINGS } from "@/lib/mock-data";
-
-export function generateStaticParams() {
-  return MOCK_LISTINGS.filter((l) => l.status === "open").map((l) => ({
-    id: l.id,
-  }));
-}
+import { getListingById } from "@/lib/mock-data";
 
 type PageProps = {
   params: Promise<{ id: string }>;
 };
 
-export default async function TeamListingDetailPage({ params }: PageProps) {
-  const { id } = await params;
+export default function TeamListingDetailPage({ params }: PageProps) {
+  const { id } = use(params);
   const listing = getListingById(id);
   if (!listing) notFound();
 

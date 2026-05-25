@@ -49,7 +49,7 @@ export function TopNav() {
           <Link
             href="/signup/team"
             className={`text-sm transition-colors ${
-              isTeamRoute
+              pathname === "/signup/team" || pathname === "/team/onboarding"
                 ? "text-[#1a1a18]"
                 : "text-[#6b6960] hover:text-[#1a1a18]"
             }`}
@@ -88,6 +88,16 @@ export function TopNav() {
               My Applications
             </Link>
           )}
+          <Link
+            href="/admin/verification"
+            className={`text-sm transition-colors ${
+              pathname.startsWith("/admin")
+                ? "text-[#1a1a18]"
+                : "text-[#8a8880] hover:text-[#6b6960]"
+            }`}
+          >
+            Admin
+          </Link>
         </nav>
 
         <div className="flex items-center gap-4">

@@ -1,14 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { VerificationStatusBadge } from "@/components/team/verification-status-badge";
 import { AssetOverlapSummary } from "./asset-overlap-summary";
 import { getAssetOverlap } from "@/lib/asset-overlap";
-import { APPLICATION_STATUS_LABELS, getDeclineReasonLabel } from "@/lib/constants";
-import { getTeamById } from "@/lib/mock-data";
+import { APPLICATION_STATUS_LABELS } from "@/lib/constants";
+import { useVerification } from "@/components/providers/verification-provider";
 import type { Application, SponsorshipListing } from "@/lib/types";
 
 const statusStyles: Record<string, { bg: string; text: string }> = {
@@ -31,6 +31,7 @@ export function ApplicantCard({
   onAccept,
   onDecline,
 }: Props) {
+  const { getTeamById } = useVerification();
   const team = getTeamById(application.teamId);
   if (!team) return null;
 
@@ -109,15 +110,6 @@ export function ApplicantCard({
           style={{ background: "#f0efeb", color: "#6b6960" }}
         >
           &ldquo;{application.fitNote}&rdquo;
-        </p>
-      )}
-
-      {application.status === "declined" && application.declineReason && (
-        <p
-          className="mt-2 rounded-md px-3 py-1.5 text-xs"
-          style={{ background: "#fef2f2", color: "#dc2626" }}
-        >
-          Reason: {getDeclineReasonLabel(application.declineReason)}
         </p>
       )}
 

@@ -2,4 +2,15 @@
 # Dependabot is disabled for npm and github-actions to avoid duplicate PRs.
 # See: docs/reviews/github-retooling-review.md (item #1)
 version: 2
-updates: []
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 0
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 0
