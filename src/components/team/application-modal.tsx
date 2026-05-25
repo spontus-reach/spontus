@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,6 +25,44 @@ export function ApplicationModal({
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
   const overlap = getAssetOverlap(listing.requestedAssets, team.sponsorshipAssets);
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const previousActiveElement = document.activeElement as HTMLElement | null;
+    modalRef.current?.focus();
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        onClose();
+        return;
+      }
+
+      if (event.key !== "Tab" || !modalRef.current) return;
+
+      const focusableElements = modalRef.current.querySelectorAll<HTMLElement>(
+        'button, [href], textarea, [tabindex]:not([tabindex="-1"])',
+      );
+      if (focusableElements.length === 0) return;
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (event.shiftKey && document.activeElement === firstElement) {
+        lastElement.focus();
+        event.preventDefault();
+      } else if (!event.shiftKey && document.activeElement === lastElement) {
+        firstElement.focus();
+        event.preventDefault();
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      previousActiveElement?.focus();
+    };
+  }, [onClose]);
 
   function handleSubmit() {
     const success = onSubmit(fitNote.trim() || undefined);
@@ -37,7 +75,19 @@ export function ApplicationModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div
+      ref={modalRef}
+      tabIndex={-1}
+      onClick={(event) => {
+        if (event.target === modalRef.current) {
+          onClose();
+        }
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 outline-none"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="application-modal-title"
+    >
       <div
         className="relative mx-4 w-full max-w-lg overflow-hidden rounded-xl shadow-xl"
         style={{ background: "white", border: "0.5px solid #d5d3cd" }}
@@ -46,10 +96,13 @@ export function ApplicationModal({
           className="flex items-center justify-between px-6 py-4"
           style={{ borderBottom: "0.5px solid #d5d3cd" }}
         >
-          <h2 style={{ fontSize: 18, fontWeight: 600, color: "#1a1a18" }}>
+          <h2
+            id="application-modal-title"
+            style={{ fontSize: 18, fontWeight: 600, color: "#1a1a18" }}
+          >
             {submitted ? "Application sent" : `Apply: ${listing.title}`}
           </h2>
-          <button onClick={onClose} style={{ color: "#6b6960" }}>
+          <button onClick={onClose} aria-label="Close" style={{ color: "#6b6960" }}>
             <X className="h-5 w-5" />
           </button>
         </div>
