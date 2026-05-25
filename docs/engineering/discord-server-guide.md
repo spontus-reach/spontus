@@ -226,11 +226,33 @@ Pin in `#resources`:
 - Template links
 - Repo link
 
-### 6. Optional integrations
+### 6. GitHub → Discord (`#github-feed`)
+
+Do **not** point a GitHub repo webhook directly at a Discord webhook URL. GitHub sends raw JSON; Discord expects `{ "content": "..." }` or `{ "embeds": [...] }` and will return `400 Cannot send an empty message`.
+
+Use the repo workflow instead:
+
+1. In Discord: `#github-feed` → **Edit Channel → Integrations → Webhooks → New Webhook**
+2. Copy the webhook URL
+3. In GitHub: **Settings → Secrets and variables → Actions → New repository secret**
+   - Name: `DISCORD_WEBHOOK_URL`
+   - Value: the Discord webhook URL
+4. Remove any broken repo webhook under **Settings → Webhooks** (the one pointing at `discord.com/api/webhooks/...`)
+5. Push to `main` or open a PR — [`.github/workflows/discord-notify.yml`](../../.github/workflows/discord-notify.yml) posts formatted updates
+
+Security notes:
+- Treat Discord webhook URLs like passwords.
+- If a webhook URL is pasted into chat, regenerate it in Discord and update the `DISCORD_WEBHOOK_URL` GitHub secret.
+- Add `[skip discord]` to a commit message when you need to push workflow changes without sending a Discord notification.
+
+Events posted today:
+- Push to `main`
+- PR opened, ready for review, closed, merged
+- Issues opened and closed
 
 | Integration | Channel | Notes |
 | --- | --- | --- |
-| GitHub webhook | `#github-feed` | Commits, PRs, issues from `spontus` repo |
+| GitHub Actions → Discord webhook | `#github-feed` | Uses `DISCORD_WEBHOOK_URL` secret |
 | Calendar reminders | `#meetings` | Manual for now |
 | GitHub docs | `#resources` | Link to repo docs folder, not live sync |
 

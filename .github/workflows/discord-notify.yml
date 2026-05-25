@@ -1,0 +1,168 @@
+name: Discord Notifications
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - closed
+      - ready_for_review
+  issues:
+    types:
+      - opened
+      - closed
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read
+
+concurrency:
+  group: discord-notify-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.issue.number || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  notify:
+    name: Post to Discord
+    runs-on: ubuntu-latest
+    if: ${{ (github.event_name != 'pull_request' || github.event.pull_request.draft == false) && !(github.event_name == 'push' && contains(github.event.head_commit.message, '[skip discord]')) }}
+
+    steps:
+      - name: Send Discord notification
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_ACTION: ${{ github.event.action }}
+          REPO: ${{ github.repository }}
+          ACTOR: ${{ github.actor }}
+          SHA: ${{ github.sha }}
+          REF_NAME: ${{ github.ref_name }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_MERGED: ${{ github.event.pull_request.merged }}
+          PR_USER: ${{ github.event.pull_request.user.login }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_USER: ${{ github.event.issue.user.login }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          COMMIT_URL: ${{ github.event.head_commit.url }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${DISCORD_WEBHOOK_URL:-}" ]]; then
+            echo "DISCORD_WEBHOOK_URL is not configured. Skipping Discord notification."
+            exit 0
+          fi
+
+          payload="$(python - <<'PY'
+          import json
+          import os
+
+          event = os.environ["EVENT_NAME"]
+          action = os.environ.get("EVENT_ACTION", "")
+          repo = os.environ["REPO"]
+          actor = os.environ["ACTOR"]
+
+          def embed(title, description, color, url=None):
+              item = {
+                  "title": title[:256],
+                  "description": description[:4096],
+                  "color": color,
+              }
+              if url:
+                  item["url"] = url
+              return item
+
+          if event == "push":
+              commit_message = os.environ.get("COMMIT_MESSAGE", "").splitlines()[0]
+              sha = os.environ["SHA"][:7]
+              commit_url = os.environ.get("COMMIT_URL") or f"https://github.com/{repo}/commit/{sha}"
+              description = (
+                  f"**Repo:** {repo}\n"
+                  f"**Branch:** {os.environ['REF_NAME']}\n"
+                  f"**Author:** {actor}\n"
+                  f"**Commit:** [{sha}]({commit_url})\n"
+                  f"**Message:** {commit_message or '(no message)'}"
+              )
+              embeds = [embed("Push to main", description, 5763719, commit_url)]
+
+          elif event == "pull_request":
+              title = os.environ.get("PR_TITLE", "Pull request update")
+              url = os.environ.get("PR_URL", "")
+              number = os.environ.get("PR_NUMBER", "")
+              merged = os.environ.get("PR_MERGED", "false") == "true"
+
+              if action == "closed" and merged:
+                  headline = f"PR merged #{number}"
+                  color = 5763719
+              elif action == "closed":
+                  headline = f"PR closed #{number}"
+                  color = 10070709
+              elif action == "opened":
+                  headline = f"PR opened #{number}"
+                  color = 3447003
+              elif action == "ready_for_review":
+                  headline = f"PR ready for review #{number}"
+                  color = 15844367
+              else:
+                  headline = f"PR updated #{number}"
+                  color = 9807270
+
+              description = (
+                  f"**Repo:** {repo}\n"
+                  f"**Title:** {title}\n"
+                  f"**Author:** {os.environ.get('PR_USER', actor)}\n"
+                  f"**Action:** {action or 'updated'}"
+              )
+              embeds = [embed(headline, description, color, url or None)]
+
+          elif event == "issues":
+              title = os.environ.get("ISSUE_TITLE", "Issue update")
+              url = os.environ.get("ISSUE_URL", "")
+              number = os.environ.get("ISSUE_NUMBER", "")
+
+              if action == "opened":
+                  headline = f"Issue opened #{number}"
+                  color = 15844367
+              else:
+                  headline = f"Issue closed #{number}"
+                  color = 10070709
+
+              description = (
+                  f"**Repo:** {repo}\n"
+                  f"**Title:** {title}\n"
+                  f"**Author:** {os.environ.get('ISSUE_USER', actor)}\n"
+                  f"**Action:** {action or 'updated'}"
+              )
+              embeds = [embed(headline, description, color, url or None)]
+
+          elif event == "workflow_dispatch":
+              description = (
+                  f"**Repo:** {repo}\n"
+                  f"**Actor:** {actor}\n"
+                  "**Purpose:** Manual Discord notification test"
+              )
+              embeds = [embed("Manual Discord test", description, 9807270)]
+
+          else:
+              description = f"**Repo:** {repo}\n**Event:** {event}\n**Actor:** {actor}"
+              embeds = [embed("GitHub activity", description, 9807270)]
+
+          print(json.dumps({
+              "username": "Spontus GitHub",
+              "embeds": embeds,
+          }))
+          PY
+          )"
+
+          curl --fail-with-body --silent --show-error \
+            -X POST "${DISCORD_WEBHOOK_URL}" \
+            -H "Content-Type: application/json" \
+            -d "${payload}"

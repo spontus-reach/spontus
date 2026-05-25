@@ -21,8 +21,7 @@ Use this folder for technical architecture, stack choices, implementation notes,
 | Page | Status | Use it for |
 | --- | --- | --- |
 | [Tech Stack](./tech-stack.md) | Reference | Current stack ideas and implementation context. |
-| [Discord Server Guide](./discord-server-guide.md) | Reference | Internal coordination server setup and channel rules. |
-| [Discord Server Guide](./discord-server-guide.md) | Reference | Internal Discord channel structure, roles, and setup instructions. |
+| [Discord Server Guide](./discord-server-guide.md) | Reference | Internal Discord setup, channel rules, and GitHub feed wiring. |
 
 ## Related Decisions
 
