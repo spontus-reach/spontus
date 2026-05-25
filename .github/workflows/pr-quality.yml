@@ -59,6 +59,26 @@ jobs:
             exit 1
           fi
 
+          if [[ "$PR_BODY" != *"## Testing"* ]]; then
+            echo "Pull request body must include a '## Testing' section." >&2
+            exit 1
+          fi
+
+          if [[ "$PR_BODY" != *"## Related Issues"* ]]; then
+            echo "Pull request body must include a '## Related Issues' section." >&2
+            exit 1
+          fi
+
+          if [[ "$PR_BODY" != *"## Notes"* ]]; then
+            echo "Pull request body must include a '## Notes' section." >&2
+            exit 1
+          fi
+
+          if [[ "$PR_BODY" != *"## Reviewer Checklist"* ]]; then
+            echo "Pull request body must include a '## Reviewer Checklist' section." >&2
+            exit 1
+          fi
+
           if [[ "$PR_BODY" == *"Describe the change"* ]]; then
             echo "Replace the placeholder text in the Summary section." >&2
             exit 1
@@ -66,5 +86,10 @@ jobs:
 
           if [[ "$PR_BODY" == *"List the checks you ran"* ]]; then
             echo "Replace the placeholder text in the Verification section." >&2
+            exit 1
+          fi
+
+          if [[ "$PR_BODY" == *"Link associated issues using GitHub keywords"* ]]; then
+            echo "Replace the placeholder text in the Related Issues section." >&2
             exit 1
           fi
