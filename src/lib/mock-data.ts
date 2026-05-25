@@ -1,4 +1,4 @@
-import type { TeamProfile, SponsorProfile, SponsorshipListing } from './types';
+import type { TeamProfile, SponsorProfile, SponsorshipListing, Application } from './types';
 
 export const MOCK_TEAMS: TeamProfile[] = [
   {
@@ -352,4 +352,105 @@ export function getListingById(id: string): SponsorshipListing | undefined {
 
 export function getListingsForSponsor(sponsorId: string): SponsorshipListing[] {
   return MOCK_LISTINGS.filter((l) => l.sponsorId === sponsorId);
+}
+
+// --- Application-side mock data (Slice 3) ---
+
+export const ACTIVE_TEAM_ID = 'cp-tri';
+
+export const MOCK_SEED_SPONSORS: SponsorProfile[] = [
+  {
+    id: 'sp-seed-gnarly',
+    companyName: 'Gnarly Nutrition',
+    brandName: 'Gnarly Nutrition',
+    oneLiner: 'Plant-based performance fuel for endurance athletes.',
+    websiteUrl: 'https://gnarlynutrition.com',
+    industryCategory: 'Nutrition & supplements',
+    geographicFocus: 'West Coast + Mountain',
+    typicalOfferTypes: ['Free product for team use', 'Event prizes'],
+    verificationStatus: 'verified',
+  },
+  {
+    id: 'sp-seed-onrunning',
+    companyName: 'On Running',
+    brandName: 'On Running',
+    oneLiner: 'Swiss-engineered running shoes and apparel.',
+    websiteUrl: 'https://on-running.com',
+    industryCategory: 'Apparel & gear',
+    geographicFocus: 'Nationwide',
+    typicalOfferTypes: ['Discount codes', 'Free product for team use'],
+    verificationStatus: 'verified',
+  },
+];
+
+export const MOCK_SEED_LISTINGS: SponsorshipListing[] = [
+  {
+    id: 'lst-seed-1',
+    sponsorId: 'sp-seed-gnarly',
+    title: 'Spring endurance team partnerships',
+    status: 'closed',
+    offerTypes: ['Free product for team use', 'Event prizes'],
+    offerSummary: 'Free product (6-month supply per athlete)',
+    numberOfTeams: 8,
+    geography: 'California',
+    sportPreferences: ['Triathlon', 'Cycling', 'Running'],
+    duration: 'Spring 2026 season',
+    applicationDeadline: '2026-03-14',
+    requestedAssets: [
+      { assetId: 'jersey_logo', required: true },
+      { assetId: 'instagram_post', required: true },
+      { assetId: 'athlete_packet_stuffing', required: false },
+    ],
+    publishedAt: '2026-01-10',
+  },
+  {
+    id: 'lst-seed-2',
+    sponsorId: 'sp-seed-onrunning',
+    title: 'College club running & tri partnerships',
+    status: 'closed',
+    offerTypes: ['Discount codes', 'Free product for team use'],
+    offerSummary: 'Discount codes + 20% team kit',
+    numberOfTeams: 20,
+    geography: 'Nationwide',
+    sportPreferences: ['Running', 'Triathlon'],
+    duration: '2025-26 academic year',
+    applicationDeadline: '2025-08-30',
+    requestedAssets: [
+      { assetId: 'jersey_logo', required: true },
+      { assetId: 'highlight_video_logo', required: true },
+      { assetId: 'instagram_post', required: false },
+    ],
+    publishedAt: '2025-07-01',
+  },
+];
+
+export const MOCK_SEED_APPLICATIONS: Application[] = [
+  {
+    id: 'app-seed-1',
+    listingId: 'lst-seed-1',
+    teamId: 'cp-tri',
+    status: 'under_review',
+    fitNote: 'We host an 800-athlete tri in May and would love to plug Gnarly at packet pickup.',
+    submittedAt: '2026-05-15',
+  },
+  {
+    id: 'app-seed-2',
+    listingId: 'lst-seed-2',
+    teamId: 'cp-tri',
+    status: 'accepted',
+    submittedAt: '2026-05-01',
+    reviewedAt: '2026-05-10',
+  },
+];
+
+export function getSeedSponsorById(id: string): SponsorProfile | undefined {
+  return [...MOCK_SPONSORS, ...MOCK_SEED_SPONSORS].find((s) => s.id === id);
+}
+
+export function getSeedListingById(id: string): SponsorshipListing | undefined {
+  return [...MOCK_LISTINGS, ...MOCK_SEED_LISTINGS].find((l) => l.id === id);
+}
+
+export function getOpenListings(): SponsorshipListing[] {
+  return MOCK_LISTINGS.filter((l) => l.status === 'open');
 }

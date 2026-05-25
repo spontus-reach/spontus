@@ -161,3 +161,23 @@ export type SponsorSignupData = {
   websiteUrl: string;
   industryCategory: string;
 };
+
+// --- Application types (Slice 3) ---
+
+export type ApplicationStatus =
+  | 'draft'
+  | 'submitted'
+  | 'under_review'
+  | 'accepted'
+  | 'declined'
+  | 'withdrawn';
+
+export type Application = {
+  id: string;
+  listingId: string;
+  teamId: string;
+  status: ApplicationStatus;
+  fitNote?: string;
+  submittedAt?: string;
+  reviewedAt?: string;
+};

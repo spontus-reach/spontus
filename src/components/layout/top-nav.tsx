@@ -6,6 +6,9 @@ import { Zap } from "lucide-react";
 
 export function TopNav() {
   const pathname = usePathname();
+  const isTeamRoute = pathname.startsWith("/team") || pathname === "/signup/team";
+  const isSponsorRoute =
+    pathname.startsWith("/sponsor") || pathname === "/signup/sponsor";
 
   return (
     <header
@@ -24,7 +27,11 @@ export function TopNav() {
               color: "#f0efeb",
             }}
           >
-            <Zap className="h-3.5 w-3.5" strokeWidth={2.5} fill="currentColor" />
+            <Zap
+              className="h-3.5 w-3.5"
+              strokeWidth={2.5}
+              fill="currentColor"
+            />
           </div>
           <span
             style={{
@@ -52,17 +59,35 @@ export function TopNav() {
           <Link
             href="/signup/sponsor"
             className={`text-sm transition-colors ${
-              pathname.startsWith("/signup/sponsor") ||
-              pathname.startsWith("/sponsor")
+              isSponsorRoute
                 ? "text-[#1a1a18]"
                 : "text-[#6b6960] hover:text-[#1a1a18]"
             }`}
           >
             For Sponsors
           </Link>
-          <span className="cursor-not-allowed text-sm text-[#6b6960]/50">
-            Browse
-          </span>
+          <Link
+            href="/team/listings"
+            className={`text-sm transition-colors ${
+              pathname.startsWith("/team/listings")
+                ? "text-[#1a1a18]"
+                : "text-[#6b6960] hover:text-[#1a1a18]"
+            }`}
+          >
+            Browse Listings
+          </Link>
+          {isTeamRoute && (
+            <Link
+              href="/team/applications"
+              className={`text-sm transition-colors ${
+                pathname === "/team/applications"
+                  ? "text-[#1a1a18]"
+                  : "text-[#6b6960] hover:text-[#1a1a18]"
+              }`}
+            >
+              My Applications
+            </Link>
+          )}
         </nav>
 
         <div className="flex items-center gap-4">
