@@ -13,7 +13,7 @@ import { getOpenListings, ACTIVE_TEAM_ID } from "@/lib/mock-data";
 export function ListingsFeed() {
   const [filters, setFilters] = useState<ListingFilterState>(DEFAULT_FILTERS);
   const { getApplicationForListing } = useApplications();
-  const openListings = getOpenListings();
+  const openListings = useMemo(() => getOpenListings(), []);
 
   const filtered = useMemo(() => {
     return openListings.filter((l) => {
