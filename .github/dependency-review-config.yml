@@ -1,4 +1,10 @@
-fail-on-severity: high
+# Fail on any vulnerability at "low" severity or above.
+# Scoped to runtime and unknown dependencies only — development-only
+# dependencies (devDependencies) do not block PRs. This is intentional:
+# dev deps don't ship to production, so low-severity CVEs there are
+# acceptable during MVP velocity. Expand to "development" scope later
+# if stricter gating is desired.
+fail-on-severity: low
 fail-on-scopes:
   - runtime
   - unknown

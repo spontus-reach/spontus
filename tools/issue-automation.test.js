@@ -1,8 +1,8 @@
 const assert = require("node:assert/strict");
 const test = require("node:test");
 
-const { analyzeDecisionLog } = require("./decision-log");
-const { inferIssueLabels } = require("./issue-triage");
+const { analyzeDecisionLog } = require("./lib/decision-log");
+const { inferIssueLabels } = require("./lib/issue-labels");
 
 test("triage labels sponsor leads for sponsor-side GTM follow-up", () => {
   const labels = inferIssueLabels({

@@ -6,6 +6,9 @@ on:
       - ".agents/skills/**"
       - "tools/validate-skills.js"
       - "tools/validate-skills.test.js"
+      - "tools/workflow-lint.test.js"
+      - "tools/issue-automation.test.js"
+      - "tools/lib/**"
       - "package.json"
       - ".github/workflows/skills.yml"
   push:
@@ -15,6 +18,9 @@ on:
       - ".agents/skills/**"
       - "tools/validate-skills.js"
       - "tools/validate-skills.test.js"
+      - "tools/workflow-lint.test.js"
+      - "tools/issue-automation.test.js"
+      - "tools/lib/**"
       - "package.json"
       - ".github/workflows/skills.yml"
   workflow_dispatch:
