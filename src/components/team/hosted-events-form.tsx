@@ -1,9 +1,9 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Field } from "@/components/team/form-field";
 import { Plus, X } from "lucide-react";
 import type { TeamProfileDraft, TeamEvent } from "@/lib/types";
 
@@ -137,21 +137,6 @@ export function HostedEventsForm({ data, onUpdate }: Props) {
           <Plus className="h-3 w-3" /> Add another event
         </Button>
       )}
-    </div>
-  );
-}
-
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <Label className="mb-1.5 block text-sm">{label}</Label>
-      {children}
     </div>
   );
 }

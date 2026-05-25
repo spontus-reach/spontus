@@ -1,7 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Field } from "@/components/team/form-field";
 import type { TeamProfileDraft } from "@/lib/types";
 
 type Props = {
@@ -60,21 +60,6 @@ export function SocialReachForm({ data, onUpdate }: Props) {
           placeholder="8000"
         />
       </Field>
-    </div>
-  );
-}
-
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <Label className="mb-1.5 block text-sm">{label}</Label>
-      {children}
     </div>
   );
 }
