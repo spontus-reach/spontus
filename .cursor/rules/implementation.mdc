@@ -1,0 +1,41 @@
+---
+description: Spontus implementation workflow
+alwaysApply: true
+---
+
+Build one feature slice at a time.
+
+Required reading before coding:
+1. docs/README.md
+2. docs/domain-glossary.md
+3. docs/product/mvp-overview.md
+4. docs/product/domain-model.md
+5. docs/product/mvp-build-slices.md
+6. docs/product/ux-walkthrough.md
+7. docs/engineering/development-readiness.md
+8. docs/engineering/tech-stack.md
+9. docs/figma-map.md
+10. docs/implementation-plan.md
+
+MVP build order:
+1. Team profile foundation
+2. Sponsor profile and listing foundation
+3. Team application flow
+4. Sponsor review flow
+5. Manual verification and admin workflow
+
+Implementation rules:
+- Prefer TypeScript and explicit data types.
+- Keep mock data structured like the future database model.
+- Reuse components rather than duplicating screen-specific UI.
+- Keep manual verification status in the MVP.
+- Keep messaging lightweight; do not build a full chat product early.
+- Do not add unrequested features.
+- Do not implement payments, escrow, AI contracts, advanced analytics, full CRM, or automated matching in the first MVP slice.
+
+After coding:
+- Run lint/typecheck/tests when available.
+- Summarize changed files.
+- Note any deviations from Figma.
+- Note any product questions or open decisions.
+- Suggest the next smallest slice.
