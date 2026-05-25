@@ -157,7 +157,7 @@ export const MOCK_TEAMS: TeamProfile[] = [
       'Discount codes',
       'Gift cards',
     ],
-    verificationStatus: 'draft',
+    verificationStatus: 'submitted_for_verification',
     profileCompleteness: 68,
     photo: 'https://images.unsplash.com/photo-1517927033932-b3d18e61fb3a?auto=format&fit=crop&w=1200&q=70',
     pastSponsors: [],
@@ -234,7 +234,7 @@ export const MOCK_TEAMS: TeamProfile[] = [
     preferredSponsorCategories: ['Apparel', 'Nutrition', 'Recovery/Fitness', 'Equipment'],
     excludedSponsorCategories: ['Supplements we cannot verify', 'Tobacco/Nicotine'],
     dealTypesInterestedIn: ['Free product for team use', 'Discount codes', 'Gift cards'],
-    verificationStatus: 'verified',
+    verificationStatus: 'needs_changes',
     profileCompleteness: 60,
     photo: 'https://images.unsplash.com/photo-1519315901367-f34ff9154487?auto=format&fit=crop&w=1200&q=70',
     pastSponsors: [
@@ -292,7 +292,7 @@ export const MOCK_SPONSORS: SponsorProfile[] = [
     typicalOfferTypes: ['Discount codes', 'Gift cards'],
     pastSponsorships:
       'Supported Cal Poly Club Swim and Cal Poly Running Club with discount cards and event coffee service.',
-    verificationStatus: 'verified',
+    verificationStatus: 'submitted_for_verification',
   },
 ];
 
@@ -369,6 +369,20 @@ export const MOCK_SEED_SPONSORS: SponsorProfile[] = [
     geographicFocus: 'West Coast + Mountain',
     typicalOfferTypes: ['Free product for team use', 'Event prizes'],
     verificationStatus: 'verified',
+  },
+  {
+    id: 'sp-seed-ccpt',
+    companyName: 'Central Coast Physical Therapy',
+    brandName: 'Central Coast PT',
+    oneLiner: 'Sports rehab and injury prevention for Cal Poly athletes.',
+    description:
+      'Local sports medicine practice providing rehab, injury prevention, and pre-season screenings for Cal Poly club sports teams.',
+    websiteUrl: 'https://centralcoastpt.com',
+    industryCategory: 'Recovery & wellness',
+    targetAudience: 'Cal Poly club athletes',
+    geographicFocus: 'San Luis Obispo',
+    typicalOfferTypes: ['On-site services', 'Discount codes'],
+    verificationStatus: 'needs_changes',
   },
   {
     id: 'sp-seed-onrunning',

@@ -7,7 +7,7 @@ import { VerificationStatusBadge } from "@/components/team/verification-status-b
 import { AssetOverlapSummary } from "./asset-overlap-summary";
 import { getAssetOverlap } from "@/lib/asset-overlap";
 import { APPLICATION_STATUS_LABELS } from "@/lib/constants";
-import { getTeamById } from "@/lib/mock-data";
+import { useVerification } from "@/components/providers/verification-provider";
 import type { Application, SponsorshipListing } from "@/lib/types";
 
 const statusStyles: Record<string, { bg: string; text: string }> = {
@@ -30,6 +30,7 @@ export function ApplicantCard({
   onAccept,
   onDecline,
 }: Props) {
+  const { getTeamById } = useVerification();
   const team = getTeamById(application.teamId);
   if (!team) return null;
 

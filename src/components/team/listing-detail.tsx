@@ -8,16 +8,13 @@ import { Card } from "@/components/ui/card";
 import { SponsorProfileCard } from "@/components/sponsor/sponsor-profile-card";
 import { ApplicationModal } from "./application-modal";
 import { useApplications } from "@/components/providers/applications-provider";
+import { useVerification } from "@/components/providers/verification-provider";
 import {
   SPONSORSHIP_ASSET_DEFINITIONS,
   CATEGORY_LABELS,
 } from "@/lib/constants";
 import { getAssetOverlap } from "@/lib/asset-overlap";
-import {
-  getSponsorById,
-  ACTIVE_TEAM_ID,
-  MOCK_TEAMS,
-} from "@/lib/mock-data";
+import { ACTIVE_TEAM_ID } from "@/lib/mock-data";
 import type {
   SponsorshipListing,
   SponsorshipAssetCategory,
@@ -30,14 +27,18 @@ const CATEGORIES: SponsorshipAssetCategory[] = [
 ];
 
 export function ListingDetail({ listing }: { listing: SponsorshipListing }) {
+  const { getSponsorById, getTeamById } = useVerification();
   const sponsor = getSponsorById(listing.sponsorId);
-  const activeTeam = MOCK_TEAMS.find((t) => t.id === ACTIVE_TEAM_ID)!;
+  const activeTeam = getTeamById(ACTIVE_TEAM_ID);
   const { getApplicationForListing, createApplication } = useApplications();
   const existingApp = getApplicationForListing(ACTIVE_TEAM_ID, listing.id);
   const [showModal, setShowModal] = useState(false);
 
+  if (!activeTeam) return null;
+
   const overlap = getAssetOverlap(listing.requestedAssets, activeTeam.sponsorshipAssets);
-  const isVerified = activeTeam.verificationStatus === "verified";
+  const teamStatus = activeTeam.verificationStatus;
+  const sponsorVerified = sponsor?.verificationStatus === "verified";
   const isOpen = listing.status === "open";
   const isPastDeadline =
     listing.applicationDeadline &&
@@ -243,7 +244,54 @@ export function ListingDetail({ listing }: { listing: SponsorshipListing }) {
         className="mt-4 p-6 text-center"
         style={{ border: "0.5px solid #d5d3cd", background: "white" }}
       >
-        {existingApp ? (
+        {!sponsorVerified ? (
+          <p className="text-sm" style={{ color: "#6b6960" }}>
+            This sponsor is currently under review. Applications will open once
+            the sponsor is verified.
+          </p>
+        ) : teamStatus === "draft" ? (
+          <div>
+            <p className="text-sm" style={{ color: "#6b6960" }}>
+              Complete your profile to apply
+            </p>
+            <Link href="/team/onboarding">
+              <Button
+                className="mt-3"
+                variant="outline"
+                style={{ borderColor: "#1a3a6e", color: "#1a3a6e" }}
+              >
+                Complete profile
+              </Button>
+            </Link>
+          </div>
+        ) : teamStatus === "submitted_for_verification" ? (
+          <p className="text-sm" style={{ color: "#6b6960" }}>
+            Your profile is under review
+          </p>
+        ) : teamStatus === "needs_changes" ? (
+          <div>
+            <p className="text-sm" style={{ color: "#6b6960" }}>
+              Your profile needs changes before you can apply
+            </p>
+            <Link href="/team/onboarding">
+              <Button
+                className="mt-3"
+                variant="outline"
+                style={{ borderColor: "#1a3a6e", color: "#1a3a6e" }}
+              >
+                Update profile
+              </Button>
+            </Link>
+          </div>
+        ) : teamStatus === "suspended" ? (
+          <p className="text-sm" style={{ color: "#dc2626" }}>
+            This team profile is suspended
+          </p>
+        ) : !isOpen || isPastDeadline ? (
+          <p className="text-sm" style={{ color: "#6b6960" }}>
+            This listing is no longer accepting applications
+          </p>
+        ) : existingApp ? (
           <div>
             <span
               className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium"
@@ -261,25 +309,6 @@ export function ListingDetail({ listing }: { listing: SponsorshipListing }) {
               </p>
             )}
           </div>
-        ) : !isVerified ? (
-          <div>
-            <p className="text-sm" style={{ color: "#6b6960" }}>
-              Complete your profile to apply
-            </p>
-            <Link href="/team/onboarding">
-              <Button
-                className="mt-3"
-                variant="outline"
-                style={{ borderColor: "#1a3a6e", color: "#1a3a6e" }}
-              >
-                Complete profile
-              </Button>
-            </Link>
-          </div>
-        ) : !isOpen || isPastDeadline ? (
-          <p className="text-sm" style={{ color: "#6b6960" }}>
-            This listing is no longer accepting applications
-          </p>
         ) : (
           <Button
             onClick={() => setShowModal(true)}

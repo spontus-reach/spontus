@@ -16,6 +16,8 @@ import { HostedEventsForm } from "@/components/team/hosted-events-form";
 import { LookingForForm } from "@/components/team/looking-for-form";
 import { MediaUploadForm } from "@/components/team/media-upload-form";
 import { VerificationStatusBadge } from "@/components/team/verification-status-badge";
+import { useVerification } from "@/components/providers/verification-provider";
+import { ACTIVE_TEAM_ID } from "@/lib/mock-data";
 import type { TeamProfileDraft, TeamSponsorshipAsset } from "@/lib/types";
 
 function computeCompleteness(
@@ -96,6 +98,15 @@ export default function TeamOnboardingPage() {
     return result;
   }, [draft, hostedEventsReviewed]);
 
+  const { getTeamById, submitForVerification } = useVerification();
+  const liveTeam = getTeamById(ACTIVE_TEAM_ID);
+  const liveStatus = liveTeam?.verificationStatus ?? draft.verificationStatus ?? "draft";
+  const canSubmit = liveStatus === "draft" || liveStatus === "needs_changes";
+
+  function handleSubmitForVerification() {
+    submitForVerification("team", ACTIVE_TEAM_ID);
+  }
+
   function handleMarkComplete() {
     if (activeSection === "hosted") {
       setHostedEventsReviewed(true);
@@ -114,15 +125,22 @@ export default function TeamOnboardingPage() {
             <h1 className="text-2xl font-semibold tracking-tight">
               {draft.name || "Your team"}
             </h1>
-            <VerificationStatusBadge
-              status={draft.verificationStatus ?? "draft"}
-            />
+            <VerificationStatusBadge status={liveStatus} />
           </div>
           <p className="mt-1 text-sm text-muted-foreground">
             Build your team profile
           </p>
         </div>
         <div className="flex gap-2">
+          {canSubmit && (
+            <Button
+              variant="outline"
+              onClick={handleSubmitForVerification}
+              style={{ borderColor: "#d5d3cd" }}
+            >
+              Submit for verification
+            </Button>
+          )}
           <Link href="/team/listings">
             <Button variant="outline" style={{ borderColor: "#d5d3cd" }}>
               Browse listings

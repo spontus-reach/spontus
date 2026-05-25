@@ -4,7 +4,8 @@ import { use } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { ApplicantsGrid } from "@/components/sponsor/applicants-grid";
-import { getListingById, getSponsorById } from "@/lib/mock-data";
+import { useVerification } from "@/components/providers/verification-provider";
+import { getListingById } from "@/lib/mock-data";
 import { ACTIVE_SPONSOR_ID } from "@/lib/constants";
 
 type PageProps = {
@@ -14,6 +15,7 @@ type PageProps = {
 export default function ApplicantsPage({ params }: PageProps) {
   const { id } = use(params);
   const listing = getListingById(id);
+  const { getSponsorById } = useVerification();
   const sponsor = listing ? getSponsorById(listing.sponsorId) : undefined;
 
   if (!listing || !sponsor || listing.sponsorId !== ACTIVE_SPONSOR_ID) {
@@ -21,6 +23,24 @@ export default function ApplicantsPage({ params }: PageProps) {
       <div className="mx-auto max-w-5xl px-6 py-16 text-center">
         <p style={{ color: "#6b6960", fontSize: 15 }}>
           Listing not found or you do not have access to review these
+          applicants.
+        </p>
+        <Link
+          href="/sponsor/onboarding"
+          className="mt-4 inline-block text-sm underline"
+          style={{ color: "#1a3a6e" }}
+        >
+          Back to sponsor profile
+        </Link>
+      </div>
+    );
+  }
+
+  if (sponsor.verificationStatus !== "verified") {
+    return (
+      <div className="mx-auto max-w-5xl px-6 py-16 text-center">
+        <p style={{ color: "#6b6960", fontSize: 15 }}>
+          Your sponsor profile must be verified before you can review
           applicants.
         </p>
         <Link

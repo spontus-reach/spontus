@@ -11,13 +11,10 @@ import { EligibilitySummary } from "./eligibility-summary";
 import { AcceptApplicationModal } from "./accept-application-modal";
 import { DeclineReasonModal } from "./decline-reason-modal";
 import { useApplications } from "@/components/providers/applications-provider";
+import { useVerification } from "@/components/providers/verification-provider";
 import { getAssetOverlap } from "@/lib/asset-overlap";
 import { APPLICATION_STATUS_LABELS } from "@/lib/constants";
-import {
-  getTeamById,
-  getSeedListingById,
-  getSponsorById,
-} from "@/lib/mock-data";
+import { getSeedListingById } from "@/lib/mock-data";
 import type { DeclineReason } from "@/lib/types";
 
 export function ApplicantDetail({
@@ -30,6 +27,7 @@ export function ApplicantDetail({
     acceptApplication,
     declineApplication,
   } = useApplications();
+  const { getTeamById, getSponsorById } = useVerification();
   const [showAccept, setShowAccept] = useState(false);
   const [showDecline, setShowDecline] = useState(false);
 

@@ -7,16 +7,21 @@ import {
   DEFAULT_FILTERS,
   type ListingFilterState,
 } from "./listing-filters";
-import { useApplications } from "./applications-provider";
+import { useApplications } from "@/components/providers/applications-provider";
+import { useVerification } from "@/components/providers/verification-provider";
 import { getOpenListings, ACTIVE_TEAM_ID } from "@/lib/mock-data";
 
 export function ListingsFeed() {
   const [filters, setFilters] = useState<ListingFilterState>(DEFAULT_FILTERS);
   const { getApplicationForListing } = useApplications();
+  const { getSponsorById } = useVerification();
   const openListings = getOpenListings();
 
   const filtered = useMemo(() => {
     return openListings.filter((l) => {
+      const sponsor = getSponsorById(l.sponsorId);
+      if (!sponsor || sponsor.verificationStatus !== "verified") return false;
+
       if (
         filters.sport &&
         l.sportPreferences.length > 0 &&
@@ -49,7 +54,7 @@ export function ListingsFeed() {
 
       return true;
     });
-  }, [openListings, filters, getApplicationForListing]);
+  }, [openListings, filters, getApplicationForListing, getSponsorById]);
 
   return (
     <div>
