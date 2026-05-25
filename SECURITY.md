@@ -1,21 +1,75 @@
-# Security
+# Security Policy
 
-## Secret Scanning
+## Reporting a Vulnerability
 
-This repository runs Gitleaks in GitHub Actions for pull requests, pushes to
-`main`, and manual workflow dispatches.
+We take security issues seriously. If you discover a vulnerability in Spontus, please report it responsibly using **GitHub Security Advisories**.
 
-GitHub push protection is controlled in repository settings, not by a workflow
-file. Enable it in GitHub with:
+**To submit a report:**
 
-1. Open repository **Settings**.
-2. Go to **Code security and analysis**.
-3. Enable **Secret Protection** or **Secret scanning**, depending on the
-   repository plan and UI.
-4. Enable **Push protection** for secret scanning.
+1. Navigate to the [Security Advisories](https://github.com/spontus-reach/spontus/security/advisories) tab of this repository.
+2. Click **"Report a vulnerability"** to open a private advisory draft.
+3. Fill in the details and submit.
 
-For local checks before pushing, run:
+This ensures your report remains private until a fix is available.
+
+**What to include in your report:**
+
+- A clear description of the vulnerability and its potential impact
+- Steps to reproduce the issue (including environment details if relevant)
+- Affected component(s) or file path(s)
+- Any proof-of-concept code or screenshots
+- Your assessment of severity (critical, high, medium, low)
+- Suggested fix, if you have one
+
+Please do **not** include sensitive credentials or live exploit payloads in your report.
+
+## Response Timeline
+
+| Action | Timeframe |
+|--------|-----------|
+| Acknowledgment of report | Within 3 business days |
+| Initial assessment and triage | Within 5 business days |
+| Status update to reporter | Within 10 business days |
+| Fix development and release | Depends on severity and complexity |
+
+We will keep you informed throughout the process. If you have not received a response within the stated timeframe, feel free to follow up on the advisory thread.
+
+## Supported Versions
+
+| Version | Supported |
+|---------|-----------|
+| Latest release on `main` | ✅ Yes |
+| Previous releases | ❌ No |
+
+Spontus is currently in active development as a pre-1.0 project. Security fixes are applied to the latest version on the `main` branch only. Older releases and branches do not receive backported fixes.
+
+## Disclosure Policy
+
+- **Do not** disclose vulnerabilities via public channels such as GitHub Issues, Discussions, pull requests, social media, or blog posts before a fix is available.
+- **Do not** exploit the vulnerability beyond what is necessary to demonstrate it exists.
+- Allow a reasonable amount of time for the maintainers to address the issue before any public disclosure.
+- Once a fix is released, we will coordinate with you on public disclosure timing and credit attribution.
+
+We appreciate responsible disclosure and will acknowledge reporters in release notes (unless you prefer to remain anonymous).
+
+## Secret Scanning (Contributors)
+
+This repository uses automated secret scanning to prevent accidental credential leaks.
+
+### CI workflow
+
+The [`.github/workflows/secrets.yml`](.github/workflows/secrets.yml) workflow runs [Gitleaks](https://github.com/gitleaks/gitleaks) on every pull request, push to `main`, and on a weekly schedule. It uses the repository-level config at [`.gitleaks.toml`](.gitleaks.toml).
+
+### Local pre-push check
+
+Run Gitleaks locally before pushing to catch secrets early:
 
 ```sh
 gitleaks git --config .gitleaks.toml --redact .
 ```
+
+Install Gitleaks via Homebrew (`brew install gitleaks`), Go (`go install github.com/gitleaks/gitleaks/v8@latest`), or download a binary from the [releases page](https://github.com/gitleaks/gitleaks/releases).
+
+### GitHub push protection
+
+This repository has GitHub push protection enabled. If you attempt to push a commit containing a recognized secret pattern, the push will be blocked with a description of the detected secret. Follow the instructions in the error message to either remove the secret or mark it as a false positive.

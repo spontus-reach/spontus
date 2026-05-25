@@ -1,0 +1,5 @@
+# Dependency updates are managed by Renovate (see renovate.json).
+# Dependabot is disabled for npm and github-actions to avoid duplicate PRs.
+# See: docs/reviews/github-retooling-review.md (item #1)
+version: 2
+updates: []
