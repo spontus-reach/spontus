@@ -1,0 +1,32 @@
+---
+description: Canonical Spontus product language
+alwaysApply: true
+---
+
+Use Team + Sponsor as the canonical marketplace sides.
+
+Definitions:
+- Team: a college club sports organization seeking sponsorship support.
+- Sponsor: a company or organization that provides cash, product, discounts, services, access, or other support in exchange for sponsorship value.
+- Brand: the sponsor's public-facing identity, product line, or marketing name.
+- Sponsorship Listing: a sponsor-created opportunity that teams can apply to.
+- Application: a team's request to be considered for a sponsorship listing.
+- Deal: an accepted sponsorship relationship between one sponsor and one team.
+- Deliverable: a promised action or asset the team owes the sponsor.
+- Proof: evidence submitted to show a deliverable happened.
+- Asset: something a team can offer or a sponsor can request.
+
+Writing rules:
+- Use Team and Sponsor for account types, product navigation, data models, permissions, and lifecycle states.
+- Use Brand only when public identity, product category, brand fit, or marketing perception matters.
+- Use college club sports teams when describing the initial market wedge.
+- Avoid Clubs + Brands as the main framing. It is less precise and makes the product sound like it includes non-sports clubs.
+- Use club sports only for the category or university context, not as the account object.
+- Use listing before acceptance and deal after acceptance.
+- Use deliverable for the obligation and proof for evidence of completion.
+
+Recommended product sentence:
+Spontus is the sponsorship marketplace for college club sports teams.
+
+Recommended landing copy:
+Verified teams find relevant sponsors. Sponsors discover teams worth backing.
