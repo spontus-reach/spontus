@@ -51,3 +51,25 @@ Spontus is currently in active development as a pre-1.0 project. Security fixes 
 - Once a fix is released, we will coordinate with you on public disclosure timing and credit attribution.
 
 We appreciate responsible disclosure and will acknowledge reporters in release notes (unless you prefer to remain anonymous).
+
+## Secret Scanning (Contributors)
+
+This repository uses automated secret scanning to prevent accidental credential leaks.
+
+### CI workflow
+
+The [`.github/workflows/secrets.yml`](.github/workflows/secrets.yml) workflow runs [Gitleaks](https://github.com/gitleaks/gitleaks) on every pull request, push to `main`, and on a weekly schedule. It uses the repository-level config at [`.gitleaks.toml`](.gitleaks.toml).
+
+### Local pre-push check
+
+Run Gitleaks locally before pushing to catch secrets early:
+
+```sh
+gitleaks git --config .gitleaks.toml --redact .
+```
+
+Install Gitleaks via Homebrew (`brew install gitleaks`), Go (`go install github.com/gitleaks/gitleaks/v8@latest`), or download a binary from the [releases page](https://github.com/gitleaks/gitleaks/releases).
+
+### GitHub push protection
+
+This repository has GitHub push protection enabled. If you attempt to push a commit containing a recognized secret pattern, the push will be blocked with a description of the detected secret. Follow the instructions in the error message to either remove the secret or mark it as a false positive.
