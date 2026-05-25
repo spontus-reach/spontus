@@ -12,10 +12,12 @@ Back to [Documentation Hub](./README.md).
 
 | Decision | Status | Evidence | Notes |
 | --- | --- | --- | --- |
-| Build a two-sided sponsorship marketplace for college club sports | Accepted | [Product Vision](./strategy/product-vision.md), [MVP Overview](./product/mvp-overview.md) | Brands post opportunities; verified teams apply. |
-| Start with standardized team and brand profiles | Accepted | [Clubs & Brands Definitions](./strategy/clubs-and-brands-definitions.md), [UX Walkthrough](./product/ux-walkthrough.md) | Profiles create trust and make comparison possible. |
-| Use a shared sponsorship asset taxonomy | Accepted | [UX Walkthrough](./product/ux-walkthrough.md), [Clubs & Brands Definitions](./strategy/clubs-and-brands-definitions.md) | Team profiles and brand listings should use matching asset language. |
+| Build a two-sided sponsorship marketplace for college club sports | Accepted | [Product Vision](./strategy/product-vision.md), [MVP Overview](./product/mvp-overview.md) | Sponsors post opportunities; verified teams apply. |
+| Use Teams + Sponsors as canonical marketplace terminology | Accepted | [Domain Glossary](./domain-glossary.md), [Teams And Sponsors Definitions](./strategy/clubs-and-brands-definitions.md) | Brand is sponsor-facing identity, not the primary account side. |
+| Start with standardized team and sponsor profiles | Accepted | [Teams And Sponsors Definitions](./strategy/clubs-and-brands-definitions.md), [Domain Model](./product/domain-model.md), [UX Walkthrough](./product/ux-walkthrough.md) | Profiles create trust and make comparison possible. |
+| Use a shared sponsorship asset taxonomy | Accepted | [Domain Glossary](./domain-glossary.md), [UX Walkthrough](./product/ux-walkthrough.md), [Teams And Sponsors Definitions](./strategy/clubs-and-brands-definitions.md) | Team profiles and sponsor listings should use matching asset language. |
 | Keep MVP messaging lightweight | Accepted | [MVP Overview](./product/mvp-overview.md), [UX Walkthrough](./product/ux-walkthrough.md) | Marketplace thread, not a full chat product. |
+| Build the first MVP slice around profile, listing, and application flow | Accepted | [MVP Build Slices](./product/mvp-build-slices.md), [Domain Model](./product/domain-model.md) | Development starts with team profile, sponsor profile/listing, application, review, and manual verification. |
 
 ## GTM Decisions
 
@@ -31,6 +33,7 @@ Back to [Documentation Hub](./README.md).
 | --- | --- | --- | --- |
 | Keep project knowledge in repo-based Markdown docs | Accepted | [Documentation Hub](./README.md), [Notion Migration](./notion-migration.md) | Standard Markdown keeps docs readable in GitHub, editors, and documentation tooling. |
 | Use GitHub issues and PRs as the execution layer | Accepted | [Documentation Hub](./README.md) | Docs store context; GitHub tracks implementation. |
+| Keep manual verification in the MVP | Accepted | [Development Readiness](./engineering/development-readiness.md), [Domain Model](./product/domain-model.md) | Trust matters more than automating verification before usage patterns are proven. |
 
 ## Operations Decisions
 
@@ -43,9 +46,8 @@ Back to [Documentation Hub](./README.md).
 
 | Decision | Owner | Needed by | Evidence |
 | --- | --- | --- | --- |
-| MVP scope: exact first build slice after profile, listing, and application flow | Brian + Joshua | Before implementation planning | [MVP Overview](./product/mvp-overview.md), [UX Walkthrough](./product/ux-walkthrough.md) |
 | Visual direction: green or electric blue accent | Brian | Before design system lock | [Spacing System](./product/spacing-system.md), [UX Walkthrough](./product/ux-walkthrough.md) |
-| Matching logic: first match-score inputs and weights | Brian + Joshua | Before brand review UI build | [UX Walkthrough](./product/ux-walkthrough.md), [Clubs & Brands Definitions](./strategy/clubs-and-brands-definitions.md) |
+| Matching logic: first match-score inputs and weights | Brian + Joshua | Before sponsor review UI build | [UX Walkthrough](./product/ux-walkthrough.md), [Teams And Sponsors Definitions](./strategy/clubs-and-brands-definitions.md) |
 | Sponsor pipeline ownership and weekly hygiene cadence | Brian + Joshua | Before active outbound sprint | [Sponsor Pipeline](./business/sponsor-pipeline.md), [GTM Overview](./business/gtm-overview.md) |
 | Which proof-of-performance requirements are MVP-critical | Brian + Joshua | Before deal/proof workflow build | [MVP Overview](./product/mvp-overview.md), [UX Walkthrough](./product/ux-walkthrough.md) |
 

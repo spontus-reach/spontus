@@ -14,7 +14,7 @@ Back to [Documentation Hub](./README.md).
 | --- | --- | --- |
 | Team research | [Cal Poly Audit](./strategy/cal-poly-audit.md), [2026 05 18 Day 1 Brainstorming](./meetings/2026-05-18-day-1-brainstorming.md), [2026 05 20 Day 2](./meetings/2026-05-20-day-2.md) | Team needs, sponsorship pain, officer workflows, Cal Poly wedge. |
 | Sponsor research | [Sponsor Pipeline](./business/sponsor-pipeline.md), [Competitive Research](./strategy/competitive-research.md), [Market Research](./market/market-research.md) | Sponsor categories, lead sources, alternatives, and positioning. |
-| Product research | [UX Walkthrough](./product/ux-walkthrough.md), [Conversational Onboarding](./product/conversational-onboarding.md), [Clubs & Brands Definitions](./strategy/clubs-and-brands-definitions.md) | User flows, onboarding assumptions, entity definitions. |
+| Product research | [UX Walkthrough](./product/ux-walkthrough.md), [Conversational Onboarding](./product/conversational-onboarding.md), [Domain Glossary](./domain-glossary.md), [Teams And Sponsors Definitions](./strategy/clubs-and-brands-definitions.md) | User flows, onboarding assumptions, entity definitions. |
 | Market research | [Market Research](./market/market-research.md), [Competitive Analysis](./market/competitive-analysis.md), [Competitive Research](./strategy/competitive-research.md) | Competitor gaps, category framing, and market context. |
 
 ## Open Research Questions
