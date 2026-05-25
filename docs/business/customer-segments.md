@@ -1,5 +1,13 @@
 # Customer Segments
 
+**Status:** Reference
+**Owner:** Brian + Joshua
+**Last reviewed:** 2026-05-24
+**Source:** Migrated Notion customer segment notes
+**Use this for:** Understanding team and sponsor customer segments.
+
+Back to [Documentation Hub](../README.md).
+
 ## Initial Supply: Teams
 
 College club sports teams with enough organization to deliver sponsor value but without dedicated sponsorship infrastructure.

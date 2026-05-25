@@ -1,5 +1,13 @@
 # Spacing System
 
+**Status:** Reference
+**Owner:** Brian + Joshua
+**Last reviewed:** 2026-05-24
+**Source:** Migrated Notion spacing/design notes
+**Use this for:** Design-system spacing context.
+
+Back to [Documentation Hub](../README.md).
+
 Multi-platform spacing and layout foundation. All values are multiples of the 8px base unit. Use tokens — never raw pixel values — in components.
 
 ## 1. Base Unit

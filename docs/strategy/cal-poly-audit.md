@@ -1,5 +1,13 @@
 # Cal Poly Club Sports Sponsorship Audit
 
+**Status:** Reference
+**Owner:** Brian + Joshua
+**Last reviewed:** 2026-05-24
+**Source:** Migrated Notion Cal Poly audit
+**Use this for:** Evidence for the Cal Poly wedge.
+
+Back to [Documentation Hub](../README.md).
+
 ## Summary
 
 Audited Cal Poly club sports Instagram accounts to map the sponsorship landscape across all 30 teams. Found a clear pattern: 3-4 teams have figured out sponsorships through brute-force hustle. The other 26+ have zero sponsor presence. The gap is not willingness — it's infrastructure and know-how.

@@ -1,5 +1,13 @@
 # Sponsor Pipeline
 
+**Status:** Canonical
+**Owner:** Brian + Joshua
+**Last reviewed:** 2026-05-24
+**Source:** Migrated Notion sponsor pipeline notes
+**Use this for:** Tracking sponsor leads, stages, and next actions.
+
+Back to [Documentation Hub](../README.md).
+
 Use this page to track sponsor leads, active conversations, deal structures, and renewal opportunities.
 
 ## Pipeline Stages

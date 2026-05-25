@@ -1,5 +1,17 @@
 # UX Walkthrough
 
+**Status:** Canonical
+**Owner:** Brian + Joshua
+**Last reviewed:** 2026-05-24
+**Source:** Migrated Notion UX walkthrough and Figma planning notes
+**Use this for:** Detailed product flows, screen inventory, state coverage, and design handoff.
+
+Back to [Documentation Hub](../README.md).
+
+## Summary / Why This Matters
+
+This is the most detailed MVP interaction blueprint. Use [MVP Overview](./mvp-overview.md) for the short product scope, then use this page when designing or building screens, flows, empty states, verification paths, and the team/brand sponsorship workflow.
+
 > User Flow Plan — restructured via the Figma User Flow Planner skill. The narrative walkthrough below is preserved as reference; the plan here is the authoritative pre-design blueprint.
 
 ---
