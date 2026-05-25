@@ -57,17 +57,28 @@ function computeOverlap(listing: SponsorshipListing, team: TeamProfile) {
 
 export function ListingDetail({ listing }: { listing: SponsorshipListing }) {
   const sponsor = getSponsorById(listing.sponsorId);
-  const activeTeam = MOCK_TEAMS.find((t) => t.id === ACTIVE_TEAM_ID)!;
+  const activeTeam = MOCK_TEAMS.find((t) => t.id === ACTIVE_TEAM_ID);
   const { getApplicationForListing, createApplication } = useApplications();
   const existingApp = getApplicationForListing(ACTIVE_TEAM_ID, listing.id);
   const [showModal, setShowModal] = useState(false);
 
-  const overlap = computeOverlap(listing, activeTeam);
-  const isVerified = activeTeam.verificationStatus === "verified";
+  const overlap = activeTeam ? computeOverlap(listing, activeTeam) : { matched: 0, total: 0, items: [] };
+  const isVerified = activeTeam?.verificationStatus === "verified";
   const isOpen = listing.status === "open";
-  const isPastDeadline =
-    listing.applicationDeadline &&
-    new Date(listing.applicationDeadline) < new Date();
+  const isPastDeadline = (() => {
+    if (!listing.applicationDeadline) return false;
+    const [year, month, day] = listing.applicationDeadline.split("-").map(Number);
+    const deadlineDate = new Date(year, month - 1, day, 23, 59, 59, 999);
+    return new Date() > deadlineDate;
+  })();
+
+  if (!activeTeam) {
+    return (
+      <div className="mx-auto max-w-5xl px-6 py-10 text-center">
+        <p style={{ color: "#dc2626" }}>Active team profile not found.</p>
+      </div>
+    );
+  }
 
   function handleApply(fitNote?: string): boolean {
     const result = createApplication(listing.id, ACTIVE_TEAM_ID, fitNote);

@@ -49,7 +49,7 @@ export function TopNav() {
           <Link
             href="/signup/team"
             className={`text-sm transition-colors ${
-              pathname === "/signup/team" || pathname === "/team/onboarding"
+              isTeamRoute
                 ? "text-[#1a1a18]"
                 : "text-[#6b6960] hover:text-[#1a1a18]"
             }`}
