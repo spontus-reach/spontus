@@ -48,7 +48,7 @@ Unless the team decides otherwise:
 - Tailwind
 - shadcn/ui
 - Supabase-ready data model
-- Vercel
+- Netlify
 - GitHub issues and PRs for execution tracking
 
 The first scaffold may use local mock data. Keep the mock data shaped like future database tables.
@@ -225,6 +225,23 @@ Acceptance checks:
 - Internal users can see submitted team and sponsor profiles.
 - Internal users can mark profiles verified, needs changes, or suspended.
 - Public marketplace flows can gate actions by verification status.
+
+## Deployment Assumption
+
+The MVP deploy target is **Netlify**. The intended custom production domain is **`spontus.io`**.
+
+See [Deployment](./engineering/deployment.md) for hosting setup details, build commands, and non-goals.
+
+## Deployment Slice
+
+After the five core MVP slices are complete, add a small deployment slice:
+
+1. Verify the app builds locally with `npm run build`.
+2. Deploy from GitHub to Netlify.
+3. Connect `spontus.io` as the custom production domain.
+4. Document the build command, publish output, and deploy workflow.
+
+Done when the latest MVP deploy is accessible on Netlify and `spontus.io` points to the production deploy.
 
 ## Explicit Non-Goals For Initial Build
 
