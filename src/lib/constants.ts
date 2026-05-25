@@ -2,6 +2,7 @@ import type {
   SponsorshipAssetDefinition,
   SponsorshipAssetCategory,
   VerificationStatus,
+  ListingStatus,
 } from './types';
 
 export const SPONSORSHIP_ASSET_DEFINITIONS: SponsorshipAssetDefinition[] = [
@@ -75,6 +76,34 @@ export const TEAM_MEMBER_ROLES = [
   { value: 'pr_manager', label: 'PR Manager' },
   { value: 'other', label: 'Other' },
 ] as const;
+
+// --- Sponsor-side constants (Slice 2) ---
+
+export const SPONSOR_INDUSTRY_CATEGORIES = [
+  'Nutrition & supplements',
+  'Apparel & gear',
+  'Beverage',
+  'Recovery & wellness',
+  'Technology & services',
+  'Food & restaurant',
+  'Financial services',
+  'Local business',
+  'Other',
+] as const;
+
+export const SPONSOR_MEMBER_ROLES = [
+  { value: 'owner', label: 'Owner' },
+  { value: 'admin', label: 'Admin' },
+  { value: 'marketing_manager', label: 'Marketing Manager' },
+  { value: 'viewer', label: 'Viewer' },
+] as const;
+
+export const LISTING_STATUS_LABELS: Record<ListingStatus, string> = {
+  draft: 'Draft',
+  open: 'Open',
+  paused: 'Paused',
+  closed: 'Closed',
+};
 
 export const VERIFICATION_STATUS_LABELS: Record<VerificationStatus, string> = {
   draft: 'Draft',

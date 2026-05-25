@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Field } from "@/components/team/form-field";
+import { Field } from "@/components/forms/form-field";
 import { optionalInteger } from "@/lib/form-values";
 import { Plus, X } from "lucide-react";
 import type { TeamProfileDraft, TeamEvent } from "@/lib/types";

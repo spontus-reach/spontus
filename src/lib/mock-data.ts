@@ -1,4 +1,4 @@
-import type { TeamProfile } from './types';
+import type { TeamProfile, SponsorProfile, SponsorshipListing } from './types';
 
 export const MOCK_TEAMS: TeamProfile[] = [
   {
@@ -251,4 +251,105 @@ export const MOCK_TEAMS: TeamProfile[] = [
 
 export function getTeamBySlug(slug: string): TeamProfile | undefined {
   return MOCK_TEAMS.find((t) => t.slug === slug);
+}
+
+// --- Sponsor-side mock data (Slice 2) ---
+
+export const MOCK_SPONSORS: SponsorProfile[] = [
+  {
+    id: 'sp-fluid',
+    companyName: 'Fluid Nutrition',
+    brandName: 'Fluid Nutrition',
+    oneLiner: 'Performance nutrition for endurance athletes.',
+    description:
+      'Athlete-owned endurance fuel and recovery brand. We\'ve sponsored college endurance teams since 2018 — currently partnered with 14 club programs across triathlon, cycling, and trail running.',
+    websiteUrl: 'https://fluidnutrition.com',
+    instagramUrl: 'https://instagram.com/fluidnutrition',
+    industryCategory: 'Nutrition & supplements',
+    targetAudience: 'Endurance athletes 18-30',
+    geographicFocus: 'California',
+    typicalOfferTypes: [
+      'Free product for team use',
+      'Cash sponsorship',
+      'Event prizes',
+    ],
+    pastSponsorships:
+      'Sponsored 12 club teams across 5 universities including Cal Poly Triathlon (2025 host race), UC Davis Cycling (2024-25), and Stanford Tri (2024).',
+    verificationStatus: 'verified',
+  },
+  {
+    id: 'sp-slo-roasters',
+    companyName: 'SLO Roasters',
+    brandName: 'SLO Roasters',
+    oneLiner: 'Locally roasted coffee for Cal Poly athletes and fans.',
+    description:
+      'San Luis Obispo\'s hometown roaster. We support local club sports because our athletes are our customers. Great for game-day energy, team study sessions, and community events.',
+    websiteUrl: 'https://sloroasters.com',
+    instagramUrl: 'https://instagram.com/sloroasters',
+    industryCategory: 'Food & restaurant',
+    targetAudience: 'Cal Poly students and local community',
+    geographicFocus: 'San Luis Obispo',
+    typicalOfferTypes: ['Discount codes', 'Gift cards'],
+    pastSponsorships:
+      'Supported Cal Poly Club Swim and Cal Poly Running Club with discount cards and event coffee service.',
+    verificationStatus: 'verified',
+  },
+];
+
+export const MOCK_LISTINGS: SponsorshipListing[] = [
+  {
+    id: 'lst-fluid-fall',
+    sponsorId: 'sp-fluid',
+    title: 'Fall endurance team partnerships',
+    description:
+      'Fluid Nutrition is looking for 3 club endurance teams in California for the Fall 2026 season. We provide product allocation and cash to help fuel your athletes — in return, we want authentic social content and event sampling opportunities.',
+    status: 'open',
+    offerTypes: ['Free product for team use', 'Cash sponsorship'],
+    offerSummary: 'Product allocation (6-month supply per athlete) + $300 cash per team',
+    numberOfTeams: 3,
+    geography: 'California',
+    sportPreferences: ['Triathlon', 'Cycling', 'Running', 'Swim'],
+    teamSizeMin: 30,
+    socialReachMin: 1000,
+    duration: 'Fall 2026 season',
+    applicationDeadline: '2026-08-30',
+    requestedAssets: [
+      { assetId: 'instagram_post', required: true },
+      { assetId: 'product_sampling', required: true },
+      { assetId: 'instagram_story', required: false },
+    ],
+    publishedAt: '2026-05-20',
+  },
+  {
+    id: 'lst-slo-coffee',
+    sponsorId: 'sp-slo-roasters',
+    title: 'Cal Poly club sports coffee partner',
+    description:
+      'SLO Roasters wants to partner with Cal Poly club sports teams for the full academic year. We offer discount codes for your athletes and gift cards for events — all we ask is a game-day banner and an occasional social shoutout.',
+    status: 'open',
+    offerTypes: ['Discount codes', 'Gift cards'],
+    offerSummary: '20% discount codes for all team members + $25 gift cards for game-day prizes',
+    numberOfTeams: 5,
+    geography: 'San Luis Obispo',
+    sportPreferences: [],
+    duration: '2026-27 academic year',
+    applicationDeadline: '2026-09-15',
+    requestedAssets: [
+      { assetId: 'banner_at_games', required: true },
+      { assetId: 'instagram_story', required: false },
+    ],
+    publishedAt: '2026-05-22',
+  },
+];
+
+export function getSponsorById(id: string): SponsorProfile | undefined {
+  return MOCK_SPONSORS.find((s) => s.id === id);
+}
+
+export function getListingById(id: string): SponsorshipListing | undefined {
+  return MOCK_LISTINGS.find((l) => l.id === id);
+}
+
+export function getListingsForSponsor(sponsorId: string): SponsorshipListing[] {
+  return MOCK_LISTINGS.filter((l) => l.sponsorId === sponsorId);
 }
