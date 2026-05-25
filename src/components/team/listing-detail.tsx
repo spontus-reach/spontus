@@ -7,11 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SponsorProfileCard } from "@/components/sponsor/sponsor-profile-card";
 import { ApplicationModal } from "./application-modal";
-import { useApplications } from "./applications-provider";
+import { useApplications } from "@/components/providers/applications-provider";
 import {
   SPONSORSHIP_ASSET_DEFINITIONS,
   CATEGORY_LABELS,
 } from "@/lib/constants";
+import { getAssetOverlap } from "@/lib/asset-overlap";
 import {
   getSponsorById,
   ACTIVE_TEAM_ID,
@@ -20,7 +21,6 @@ import {
 import type {
   SponsorshipListing,
   SponsorshipAssetCategory,
-  TeamProfile,
 } from "@/lib/types";
 
 const CATEGORIES: SponsorshipAssetCategory[] = [
@@ -29,32 +29,6 @@ const CATEGORIES: SponsorshipAssetCategory[] = [
   "product_event_activation",
 ];
 
-function getAssetLabel(assetId: string): string {
-  return (
-    SPONSORSHIP_ASSET_DEFINITIONS.find((a) => a.id === assetId)?.label ??
-    assetId
-  );
-}
-
-function computeOverlap(listing: SponsorshipListing, team: TeamProfile) {
-  const teamAssetIds = new Set(
-    team.sponsorshipAssets
-      .filter((a) => a.status !== "unavailable")
-      .map((a) => a.assetId)
-  );
-  const results = listing.requestedAssets.map((ra) => ({
-    assetId: ra.assetId,
-    label: getAssetLabel(ra.assetId),
-    required: ra.required,
-    matched: teamAssetIds.has(ra.assetId),
-  }));
-  return {
-    matched: results.filter((r) => r.matched).length,
-    total: results.length,
-    items: results,
-  };
-}
-
 export function ListingDetail({ listing }: { listing: SponsorshipListing }) {
   const sponsor = getSponsorById(listing.sponsorId);
   const activeTeam = MOCK_TEAMS.find((t) => t.id === ACTIVE_TEAM_ID);
@@ -62,7 +36,9 @@ export function ListingDetail({ listing }: { listing: SponsorshipListing }) {
   const existingApp = getApplicationForListing(ACTIVE_TEAM_ID, listing.id);
   const [showModal, setShowModal] = useState(false);
 
-  const overlap = activeTeam ? computeOverlap(listing, activeTeam) : { matched: 0, total: 0, items: [] };
+  const overlap = activeTeam
+    ? getAssetOverlap(listing.requestedAssets, activeTeam.sponsorshipAssets)
+    : { matchedCount: 0, totalCount: 0, items: [] };
   const isVerified = activeTeam?.verificationStatus === "verified";
   const isOpen = listing.status === "open";
   const isPastDeadline = (() => {
@@ -170,7 +146,7 @@ export function ListingDetail({ listing }: { listing: SponsorshipListing }) {
               What the sponsor wants
             </h3>
             <span className="text-xs font-medium" style={{ color: "#16a34a" }}>
-              You offer {overlap.matched} of {overlap.total}
+              You offer {overlap.matchedCount} of {overlap.totalCount}
             </span>
           </div>
           <div className="mt-4 space-y-4">

@@ -5,39 +5,8 @@ import { Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { TeamProfilePreview } from "./team-profile-preview";
-import { SPONSORSHIP_ASSET_DEFINITIONS } from "@/lib/constants";
+import { getAssetOverlap } from "@/lib/asset-overlap";
 import type { TeamProfile, SponsorshipListing } from "@/lib/types";
-
-function getAssetLabel(assetId: string): string {
-  return (
-    SPONSORSHIP_ASSET_DEFINITIONS.find((a) => a.id === assetId)?.label ??
-    assetId
-  );
-}
-
-function computeAssetOverlap(
-  listing: SponsorshipListing,
-  team: TeamProfile
-) {
-  const teamAssetIds = new Set(
-    team.sponsorshipAssets
-      .filter((a) => a.status !== "unavailable")
-      .map((a) => a.assetId)
-  );
-
-  const results = listing.requestedAssets.map((ra) => ({
-    assetId: ra.assetId,
-    label: getAssetLabel(ra.assetId),
-    required: ra.required,
-    matched: teamAssetIds.has(ra.assetId),
-  }));
-
-  return {
-    matched: results.filter((r) => r.matched).length,
-    total: results.length,
-    items: results,
-  };
-}
 
 type Props = {
   listing: SponsorshipListing;
@@ -55,7 +24,7 @@ export function ApplicationModal({
   const [fitNote, setFitNote] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
-  const overlap = computeAssetOverlap(listing, team);
+  const overlap = getAssetOverlap(listing.requestedAssets, team.sponsorshipAssets);
 
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -161,8 +130,8 @@ export function ApplicationModal({
                 </div>
                 <p className="mt-1 text-sm" style={{ color: "#1a1a18" }}>
                   You offer{" "}
-                  <span className="font-semibold">{overlap.matched}</span> of{" "}
-                  <span className="font-semibold">{overlap.total}</span>{" "}
+                  <span className="font-semibold">{overlap.matchedCount}</span> of{" "}
+                  <span className="font-semibold">{overlap.totalCount}</span>{" "}
                   requested assets
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">

@@ -104,6 +104,27 @@ export const LISTING_STATUS_LABELS: Record<string, string> = {
   closed: 'Closed',
 };
 
+// --- Sponsor review constants (Slice 4) ---
+
+export const ACTIVE_SPONSOR_ID = 'sp-fluid';
+
+export const DECLINE_REASONS = [
+  { value: 'different_sport', label: 'Looking for a different sport' },
+  { value: 'need_larger_team', label: 'Need larger team size' },
+  { value: 'filled_all_spots', label: 'Filled all spots' },
+  { value: 'not_right_fit_this_season', label: 'Not the right fit this season' },
+  { value: 'other', label: 'Other' },
+] as const;
+
+export const APPLICATION_STATUS_LABELS: Record<string, string> = {
+  draft: 'Draft',
+  submitted: 'Submitted',
+  under_review: 'Under review',
+  accepted: 'Accepted',
+  declined: 'Declined',
+  withdrawn: 'Withdrawn',
+};
+
 export const VERIFICATION_STATUS_LABELS: Record<VerificationStatus, string> = {
   draft: 'Draft',
   submitted_for_verification: 'Submitted for verification',

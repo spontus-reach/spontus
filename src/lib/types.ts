@@ -172,12 +172,20 @@ export type ApplicationStatus =
   | 'declined'
   | 'withdrawn';
 
+export type DeclineReason =
+  | 'different_sport'
+  | 'need_larger_team'
+  | 'filled_all_spots'
+  | 'not_right_fit_this_season'
+  | 'other';
+
 export type Application = {
   id: string;
   listingId: string;
   teamId: string;
   status: ApplicationStatus;
   fitNote?: string;
+  declineReason?: DeclineReason;
   submittedAt?: string;
   reviewedAt?: string;
 };
