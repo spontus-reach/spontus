@@ -1,0 +1,114 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-inter);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  --color-spontus-green: var(--spontus-green);
+  --color-spontus-green-bright: var(--spontus-green-bright);
+  --color-spontus-navy: var(--spontus-navy);
+  --color-spontus-blue-soft: var(--spontus-blue-soft);
+  --color-spontus-ink: var(--spontus-ink);
+  --color-spontus-surface: var(--spontus-surface);
+  --color-spontus-faint: var(--spontus-faint);
+}
+
+:root {
+  /* Figma prototype exact palette */
+  --spontus-green: #22c55e;
+  --spontus-green-bright: #4ade80;
+  --spontus-navy: #1a3a6e;
+  --spontus-blue-soft: #dce6f5;
+  --spontus-ink: #141414;
+  --spontus-surface: #e8e6e0;
+  --spontus-faint: #8a8880;
+
+  /* Cream base — exact Figma values */
+  --background: #f0efeb;
+  --foreground: #1a1a18;
+  --card: #ffffff;
+  --card-foreground: #1a1a18;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a18;
+  --primary: #141414;
+  --primary-foreground: #f0efeb;
+  --secondary: #e8e6e0;
+  --secondary-foreground: #1a1a18;
+  --muted: #e8e6e0;
+  --muted-foreground: #6b6960;
+  --accent: #e8e6e0;
+  --accent-foreground: #1a1a18;
+  --destructive: #ef4444;
+  --border: #d5d3cd;
+  --input: #d5d3cd;
+  --ring: #1a3a6e;
+  --chart-1: #1a3a6e;
+  --chart-2: #22c55e;
+  --chart-3: #6b6960;
+  --chart-4: #8a8880;
+  --chart-5: #d5d3cd;
+  --radius: 0.625rem;
+  --sidebar: #e8e6e0;
+  --sidebar-foreground: #1a1a18;
+  --sidebar-primary: #1a3a6e;
+  --sidebar-primary-foreground: #f0efeb;
+  --sidebar-accent: #dce6f5;
+  --sidebar-accent-foreground: #1a1a18;
+  --sidebar-border: #d5d3cd;
+  --sidebar-ring: #1a3a6e;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
