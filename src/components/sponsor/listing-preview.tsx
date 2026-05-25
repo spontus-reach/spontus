@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import {
   SPONSORSHIP_ASSET_DEFINITIONS,
   CATEGORY_LABELS,
+  LISTING_STATUS_LABELS,
 } from "@/lib/constants";
 import { SponsorProfileCard } from "./sponsor-profile-card";
 import type {
@@ -49,7 +50,7 @@ export function ListingPreview({
                     }
               }
             >
-              {listing.status === "open" ? "Open" : listing.status}
+              {LISTING_STATUS_LABELS[listing.status]}
             </div>
             <h2
               className="mt-3"
