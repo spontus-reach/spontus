@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/team/form-field";
+import { optionalInteger } from "@/lib/form-values";
 import { Plus, X } from "lucide-react";
 import type { TeamProfileDraft, TeamEvent } from "@/lib/types";
 
@@ -128,8 +129,7 @@ export function CompetitionEventsForm({ data, onUpdate }: Props) {
                   value={evt.expectedAttendance ?? ""}
                   onChange={(e) =>
                     updateEvent(evt.id, {
-                      expectedAttendance:
-                        parseInt(e.target.value) || undefined,
+                      expectedAttendance: optionalInteger(e.target.value),
                     })
                   }
                 />

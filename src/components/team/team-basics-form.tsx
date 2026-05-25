@@ -3,6 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Field } from "@/components/team/form-field";
+import { optionalInteger } from "@/lib/form-values";
 import type { TeamProfileDraft } from "@/lib/types";
 
 type Props = {
@@ -56,7 +57,7 @@ export function TeamBasicsForm({ data, onUpdate }: Props) {
             type="number"
             value={data.rosterSize ?? ""}
             onChange={(e) =>
-              onUpdate({ rosterSize: parseInt(e.target.value) || undefined })
+              onUpdate({ rosterSize: optionalInteger(e.target.value) })
             }
             placeholder="80"
           />
@@ -66,7 +67,7 @@ export function TeamBasicsForm({ data, onUpdate }: Props) {
             type="number"
             value={data.yearFounded ?? ""}
             onChange={(e) =>
-              onUpdate({ yearFounded: parseInt(e.target.value) || undefined })
+              onUpdate({ yearFounded: optionalInteger(e.target.value) })
             }
             placeholder="2005"
           />

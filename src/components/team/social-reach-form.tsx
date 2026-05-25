@@ -2,6 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Field } from "@/components/team/form-field";
+import { optionalInteger } from "@/lib/form-values";
 import type { TeamProfileDraft } from "@/lib/types";
 
 type Props = {
@@ -34,11 +35,18 @@ export function SocialReachForm({ data, onUpdate }: Props) {
           placeholder="https://tiktok.com/@calpolytri"
         />
       </Field>
-      <Field label="YouTube / Livestream URL">
+      <Field label="YouTube URL">
         <Input
-          value={data.youtubeUrl ?? data.livestreamUrl ?? ""}
+          value={data.youtubeUrl ?? ""}
           onChange={(e) => onUpdate({ youtubeUrl: e.target.value })}
           placeholder="https://youtube.com/@calpolytri"
+        />
+      </Field>
+      <Field label="Livestream URL">
+        <Input
+          value={data.livestreamUrl ?? ""}
+          onChange={(e) => onUpdate({ livestreamUrl: e.target.value })}
+          placeholder="https://veo.co/calpolytri"
         />
       </Field>
       <Field label="Website URL">
@@ -54,7 +62,7 @@ export function SocialReachForm({ data, onUpdate }: Props) {
           value={data.combinedReach ?? ""}
           onChange={(e) =>
             onUpdate({
-              combinedReach: parseInt(e.target.value) || undefined,
+              combinedReach: optionalInteger(e.target.value),
             })
           }
           placeholder="8000"
