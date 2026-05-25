@@ -79,10 +79,14 @@ type(scope): description
 
 The PR body must include the template sections:
 
-- `Summary`
-- `Verification`
+- `## Summary`
+- `## Verification`
+- `## Testing`
+- `## Related Issues`
+- `## Notes`
+- `## Reviewer Checklist`
 
-Replace the placeholder text in those sections before submitting. The PR quality workflow fails when the body is empty, required sections are missing, or the Summary and Verification placeholders are still present.
+Replace the placeholder text in those sections before submitting. The PR quality workflow fails when the body is empty, required sections are missing, or placeholders are still present.
 
 Before requesting review:
 
