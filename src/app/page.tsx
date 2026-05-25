@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { Hero } from "@/components/landing/hero";
@@ -44,10 +45,12 @@ export default function LandingPage() {
                 }}
               >
                 {triTeam.photo && (
-                  <img
+                  <Image
                     src={triTeam.photo}
                     alt={triTeam.name}
-                    className="absolute inset-0 h-full w-full object-cover"
+                    fill
+                    sizes="(min-width: 768px) 420px, calc(100vw - 48px)"
+                    className="object-cover"
                   />
                 )}
                 <div

@@ -108,7 +108,7 @@ export function SponsorshipAssetMenu({
                         : { borderColor: "#d5d3cd", background: "white" }
                     }
                   >
-                    <label className="flex cursor-pointer items-start gap-3">
+                    <div className="flex items-start gap-3">
                       <Checkbox
                         checked={isSelected}
                         onCheckedChange={() => toggle(def.id)}
@@ -116,13 +116,16 @@ export function SponsorshipAssetMenu({
                         className="mt-0.5"
                       />
                       <div className="flex-1">
-                        <div
+                        <button
+                          type="button"
+                          disabled={readonly}
+                          onClick={() => toggle(def.id)}
                           className={`text-sm ${
                             isSelected ? "font-semibold" : "font-medium"
-                          }`}
+                          } text-left disabled:cursor-default`}
                         >
                           {def.label}
-                        </div>
+                        </button>
                         {isSelected && !readonly && (
                           <div className="mt-2 space-y-2">
                             <Select
@@ -159,7 +162,7 @@ export function SponsorshipAssetMenu({
                           </div>
                         )}
                       </div>
-                    </label>
+                    </div>
                   </div>
                 );
               })}

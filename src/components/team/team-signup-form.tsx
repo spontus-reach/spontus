@@ -27,12 +27,17 @@ export function TeamSignupForm() {
   const [role, setRole] = useState<TeamMemberRole | "">("");
   const [emailError, setEmailError] = useState("");
 
+  function isEduEmail(value: string) {
+    return value.trim().toLowerCase().endsWith(".edu");
+  }
+
   function validateEmail(value: string) {
-    if (!value) {
+    const normalized = value.trim().toLowerCase();
+    if (!normalized) {
       setEmailError("");
       return;
     }
-    if (!value.endsWith(".edu")) {
+    if (!normalized.endsWith(".edu")) {
       setEmailError("Must be a .edu email address");
     } else {
       setEmailError("");
@@ -41,15 +46,21 @@ export function TeamSignupForm() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!email.endsWith(".edu")) {
+    if (!isEduEmail(email)) {
       setEmailError("Must be a .edu email address");
       return;
     }
     router.push("/team/onboarding");
   }
 
-  const isValid =
-    fullName && email.endsWith(".edu") && university && teamName && sport && role;
+  const isValid = Boolean(
+    fullName.trim() &&
+      isEduEmail(email) &&
+      university.trim() &&
+      teamName.trim() &&
+      sport.trim() &&
+      role
+  );
 
   return (
     <div className="mx-auto max-w-xl px-6 py-16">

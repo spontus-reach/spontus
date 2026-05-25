@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { MapPin, Calendar, Mail } from "lucide-react";
 import { VerificationStatusBadge } from "@/components/team/verification-status-badge";
 import type { TeamProfile } from "@/lib/types";
@@ -8,12 +9,14 @@ export function TeamProfileHero({ team }: { team: TeamProfile }) {
       className="overflow-hidden rounded-xl"
       style={{ border: "0.5px solid #d5d3cd", background: "white" }}
     >
-      <div className="relative">
+      <div className="relative h-64">
         {team.photo ? (
-          <img
+          <Image
             src={team.photo}
             alt={team.name}
-            className="h-64 w-full object-cover"
+            fill
+            sizes="(min-width: 1024px) 896px, calc(100vw - 48px)"
+            className="object-cover"
           />
         ) : (
           <div

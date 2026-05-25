@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Users, Eye, Trophy } from "lucide-react";
 import type { TeamProfile } from "@/lib/types";
@@ -63,12 +64,17 @@ export function TeamPreviewCard({
           borderRadius: 14,
         }}
       >
-        <div style={{ aspectRatio: "16 / 9", overflow: "hidden" }}>
+        <div
+          className="relative"
+          style={{ aspectRatio: "16 / 9", overflow: "hidden" }}
+        >
           {team.photo ? (
-            <img
+            <Image
               src={team.photo}
               alt={team.name}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              fill
+              sizes="(min-width: 768px) 544px, calc(100vw - 48px)"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
             <div
