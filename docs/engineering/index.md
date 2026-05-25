@@ -34,6 +34,8 @@ Use this folder for development readiness, technical architecture, stack choices
 | Page | Status | Use it for |
 | --- | --- | --- |
 | [Tech Stack](./tech-stack.md) | Reference | Current stack ideas and implementation context. |
+| [Backend Plan](./backend-plan.md) | Draft | Supabase schema, RLS, storage, and migration order. |
+| [Deployment](./deployment.md) | Reference | Netlify hosting, production domain, and deployment workflow. |
 | [Discord Server Guide](./discord-server-guide.md) | Reference | Internal Discord setup, channel rules, and GitHub feed wiring. |
 
 ## When To Create A New Engineering Doc

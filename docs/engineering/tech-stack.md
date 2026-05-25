@@ -32,6 +32,15 @@ This page tracks product and engineering assumptions. It should stay lightweight
 - Events
 - Proof assets
 
+## Hosting And Deployment
+
+- Hosting: **Netlify**
+- Production domain: **`spontus.io`**
+- Deployment source: GitHub (auto-deploy from main or feature branches)
+- Environment variables: keep minimal until Supabase or other services are wired
+
+See [Deployment](./deployment.md) for setup details.
+
 ## Build Principle
 
 Do not overbuild before marketplace liquidity exists. Start with the smallest system that preserves structured team/sponsor data from manual deals, then automate the steps that repeat across multiple real transactions.

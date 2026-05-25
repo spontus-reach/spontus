@@ -34,6 +34,7 @@ Back to [Documentation Hub](./README.md).
 | Keep project knowledge in repo-based Markdown docs | Accepted | [Documentation Hub](./README.md), [Notion Migration](./notion-migration.md) | Standard Markdown keeps docs readable in GitHub, editors, and documentation tooling. |
 | Use GitHub issues and PRs as the execution layer | Accepted | [Documentation Hub](./README.md) | Docs store context; GitHub tracks implementation. |
 | Keep manual verification in the MVP | Accepted | [Development Readiness](./engineering/development-readiness.md), [Domain Model](./product/domain-model.md) | Trust matters more than automating verification before usage patterns are proven. |
+| Use Netlify for MVP deployment and `spontus.io` as the production domain | Accepted | [Deployment](./engineering/deployment.md) | Free/low-friction MVP deployment with custom domain support. No extra infra until needed. |
 
 ## Operations Decisions
 

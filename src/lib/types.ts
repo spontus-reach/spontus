@@ -96,3 +96,96 @@ export type TeamSignupData = {
   sport: string;
   role: TeamMemberRole;
 };
+
+// --- Sponsor-side types (Slice 2) ---
+
+export type SponsorProfile = {
+  id: string;
+  companyName: string;
+  brandName?: string;
+  oneLiner?: string;
+  description?: string;
+  logoUrl?: string;
+  websiteUrl?: string;
+  instagramUrl?: string;
+  industryCategory?: string;
+  targetAudience?: string;
+  geographicFocus?: string;
+  typicalOfferTypes: string[];
+  pastSponsorships?: string;
+  verificationStatus: VerificationStatus;
+};
+
+export type SponsorProfileDraft = Partial<SponsorProfile>;
+
+export type ListingStatus = 'draft' | 'open' | 'paused' | 'closed';
+
+export type ListingRequestedAsset = {
+  assetId: string;
+  required: boolean;
+  notes?: string;
+};
+
+export type SponsorshipListing = {
+  id: string;
+  sponsorId: string;
+  title: string;
+  description?: string;
+  status: ListingStatus;
+  offerTypes: string[];
+  offerSummary?: string;
+  numberOfTeams?: number;
+  geography?: string;
+  sportPreferences: string[];
+  teamSizeMin?: number;
+  socialReachMin?: number;
+  duration?: string;
+  applicationDeadline?: string;
+  requestedAssets: ListingRequestedAsset[];
+  publishedAt?: string;
+};
+
+export type ListingDraft = Partial<SponsorshipListing>;
+
+export type SponsorMemberRole =
+  | 'owner'
+  | 'admin'
+  | 'marketing_manager'
+  | 'viewer';
+
+export type SponsorSignupData = {
+  companyName: string;
+  contactName: string;
+  role: SponsorMemberRole;
+  email: string;
+  websiteUrl: string;
+  industryCategory: string;
+};
+
+// --- Application types (Slice 3) ---
+
+export type ApplicationStatus =
+  | 'draft'
+  | 'submitted'
+  | 'under_review'
+  | 'accepted'
+  | 'declined'
+  | 'withdrawn';
+
+export type DeclineReason =
+  | 'different_sport'
+  | 'need_larger_team'
+  | 'filled_all_spots'
+  | 'not_right_fit_this_season'
+  | 'other';
+
+export type Application = {
+  id: string;
+  listingId: string;
+  teamId: string;
+  status: ApplicationStatus;
+  fitNote?: string;
+  declineReason?: DeclineReason;
+  submittedAt?: string;
+  reviewedAt?: string;
+};

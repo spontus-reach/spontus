@@ -76,6 +76,59 @@ export const TEAM_MEMBER_ROLES = [
   { value: 'other', label: 'Other' },
 ] as const;
 
+// --- Sponsor-side constants (Slice 2) ---
+
+export const SPONSOR_INDUSTRY_CATEGORIES = [
+  'Nutrition & supplements',
+  'Apparel & gear',
+  'Beverage',
+  'Recovery & wellness',
+  'Technology & services',
+  'Food & restaurant',
+  'Financial services',
+  'Local business',
+  'Other',
+] as const;
+
+export const SPONSOR_MEMBER_ROLES = [
+  { value: 'owner', label: 'Owner' },
+  { value: 'admin', label: 'Admin' },
+  { value: 'marketing_manager', label: 'Marketing Manager' },
+  { value: 'viewer', label: 'Viewer' },
+] as const;
+
+export const LISTING_STATUS_LABELS: Record<string, string> = {
+  draft: 'Draft',
+  open: 'Open',
+  paused: 'Paused',
+  closed: 'Closed',
+};
+
+// --- Sponsor review constants (Slice 4) ---
+
+export const ACTIVE_SPONSOR_ID = 'sp-fluid';
+
+export const DECLINE_REASONS = [
+  { value: 'different_sport', label: 'Looking for a different sport' },
+  { value: 'need_larger_team', label: 'Need larger team size' },
+  { value: 'filled_all_spots', label: 'Filled all spots' },
+  { value: 'not_right_fit_this_season', label: 'Not the right fit this season' },
+  { value: 'other', label: 'Other' },
+] as const;
+
+export function getDeclineReasonLabel(reason: string): string {
+  return DECLINE_REASONS.find((r) => r.value === reason)?.label ?? reason;
+}
+
+export const APPLICATION_STATUS_LABELS: Record<string, string> = {
+  draft: 'Draft',
+  submitted: 'Submitted',
+  under_review: 'Under review',
+  accepted: 'Accepted',
+  declined: 'Declined',
+  withdrawn: 'Withdrawn',
+};
+
 export const VERIFICATION_STATUS_LABELS: Record<VerificationStatus, string> = {
   draft: 'Draft',
   submitted_for_verification: 'Submitted for verification',
