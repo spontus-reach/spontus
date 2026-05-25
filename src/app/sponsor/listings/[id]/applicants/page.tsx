@@ -1,6 +1,3 @@
-"use client";
-
-import { use } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { ApplicantsGrid } from "@/components/sponsor/applicants-grid";
@@ -11,8 +8,8 @@ type PageProps = {
   params: Promise<{ id: string }>;
 };
 
-export default function ApplicantsPage({ params }: PageProps) {
-  const { id } = use(params);
+export default async function ApplicantsPage({ params }: PageProps) {
+  const { id } = await params;
   const listing = getListingById(id);
   const sponsor = listing ? getSponsorById(listing.sponsorId) : undefined;
 

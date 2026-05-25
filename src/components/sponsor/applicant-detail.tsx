@@ -12,7 +12,7 @@ import { AcceptApplicationModal } from "./accept-application-modal";
 import { DeclineReasonModal } from "./decline-reason-modal";
 import { useApplications } from "@/components/providers/applications-provider";
 import { getAssetOverlap } from "@/lib/asset-overlap";
-import { APPLICATION_STATUS_LABELS } from "@/lib/constants";
+import { APPLICATION_STATUS_LABELS, ACTIVE_SPONSOR_ID } from "@/lib/constants";
 import {
   getTeamById,
   getSeedListingById,
@@ -50,6 +50,23 @@ export function ApplicantDetail({
     return (
       <div className="mx-auto max-w-5xl px-6 py-16 text-center">
         <p style={{ color: "#6b6960" }}>Application data incomplete.</p>
+      </div>
+    );
+  }
+
+  if (listing.sponsorId !== ACTIVE_SPONSOR_ID) {
+    return (
+      <div className="mx-auto max-w-5xl px-6 py-16 text-center">
+        <p style={{ color: "#6b6960", fontSize: 15 }}>
+          You do not have access to review this application.
+        </p>
+        <Link
+          href="/sponsor/onboarding"
+          className="mt-4 inline-block text-sm underline"
+          style={{ color: "#1a3a6e" }}
+        >
+          Back to sponsor profile
+        </Link>
       </div>
     );
   }

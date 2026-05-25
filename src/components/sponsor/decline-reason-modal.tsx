@@ -16,20 +16,29 @@ export function DeclineReasonModal({ teamName, onConfirm, onClose }: Props) {
   const [selected, setSelected] = useState<DeclineReason | "">("");
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="decline-modal-title"
+    >
       <div
         className="relative mx-4 w-full max-w-md rounded-xl p-6 shadow-xl"
         style={{ background: "white", border: "0.5px solid #d5d3cd" }}
       >
         <button
           onClick={onClose}
+          aria-label="Close"
           className="absolute right-4 top-4"
           style={{ color: "#6b6960" }}
         >
           <X className="h-5 w-5" />
         </button>
 
-        <h2 style={{ fontSize: 18, fontWeight: 600, color: "#1a1a18" }}>
+        <h2
+          id="decline-modal-title"
+          style={{ fontSize: 18, fontWeight: 600, color: "#1a1a18" }}
+        >
           Decline application
         </h2>
         <p className="mt-2 text-sm" style={{ color: "#6b6960" }}>

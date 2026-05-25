@@ -96,7 +96,9 @@ export function ApplicantsGrid({ listing }: { listing: SponsorshipListing }) {
           { label: "Accepted", value: acceptedCount, color: "#16a34a" },
           {
             label: "Spots left",
-            value: (listing.numberOfTeams ?? 0) - acceptedCount,
+            value: listing.numberOfTeams != null
+              ? Math.max(0, listing.numberOfTeams - acceptedCount)
+              : "?",
           },
           { label: "Declined", value: declinedCount },
         ].map((s) => (
