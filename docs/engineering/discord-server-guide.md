@@ -144,7 +144,7 @@ Reference docs:
 - [UX Walkthrough](../product/ux-walkthrough.md)
 - [Spacing System](../product/spacing-system.md)
 - [Conversational Onboarding](../product/conversational-onboarding.md)
-- [Clubs & Brands Definitions](../strategy/clubs-and-brands-definitions.md)
+- [Teams And Sponsors Definitions](../strategy/clubs-and-brands-definitions.md)
 
 ---
 

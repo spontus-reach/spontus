@@ -1,16 +1,46 @@
-# Platform Concepts: Clubs & Brands Definition
+# Platform Concepts: Teams And Sponsors Definition
 
 **Status:** Canonical
 **Owner:** Brian + Joshua
 **Last reviewed:** 2026-05-24
 **Source:** Migrated Notion platform definitions
-**Use this for:** Core entity definitions and platform relationship language.
+**Use this for:** Strategy-level definitions for Teams, Sponsors, and marketplace relationships.
 
 Back to [Documentation Hub](../README.md).
 
 ## Summary / Why This Matters
 
-This page defines the two sides of the marketplace: verified club teams and brand sponsors. Use it when naming product objects, writing specs, designing onboarding, or deciding whether a workflow belongs to the team side, sponsor side, or shared platform layer.
+This page defines the two sides of the marketplace: verified teams and sponsors. Use it when naming product objects, writing specs, designing onboarding, or deciding whether a workflow belongs to the team side, sponsor side, or shared platform layer.
+
+For concise implementation vocabulary, use [Domain Glossary](../domain-glossary.md). For conceptual entities and statuses, use [Domain Model](../product/domain-model.md).
+
+## Canonical MVP Definitions
+
+| Concept | Canonical MVP definition |
+| --- | --- |
+| Team | A college club sports organization seeking sponsorship support. In the first wedge, this means Cal Poly club sports teams and similar student-run college teams. |
+| Sponsor | A company or organization that provides cash, product, discounts, services, or access in exchange for sponsorship value. |
+| Brand | The sponsor's public identity or product identity. Brand is not the primary account-side term. |
+| Sponsorship Listing | A sponsor-created opportunity describing the offer, criteria, timeline, and requested assets. |
+| Application | A team's submission to a specific sponsorship listing. |
+| Deal | An accepted sponsorship relationship between one team and one sponsor. |
+| Deliverable | A promised action or asset the team owes the sponsor. |
+| Proof | Evidence that a deliverable happened. |
+| Verification | A manual trust check for MVP that confirms teams and sponsors are legitimate enough to participate. |
+
+## Canonical Language Rules
+
+- Use **Team** and **Sponsor** for the two marketplace sides.
+- Use **Brand** only when sponsor identity, brand safety, or public-facing marketing context matters.
+- Use **club sports** for the market category, not as the account object.
+- Use **Sponsorship Listing** before acceptance and **Deal** after acceptance.
+- Use **Deliverable** for obligations and **Proof** for evidence.
+
+## MVP Boundary
+
+The canonical MVP model is intentionally narrower than the full reference material below. For development, assume manual verification, one active profile per team or sponsor, sponsor-created listings, team-submitted applications, and lightweight post-acceptance deal tracking.
+
+The UI, verification, lifecycle, and data-attribute sections below are useful reference material. They include future-facing ideas and should not override [MVP Build Slices](../product/mvp-build-slices.md) or [Development Readiness](../engineering/development-readiness.md).
 
 *Last Updated: 2026-05-24*
 
@@ -18,7 +48,7 @@ This page defines the two sides of the marketplace: verified club teams and bran
 
 ---
 
-## Overview
+## Reference Material: Overview
 
 Spontus connects two distinct but complementary entities:
 
@@ -29,7 +59,7 @@ This document defines what constitutes each entity type, what they can do on the
 
 ---
 
-## Club Teams: Definition & Characteristics
+## Reference Material: Teams Definition And Characteristics
 
 ### What Is a Club Team?
 
@@ -65,7 +95,7 @@ Club Teams seek sponsorship to address:
 
 ---
 
-## Brand Sponsors: Definition & Characteristics
+## Reference Material: Sponsors Definition And Characteristics
 
 ### What Is a Brand Sponsor?
 
@@ -102,7 +132,7 @@ Brands sponsor Club Teams to achieve:
 
 ---
 
-## Value Exchange Framework
+## Reference Material: Value Exchange Framework
 
 ### What Clubs Provide to Brands
 
@@ -158,7 +188,7 @@ Brand Sponsors offer teams:
 
 ---
 
-## User Interface & User Experience
+## Reference Material: User Interface And User Experience
 
 ### Club Team Perspective
 
@@ -251,7 +281,7 @@ For active sponsorships, brands can:
 
 ---
 
-## Verification & Trust Framework
+## Reference Material: Verification And Trust Framework
 
 ### Club Team Verification Process
 
@@ -303,7 +333,7 @@ To ensure team confidence, Spontus verifies brands through:
 
 ---
 
-## Data Model & Attributes
+## Reference Material: Data Model And Attributes
 
 ### Club Team Data Structure
 
@@ -380,7 +410,7 @@ To ensure team confidence, Spontus verifies brands through:
 
 ---
 
-## Relationship Lifecycle & Workflows
+## Reference Material: Relationship Lifecycle And Workflows
 
 ### Sponsorship Discovery Phase
 
@@ -416,7 +446,7 @@ To ensure team confidence, Spontus verifies brands through:
 
 ---
 
-## Standards & Best Practices
+## Reference Material: Standards And Best Practices
 
 ### For Club Teams
 
