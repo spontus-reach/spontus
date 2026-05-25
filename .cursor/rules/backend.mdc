@@ -1,0 +1,43 @@
+---
+description: Spontus backend implementation guidance
+alwaysApply: true
+---
+
+Read docs/engineering/backend-plan.md before implementing auth, database, storage, API routes, server actions, or data fetching.
+
+Backend rules:
+- Use Supabase-ready data structures unless the team explicitly chooses another backend.
+- Use Team + Sponsor as the core account sides.
+- Use Brand only as sponsor display identity.
+- Keep the sponsorship asset taxonomy shared between team profiles and sponsor listings.
+- Keep manual verification status in the MVP.
+- Enable Row Level Security on all app tables once Supabase tables exist.
+- Do not rely on frontend-only access checks for sensitive data.
+- Keep mock data shaped like future database rows.
+
+First backend slice:
+- profiles
+- teams
+- team_memberships
+- team_profiles
+- team_events
+- sponsorship_asset_definitions
+- team_sponsorship_assets
+
+Do not build these in the first backend slice unless explicitly requested:
+- payments
+- escrow
+- tax workflows
+- AI contracts
+- automated matching
+- advanced analytics
+- full CRM
+- social API ingestion
+- youth sports compliance engine
+
+When adding backend code:
+1. Identify which MVP slice the backend work belongs to.
+2. Link the change to docs/engineering/backend-plan.md.
+3. Keep migrations small and reversible.
+4. Add seed data for canonical sponsorship assets when relevant.
+5. Summarize RLS assumptions and any security gaps after implementation.
