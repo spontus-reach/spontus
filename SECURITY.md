@@ -6,7 +6,7 @@ We take security issues seriously. If you discover a vulnerability in Spontus, p
 
 **To submit a report:**
 
-1. Navigate to the [Security Advisories](../../security/advisories) tab of this repository.
+1. Navigate to the [Security Advisories](https://github.com/spontus-reach/spontus/security/advisories) tab of this repository.
 2. Click **"Report a vulnerability"** to open a private advisory draft.
 3. Fill in the details and submit.
 
