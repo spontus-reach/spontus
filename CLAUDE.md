@@ -69,3 +69,32 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Test files should be colocated with implementation
 - Use Node.js test runner (`node --test`)
 - Follow existing test patterns in the codebase
+
+## gstack - AI Engineering Team
+gstack provides a virtual engineering team with specialized roles:
+- **CEO/Founder**: `/plan-ceo-review` - Rethink problems, expand scope, strategy review
+- **Eng Manager**: `/plan-eng-review` - Architecture, data flow, diagrams, edge cases
+- **Designer**: `/plan-design-review` / `/design-review` - Visual QA, design polish
+- **DX Engineer**: `/devex-review` / `/plan-devex-review` - Developer experience audits
+- **QA Lead**: `/qa` / `/browse` - Test sites, find bugs, take screenshots
+- **Security Officer**: `/cso` - OWASP + STRIDE audits, threat modeling
+- **Release Engineer**: `/ship` / `/land-and-deploy` - PR creation, merge, deploy
+- **Reviewer**: `/review` - Pre-landing PR review for SQL safety, LLM boundaries
+- **Investigator**: `/investigate` - Root cause analysis for bugs
+- **Documentation**: `/document-generate` / `/document-release` - Auto-generate docs
+- **Codex Consultant**: `/codex` - Second opinion from OpenAI Codex CLI
+- **Learning**: `/learn` - Manage project learnings across sessions
+- **Safety**: `/careful` / `/freeze` / `/guard` - Destructive command warnings
+- **Performance**: `/benchmark` - Performance regression detection
+- **Canary Monitoring**: `/canary` - Post-deploy monitoring
+- **Context**: `/context-save` / `/context-restore` - Save/resume work across sessions
+
+**Usage Examples:**
+- Start with `/office-hours` to describe what you're building
+- Use `/browse https://your-app.com` to test and interact with web pages
+- Run `/qa` for systematic QA testing and bug fixing
+- Take screenshots with `/screenshot` after browsing
+- Validate designs with `/design-review` and `/design-shotgun`
+- Check performance with `/benchmark` and `/benchmark-models`
+
+**Important:** Use `/browse` skill from gstack for all web browsing, never use mcp__claude-in-chrome__* tools.
