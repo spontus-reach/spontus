@@ -1,18 +1,53 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { SponsorProfileForm } from "@/components/sponsor/sponsor-profile-form";
 import { VerificationStatusBadge } from "@/components/team/verification-status-badge";
 import { useVerification } from "@/components/providers/verification-provider";
+import { useRouter } from "next/navigation";
 import { ACTIVE_SPONSOR_ID } from "@/lib/constants";
 import type { SponsorProfileDraft } from "@/lib/types";
 
 export default function SponsorOnboardingPage() {
-  const [draft, setDraft] = useState<SponsorProfileDraft>({
-    verificationStatus: "draft",
-    typicalOfferTypes: [],
+  const router = useRouter();
+
+  // Check if we have signup data from URL state (from sponsor signup page)
+  const [draft, setDraft] = useState<SponsorProfileDraft>(() => {
+    // Check if router state has signup data from sponsor signup
+    if (typeof window !== 'undefined') {
+      try {
+        const state = router.state as { signupData?: any } | null;
+        if (state && state.signupData) {
+          const { companyName, contactName, role, email, websiteUrl, industryCategory } = state.signupData;
+          // Map signup data to draft profile format
+          return {
+            verificationStatus: "draft",
+            companyName,
+            brandName: "",
+            oneLiner: "",
+            description: "",
+            logoUrl: "",
+            websiteUrl,
+            instagramUrl: "",
+            industryCategory,
+            targetAudience: "",
+            geographicFocus: "",
+            typicalOfferTypes: [],
+            pastSponsorships: "",
+          };
+        }
+      } catch (e) {
+        // If we can't access state, fall back to default
+        console.log("Could not access router state:", e);
+      }
+    }
+    // Default draft state
+    return {
+      verificationStatus: "draft",
+      typicalOfferTypes: [],
+    };
   });
 
   const { getSponsorById, submitForVerification } = useVerification();

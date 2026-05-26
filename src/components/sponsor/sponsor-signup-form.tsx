@@ -19,8 +19,18 @@ import {
 } from "@/lib/constants";
 import type { SponsorMemberRole } from "@/lib/types";
 
-export function SponsorSignupForm() {
-  const router = useRouter();
+interface SponsorSignupFormProps {
+  onSubmit?: (data: {
+    companyName: string;
+    contactName: string;
+    role: string;
+    email: string;
+    websiteUrl: string;
+    industryCategory: string;
+  }) => void;
+}
+
+export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps = {}) {
   const [companyName, setCompanyName] = useState("");
   const [contactName, setContactName] = useState("");
   const [role, setRole] = useState<SponsorMemberRole | "">("");
@@ -60,7 +70,7 @@ export function SponsorSignupForm() {
   }
 
   // Enhanced email validation with more specific error messages
-  function getWorkEmailValidationError(value: string): string {
+  export function getWorkEmailValidationError(value: string): string {
     const trimmed = value.trim();
     if (!trimmed) {
       return "Email is required";
@@ -94,14 +104,25 @@ export function SponsorSignupForm() {
     return "";
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleFormSubmit(e: React.FormEvent) {
     e.preventDefault();
     // Validate email before proceeding
     if (email) {
-      validateWorkEmail(email);
+      const error = getWorkEmailValidationError(email);
+      setEmailError(error);
     }
     if (!emailError) {
-      router.push("/sponsor/onboarding");
+      // Call the onSubmit handler if provided
+      if (onSubmit) {
+        onSubmit({
+          companyName,
+          contactName,
+          role,
+          email,
+          websiteUrl,
+          industryCategory
+        });
+      }
     }
   }
 

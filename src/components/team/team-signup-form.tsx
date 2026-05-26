@@ -17,8 +17,18 @@ import { Field } from "@/components/team/form-field";
 import { TEAM_MEMBER_ROLES } from "@/lib/constants";
 import type { TeamMemberRole } from "@/lib/types";
 
-export function TeamSignupForm() {
-  const router = useRouter();
+interface TeamSignupFormProps {
+  onSubmit?: (data: {
+    fullName: string;
+    email: string;
+    university: string;
+    teamName: string;
+    sport: string;
+    role: string;
+  }) => void;
+}
+
+export function TeamSignupForm({ onSubmit }: TeamSignupFormProps = {}) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [university, setUniversity] = useState("");
@@ -79,13 +89,26 @@ export function TeamSignupForm() {
     return "";
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleFormSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!isEduEmail(email)) {
-      setEmailError("Must be a .edu email address");
-      return;
+    // Validate email before proceeding
+    if (email) {
+      const error = getEmailValidationError(email);
+      setEmailError(error);
     }
-    router.push("/team/onboarding");
+    if (!emailError) {
+      // Call the onSubmit handler if provided
+      if (onSubmit) {
+        onSubmit({
+          fullName,
+          email,
+          university,
+          teamName,
+          sport,
+          role
+        });
+      }
+    }
   }
 
   const isValid = Boolean(

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,7 @@ import { LookingForForm } from "@/components/team/looking-for-form";
 import { MediaUploadForm } from "@/components/team/media-upload-form";
 import { VerificationStatusBadge } from "@/components/team/verification-status-badge";
 import { useVerification } from "@/components/providers/verification-provider";
+import { useRouter } from "next/navigation";
 import { ACTIVE_TEAM_ID } from "@/lib/mock-data";
 import type { TeamProfileDraft, TeamSponsorshipAsset } from "@/lib/types";
 
@@ -64,17 +65,63 @@ function computeSectionComplete(
 }
 
 export default function TeamOnboardingPage() {
-  const [draft, setDraft] = useState<TeamProfileDraft>({
-    verificationStatus: "draft",
-    sponsorshipAssets: [],
-    events: [],
-    hostedEvents: [],
-    preferredSponsorCategories: [],
-    excludedSponsorCategories: [],
-    dealTypesInterestedIn: [],
-    socialLinks: [],
-    pastSponsors: [],
+  const router = useRouter();
+
+  // Check if we have signup data from URL state (from signup page)
+  const [draft, setDraft] = useState<TeamProfileDraft>(() => {
+    // Check if router state has signup data from team signup
+    if (typeof window !== 'undefined') {
+      try {
+        const state = router.state as { signupData?: any } | null;
+        if (state && state.signupData) {
+          const { fullName, email, university, teamName, sport, role } = state.signupData;
+          // Map signup data to draft profile format
+          return {
+            verificationStatus: "draft",
+            name: teamName,
+            university,
+            sport,
+            oneLiner: "",
+            description: "",
+            league: "",
+            competitionSummary: "",
+            season: "",
+            websiteUrl: "",
+            instagramUrl: "",
+            tiktokUrl: "",
+            livestreamUrl: "",
+            combinedReach: 0,
+            socialLinks: [],
+            events: [],
+            sponsorshipAssets: [],
+            hostedEvents: [],
+            preferredSponsorCategories: [],
+            excludedSponsorCategories: [],
+            dealTypesInterestedIn: [],
+            socialLinks: [],
+            pastSponsors: [],
+            // We don't store contact info in the profile, it's for verification only
+          };
+        }
+      } catch (e) {
+        // If we can't access state, fall back to default
+        console.log("Could not access router state:", e);
+      }
+    }
+    // Default draft state
+    return {
+      verificationStatus: "draft",
+      sponsorshipAssets: [],
+      events: [],
+      hostedEvents: [],
+      preferredSponsorCategories: [],
+      excludedSponsorCategories: [],
+      dealTypesInterestedIn: [],
+      socialLinks: [],
+      pastSponsors: [],
+    };
   });
+
   const [activeSection, setActiveSection] = useState("basics");
   const [hostedEventsReviewed, setHostedEventsReviewed] = useState(false);
 
