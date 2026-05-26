@@ -14,6 +14,9 @@ on:
     types:
       - opened
       - closed
+  discussion_comment:
+    types:
+      - created
   workflow_dispatch:
 
 permissions:
@@ -29,12 +32,13 @@ jobs:
   notify:
     name: Post to Discord
     runs-on: ubuntu-latest
-    if: ${{ (github.event_name != 'pull_request' || github.event.pull_request.draft == false) && !(github.event_name == 'push' && contains(github.event.head_commit.message, '[skip discord]')) }}
+    if: ${{ (github.event_name != 'pull_request' || github.event.pull_request.draft == false) && !(github.event_name == 'push' && contains(github.event.head_commit.message, '[skip discord]')) && (github.event_name != 'discussion_comment' || (github.event.action == 'created' && github.event.discussion.title == 'Daily GitHub Change Log')) }}
 
     steps:
       - name: Send Discord notification
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_DAILY_UPDATES_WEBHOOK_URL: ${{ secrets.DISCORD_DAILY_UPDATES_WEBHOOK_URL }}
           EVENT_NAME: ${{ github.event_name }}
           EVENT_ACTION: ${{ github.event.action }}
           REPO: ${{ github.repository }}
@@ -56,19 +60,33 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [[ -z "${DISCORD_WEBHOOK_URL:-}" ]]; then
-            echo "DISCORD_WEBHOOK_URL is not configured. Skipping Discord notification."
+          webhook_url="${DISCORD_WEBHOOK_URL:-}"
+          if [[ "${EVENT_NAME}" == "discussion_comment" ]]; then
+            webhook_url="${DISCORD_DAILY_UPDATES_WEBHOOK_URL:-}"
+          fi
+
+          if [[ -z "${webhook_url:-}" ]]; then
+            if [[ "${EVENT_NAME}" == "discussion_comment" ]]; then
+              echo "DISCORD_DAILY_UPDATES_WEBHOOK_URL is not configured. Skipping daily update notification."
+            else
+              echo "DISCORD_WEBHOOK_URL is not configured. Skipping Discord notification."
+            fi
             exit 0
           fi
 
           payload="$(python - <<'PY'
           import json
           import os
+          from pathlib import Path
 
           event = os.environ["EVENT_NAME"]
           action = os.environ.get("EVENT_ACTION", "")
           repo = os.environ["REPO"]
           actor = os.environ["ACTOR"]
+          event_payload = {}
+          event_path = os.environ.get("GITHUB_EVENT_PATH")
+          if event_path and Path(event_path).exists():
+              event_payload = json.loads(Path(event_path).read_text())
 
           def embed(title, description, color, url=None):
               item = {
@@ -143,6 +161,42 @@ jobs:
               )
               embeds = [embed(headline, description, color, url or None)]
 
+          elif event == "discussion_comment":
+              discussion = event_payload.get("discussion", {})
+              comment = event_payload.get("comment", {})
+              title = discussion.get("title", "Discussion update")
+              discussion_url = discussion.get("html_url", "")
+              url = comment.get("html_url") or discussion_url
+              author = comment.get("user", {}).get("login", actor)
+              body = comment.get("body", "").strip()
+              lines = [line.strip() for line in body.splitlines()]
+              heading = next((line.lstrip("# ").strip() for line in lines if line.startswith("## ")), title)
+
+              bullets = []
+              in_summary = False
+              for line in lines:
+                  normalized = line.strip()
+                  if normalized.lower() in {"### summary", "summary"}:
+                      in_summary = True
+                      continue
+                  if in_summary and normalized.startswith("### "):
+                      break
+                  if in_summary and normalized.startswith("- "):
+                      bullets.append(normalized)
+                  if len(bullets) == 6:
+                      break
+
+              if not bullets and body:
+                  bullets = [body[:500]]
+
+              description = (
+                  f"**Repo:** {repo}\n"
+                  f"**Discussion:** [{title}]({discussion_url or url})\n"
+                  f"**Author:** {author}\n\n"
+                  + "\n".join(bullets[:6])
+              )
+              embeds = [embed(heading, description, 5763719, url or None)]
+
           elif event == "workflow_dispatch":
               description = (
                   f"**Repo:** {repo}\n"
@@ -163,6 +217,6 @@ jobs:
           )"
 
           curl --fail-with-body --silent --show-error \
-            -X POST "${DISCORD_WEBHOOK_URL}" \
+            -X POST "${webhook_url}" \
             -H "Content-Type: application/json" \
             -d "${payload}"
