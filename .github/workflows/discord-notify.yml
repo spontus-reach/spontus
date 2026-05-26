@@ -2,18 +2,29 @@ name: Discord Notifications
 
 on:
   push:
-    branches:
-      - main
   pull_request:
     types:
       - opened
       - reopened
+      - synchronize
+      - edited
       - closed
       - ready_for_review
   issues:
     types:
       - opened
+      - edited
+      - reopened
       - closed
+  issue_comment:
+    types:
+      - created
+  pull_request_review:
+    types:
+      - submitted
+  pull_request_review_comment:
+    types:
+      - created
   discussion_comment:
     types:
       - created
@@ -25,7 +36,7 @@ permissions:
   issues: read
 
 concurrency:
-  group: discord-notify-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.issue.number || github.sha }}
+  group: discord-notify-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.issue.number || github.event.comment.id || github.event.review.id || github.sha }}
   cancel-in-progress: true
 
 jobs:
@@ -99,17 +110,22 @@ jobs:
               return item
 
           if event == "push":
+              commits = event_payload.get("commits", [])
               commit_message = os.environ.get("COMMIT_MESSAGE", "").splitlines()[0]
               sha = os.environ["SHA"][:7]
               commit_url = os.environ.get("COMMIT_URL") or f"https://github.com/{repo}/commit/{sha}"
+              branch = os.environ["REF_NAME"]
+              commit_count = len(commits)
+              headline = f"Push to {branch}"
               description = (
                   f"**Repo:** {repo}\n"
-                  f"**Branch:** {os.environ['REF_NAME']}\n"
+                  f"**Branch:** {branch}\n"
                   f"**Author:** {actor}\n"
-                  f"**Commit:** [{sha}]({commit_url})\n"
+                  f"**Commits:** {commit_count or 1}\n"
+                  f"**Latest:** [{sha}]({commit_url})\n"
                   f"**Message:** {commit_message or '(no message)'}"
               )
-              embeds = [embed("Push to main", description, 5763719, commit_url)]
+              embeds = [embed(headline, description, 5763719, commit_url)]
 
           elif event == "pull_request":
               title = os.environ.get("PR_TITLE", "Pull request update")
@@ -149,6 +165,12 @@ jobs:
               if action == "opened":
                   headline = f"Issue opened #{number}"
                   color = 15844367
+              elif action == "reopened":
+                  headline = f"Issue reopened #{number}"
+                  color = 15844367
+              elif action == "edited":
+                  headline = f"Issue edited #{number}"
+                  color = 9807270
               else:
                   headline = f"Issue closed #{number}"
                   color = 10070709
@@ -160,6 +182,63 @@ jobs:
                   f"**Action:** {action or 'updated'}"
               )
               embeds = [embed(headline, description, color, url or None)]
+
+          elif event == "issue_comment":
+              issue = event_payload.get("issue", {})
+              comment = event_payload.get("comment", {})
+              number = issue.get("number", "")
+              title = issue.get("title", "Issue or PR comment")
+              url = comment.get("html_url") or issue.get("html_url", "")
+              author = comment.get("user", {}).get("login", actor)
+              body = comment.get("body", "").strip().splitlines()
+              first_line = next((line.strip() for line in body if line.strip()), "(no comment body)")
+              item_type = "PR" if "pull_request" in issue else "Issue"
+              headline = f"{item_type} comment #{number}"
+              description = (
+                  f"**Repo:** {repo}\n"
+                  f"**Title:** {title}\n"
+                  f"**Author:** {author}\n"
+                  f"**Comment:** {first_line[:500]}"
+              )
+              embeds = [embed(headline, description, 9807270, url or None)]
+
+          elif event == "pull_request_review":
+              pull_request = event_payload.get("pull_request", {})
+              review = event_payload.get("review", {})
+              number = pull_request.get("number", "")
+              title = pull_request.get("title", "Pull request review")
+              url = review.get("html_url") or pull_request.get("html_url", "")
+              author = review.get("user", {}).get("login", actor)
+              state = review.get("state", "submitted").replace("_", " ").title()
+              body = review.get("body", "").strip().splitlines()
+              first_line = next((line.strip() for line in body if line.strip()), "(no review body)")
+              description = (
+                  f"**Repo:** {repo}\n"
+                  f"**Title:** {title}\n"
+                  f"**Reviewer:** {author}\n"
+                  f"**State:** {state}\n"
+                  f"**Note:** {first_line[:500]}"
+              )
+              embeds = [embed(f"PR review #{number}", description, 9807270, url or None)]
+
+          elif event == "pull_request_review_comment":
+              pull_request = event_payload.get("pull_request", {})
+              comment = event_payload.get("comment", {})
+              number = pull_request.get("number", "")
+              title = pull_request.get("title", "Pull request review comment")
+              url = comment.get("html_url") or pull_request.get("html_url", "")
+              author = comment.get("user", {}).get("login", actor)
+              body = comment.get("body", "").strip().splitlines()
+              first_line = next((line.strip() for line in body if line.strip()), "(no comment body)")
+              path = comment.get("path", "")
+              description = (
+                  f"**Repo:** {repo}\n"
+                  f"**Title:** {title}\n"
+                  f"**Author:** {author}\n"
+                  f"**File:** {path or '(not provided)'}\n"
+                  f"**Comment:** {first_line[:500]}"
+              )
+              embeds = [embed(f"PR review comment #{number}", description, 9807270, url or None)]
 
           elif event == "discussion_comment":
               discussion = event_payload.get("discussion", {})
