@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,20 +45,7 @@ export function TeamSignupForm({ onSubmit }: TeamSignupFormProps = {}) {
            normalized.lastIndexOf(".edu") === normalized.length - 4;
   }
 
-  function validateEmail(value: string) {
-    const normalized = value.trim().toLowerCase();
-    if (!normalized) {
-      setEmailError("");
-      return;
-    }
-
-    if (!isEduEmail(normalized)) {
-      setEmailError("Must be a valid .edu email address (e.g., name@university.edu)");
-    } else {
-      setEmailError("");
-    }
-  }
-
+  
   // Enhanced email validation with more specific error messages
   export function getEmailValidationError(value: string): string {
     const trimmed = value.trim();
@@ -130,7 +116,7 @@ export function TeamSignupForm({ onSubmit }: TeamSignupFormProps = {}) {
       </p>
 
       <Card className="mt-8 border-border bg-card p-6">
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleFormSubmit} className="space-y-5">
           <Field label="Full name">
             <Input
               placeholder="Maya Hernandez"

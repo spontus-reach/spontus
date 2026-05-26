@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -72,9 +72,13 @@ export default function TeamOnboardingPage() {
     // Check if router state has signup data from team signup
     if (typeof window !== 'undefined') {
       try {
-        const state = router.state as { signupData?: any } | null;
+        const state = router.state as { signupData?: {
+          university: string;
+          teamName: string;
+          sport: string;
+        } } | null;
         if (state && state.signupData) {
-          const { fullName, email, university, teamName, sport, role } = state.signupData;
+          const { university, teamName, sport } = state.signupData;
           // Map signup data to draft profile format
           return {
             verificationStatus: "draft",

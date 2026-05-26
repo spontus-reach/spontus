@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { SponsorProfileForm } from "@/components/sponsor/sponsor-profile-form";
@@ -18,9 +18,13 @@ export default function SponsorOnboardingPage() {
     // Check if router state has signup data from sponsor signup
     if (typeof window !== 'undefined') {
       try {
-        const state = router.state as { signupData?: any } | null;
+        const state = router.state as { signupData?: {
+          companyName: string;
+          websiteUrl: string;
+          industryCategory: string;
+        } } | null;
         if (state && state.signupData) {
-          const { companyName, contactName, role, email, websiteUrl, industryCategory } = state.signupData;
+          const { companyName, websiteUrl, industryCategory } = state.signupData;
           // Map signup data to draft profile format
           return {
             verificationStatus: "draft",

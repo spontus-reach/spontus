@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,36 +38,7 @@ export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps = {}) {
   const [industryCategory, setIndustryCategory] = useState("");
   const [emailError, setEmailError] = useState("");
 
-  function isWorkEmail(value: string) {
-    const normalized = value.trim().toLowerCase();
-    // Work email should NOT be .edu and should be a valid email format
-    if (!normalized) return false;
-    if (normalized.endsWith(".edu")) return false; // Not a school email
-    if (!normalized.includes("@")) return false; // Must have @ symbol
-
-    const [localPart, domainPart] = normalized.split("@");
-    if (!localPart || !domainPart) return false; // Valid email format
-
-    // Domain should have at least one dot (e.g., company.com)
-    return domainPart.includes(".") &&
-           domainPart.split(".").length >= 2 &&
-           domainPart.split(".").every(part => part.length > 0);
-  }
-
-  function validateWorkEmail(value: string) {
-    const normalized = value.trim().toLowerCase();
-    if (!normalized) {
-      setEmailError("");
-      return;
-    }
-
-    if (!isWorkEmail(normalized)) {
-      setEmailError("Please enter a valid work email address (non-.edu)");
-    } else {
-      setEmailError("");
-    }
-  }
-
+  
   // Enhanced email validation with more specific error messages
   export function getWorkEmailValidationError(value: string): string {
     const trimmed = value.trim();
@@ -149,7 +119,7 @@ export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps = {}) {
         className="mt-8 p-6"
         style={{ border: "0.5px solid #d5d3cd", background: "white" }}
       >
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleFormSubmit} className="space-y-5">
           <Field label="Company name">
             <Input
               placeholder="Fluid Nutrition"
