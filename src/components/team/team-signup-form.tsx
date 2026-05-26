@@ -28,7 +28,12 @@ export function TeamSignupForm() {
   const [emailError, setEmailError] = useState("");
 
   function isEduEmail(value: string) {
-    return value.trim().toLowerCase().endsWith(".edu");
+    const normalized = value.trim().toLowerCase();
+    // Basic .edu domain validation
+    return normalized.endsWith(".edu") &&
+           normalized.length > 5 &&  // At least "a@b.edu"
+           normalized.includes("@") &&
+           normalized.lastIndexOf(".edu") === normalized.length - 4;
   }
 
   function validateEmail(value: string) {
@@ -37,11 +42,41 @@ export function TeamSignupForm() {
       setEmailError("");
       return;
     }
-    if (!normalized.endsWith(".edu")) {
-      setEmailError("Must be a .edu email address");
+
+    if (!isEduEmail(normalized)) {
+      setEmailError("Must be a valid .edu email address (e.g., name@university.edu)");
     } else {
       setEmailError("");
     }
+  }
+
+  // Enhanced email validation with more specific error messages
+  export function getEmailValidationError(value: string): string {
+    const trimmed = value.trim();
+    if (!trimmed) {
+      return "Email is required";
+    }
+
+    if (!trimmed.includes("@")) {
+      return "Please enter a valid email address";
+    }
+
+    const [localPart, domainPart] = trimmed.split("@");
+    if (!localPart || !domainPart) {
+      return "Please enter a valid email address";
+    }
+
+    if (!domainPart.endsWith(".edu")) {
+      return "Must be a .edu email address";
+    }
+
+    // Check if it's a reasonable .edu domain (at least domain.tld.edu format)
+    const domainParts = domainPart.split(".");
+    if (domainParts.length < 2 || domainParts[domainParts.length - 2].length === 0) {
+      return "Please enter a valid .edu email address";
+    }
+
+    return "";
   }
 
   function handleSubmit(e: React.FormEvent) {
@@ -88,9 +123,15 @@ export function TeamSignupForm() {
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
-                if (emailError) validateEmail(e.target.value);
+                if (emailError) {
+                  const error = getEmailValidationError(e.target.value);
+                  setEmailError(error);
+                }
               }}
-              onBlur={(e) => validateEmail(e.target.value)}
+              onBlur={(e) => {
+                const error = getEmailValidationError(e.target.value);
+                setEmailError(error);
+              }}
               className={emailError ? "border-destructive" : ""}
             />
             {emailError && (

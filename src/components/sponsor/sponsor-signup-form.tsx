@@ -27,10 +27,82 @@ export function SponsorSignupForm() {
   const [email, setEmail] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [industryCategory, setIndustryCategory] = useState("");
+  const [emailError, setEmailError] = useState("");
+
+  function isWorkEmail(value: string) {
+    const normalized = value.trim().toLowerCase();
+    // Work email should NOT be .edu and should be a valid email format
+    if (!normalized) return false;
+    if (normalized.endsWith(".edu")) return false; // Not a school email
+    if (!normalized.includes("@")) return false; // Must have @ symbol
+
+    const [localPart, domainPart] = normalized.split("@");
+    if (!localPart || !domainPart) return false; // Valid email format
+
+    // Domain should have at least one dot (e.g., company.com)
+    return domainPart.includes(".") &&
+           domainPart.split(".").length >= 2 &&
+           domainPart.split(".").every(part => part.length > 0);
+  }
+
+  function validateWorkEmail(value: string) {
+    const normalized = value.trim().toLowerCase();
+    if (!normalized) {
+      setEmailError("");
+      return;
+    }
+
+    if (!isWorkEmail(normalized)) {
+      setEmailError("Please enter a valid work email address (non-.edu)");
+    } else {
+      setEmailError("");
+    }
+  }
+
+  // Enhanced email validation with more specific error messages
+  function getWorkEmailValidationError(value: string): string {
+    const trimmed = value.trim();
+    if (!trimmed) {
+      return "Email is required";
+    }
+
+    if (!trimmed.includes("@")) {
+      return "Please enter a valid email address";
+    }
+
+    const [localPart, domainPart] = trimmed.split("@");
+    if (!localPart || !domainPart) {
+      return "Please enter a valid email address";
+    }
+
+    // Check if it's a .edu email (not allowed for sponsors)
+    if (domainPart.endsWith(".edu")) {
+      return "Work email cannot be a .edu address";
+    }
+
+    // Domain should have at least one dot and valid parts
+    if (!domainPart.includes(".")) {
+      return "Please enter a valid email address with domain";
+    }
+
+    const domainParts = domainPart.split(".");
+    if (domainParts.length < 2 ||
+        domainParts.some(part => part.length === 0)) {
+      return "Please enter a valid email address";
+    }
+
+    return "";
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    router.push("/sponsor/onboarding");
+    // Validate email before proceeding
+    if (email) {
+      validateWorkEmail(email);
+    }
+    if (!emailError) {
+      router.push("/sponsor/onboarding");
+    }
   }
 
   const isValid =
@@ -96,8 +168,22 @@ export function SponsorSignupForm() {
               type="email"
               placeholder="jordan@fluidnutrition.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (emailError) {
+                  const error = getWorkEmailValidationError(e.target.value);
+                  setEmailError(error);
+                }
+              }}
+              onBlur={(e) => {
+                const error = getWorkEmailValidationError(e.target.value);
+                setEmailError(error);
+              }}
+              className={emailError ? "border-destructive" : ""}
             />
+            {emailError && (
+              <p className="mt-1 text-xs text-destructive">{emailError}</p>
+            )}
           </Field>
 
           <Field label="Company website">
