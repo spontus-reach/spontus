@@ -160,8 +160,8 @@ console.assert(team4StatusAfter === 'submitted_for_verification', `Expected "sub
 console.log('Test 5: Should NOT allow submission from suspended status');
 const result5 = submitForVerification('team', 'team-5'); // team-5 is suspended
 console.assert(result5 === false, `Expected false, got ${result5}`);
-let team5StatusAfterVar = teams.find(t => t.id === 'team-5')?.verificationStatus; // Renamed to avoid duplicate
-console.assert(team5StatusAfterVar === 'suspended', `Expected "suspended", got "${team5StatusAfterVar}"`);
+const team5StatusAfter2 = teams.find(t => t.id === 'team-5')?.verificationStatus; // Renamed to avoid duplicate
+console.assert(team5StatusAfter2 === 'suspended', `Expected "suspended", got "${team5StatusAfter2}"`);
 
 console.log('Test 6: Should work for sponsors as well');
 // Sponsor submission from draft

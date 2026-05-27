@@ -1,3 +1,5 @@
+"use client";
+
 import { TeamSignupForm } from "@/components/team/team-signup-form";
 import { useRouter } from "next/navigation";
 
@@ -13,6 +15,7 @@ export default function TeamSignupPage() {
     role: string;
   }) {
     // Navigate to onboarding with signup data as state
+    // @ts-expect-error Next.js router state typing
     router.push({
       pathname: "/team/onboarding",
       state: { signupData: data }

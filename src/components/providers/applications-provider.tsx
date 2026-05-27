@@ -1,8 +1,9 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, useRef } from "react";
-import type { Application, ApplicationStatus, DeclineReason } from "@/lib/types";
-import { MOCK_SEED_APPLICATIONS } from "@/lib/mock-data";
+import { createContext, useContext, useState, useCallback, useEffect } from "react";
+import type { Application, DeclineReason } from "@/lib/types";
+import { supabase } from "@/lib/supabase";
+import { mapApplicationRow } from "@/lib/db";
 
 interface ApplicationsContextValue {
   applications: Application[];
@@ -10,7 +11,7 @@ interface ApplicationsContextValue {
     listingId: string,
     teamId: string,
     fitNote?: string
-  ) => Application | null;
+  ) => Promise<Application | null>;
   getApplicationsForTeam: (teamId: string) => Application[];
   getApplicationForListing: (
     teamId: string,
@@ -18,22 +19,41 @@ interface ApplicationsContextValue {
   ) => Application | undefined;
   getApplicationsByListingId: (listingId: string) => Application[];
   getApplicationById: (applicationId: string) => Application | undefined;
-  acceptApplication: (applicationId: string) => void;
-  declineApplication: (applicationId: string, reason: DeclineReason) => void;
+  acceptApplication: (applicationId: string) => Promise<void>;
+  declineApplication: (applicationId: string, reason: DeclineReason) => Promise<void>;
+  // We might also need a function to refetch or update the state from the database
+  refresh: () => Promise<void>;
 }
 
 const ApplicationsContext = createContext<ApplicationsContextValue | null>(null);
 
-const TERMINAL_STATUSES: ApplicationStatus[] = ["accepted", "declined", "withdrawn"];
 
 export function ApplicationsProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [applications, setApplications] =
-    useState<Application[]>(MOCK_SEED_APPLICATIONS);
-  const createdRef = useRef<Application | null>(null);
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // Fetch all applications from the database on mount
+  useEffect(() => {
+    async function fetchApplications() {
+      setLoading(true);
+      try {
+        const { data, error } = await supabase.from('applications').select('*');
+        if (error) throw error;
+        setApplications((data ?? []).map((row) => mapApplicationRow(row)));
+      } catch (error) {
+        console.error('Failed to fetch applications:', error);
+        setApplications([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchApplications();
+  }, []);
 
   const getApplicationsForTeam = useCallback(
     (teamId: string) => applications.filter((a) => a.teamId === teamId),
@@ -61,80 +81,123 @@ export function ApplicationsProvider({
   );
 
   const createApplication = useCallback(
-    (listingId: string, teamId: string, fitNote?: string): Application | null => {
-      const newApp: Application = {
-        id: `app-${Date.now()}`,
-        listingId,
-        teamId,
-        status: "submitted",
-        fitNote: fitNote || undefined,
-        submittedAt: new Date().toISOString().split("T")[0],
-      };
+    async (listingId: string, teamId: string, fitNote?: string): Promise<Application | null> => {
+      try {
+        const newApp = {
+          listing_id: listingId,
+          team_id: teamId,
+          status: "submitted",
+          fit_note: fitNote || null,
+          submitted_at: new Date().toISOString().split("T")[0],
+        };
 
-      createdRef.current = null;
+        const { data, error } = await supabase
+          .from('applications')
+          .insert(newApp)
+          .select()
+          .single();
 
-      setApplications((prev) => {
-        const duplicate = prev.some(
-          (a) => a.teamId === teamId && a.listingId === listingId,
-        );
-        if (duplicate) return prev;
-        createdRef.current = newApp;
-        return [...prev, newApp];
-      });
+        if (error) throw error;
 
-      return createdRef.current;
+        // Update state optimistically
+        const application = mapApplicationRow(data);
+        setApplications(prev => [...prev, application]);
+        return application;
+      } catch (error) {
+        console.error('Failed to create application:', error);
+        return null;
+      }
     },
-    [],
+    []
   );
 
   const acceptApplication = useCallback(
-    (applicationId: string) => {
-      setApplications((prev) =>
-        prev.map((a) => {
-          if (a.id !== applicationId) return a;
-          if (TERMINAL_STATUSES.includes(a.status)) return a;
-          return {
-            ...a,
-            status: "accepted" as const,
-            reviewedAt: new Date().toISOString().split("T")[0],
-          };
-        })
-      );
+    async (applicationId: string) => {
+      try {
+        const { data, error } = await supabase
+          .from('applications')
+          .update({
+            status: "accepted",
+            reviewed_at: new Date().toISOString().split("T")[0],
+          })
+          .eq('id', applicationId)
+          .select()
+          .single();
+
+        if (error) throw error;
+
+        // Update state
+        setApplications(prev =>
+          prev.map(app => (app.id === applicationId ? mapApplicationRow(data) : app))
+        );
+      } catch (error) {
+        console.error('Failed to accept application:', error);
+      }
     },
     []
   );
 
   const declineApplication = useCallback(
-    (applicationId: string, reason: DeclineReason) => {
-      setApplications((prev) =>
-        prev.map((a) => {
-          if (a.id !== applicationId) return a;
-          if (TERMINAL_STATUSES.includes(a.status)) return a;
-          return {
-            ...a,
-            status: "declined" as const,
-            declineReason: reason,
-            reviewedAt: new Date().toISOString().split("T")[0],
-          };
-        })
-      );
+    async (applicationId: string, reason: DeclineReason) => {
+      try {
+        const { data, error } = await supabase
+          .from('applications')
+          .update({
+            status: "declined",
+            decline_reason: reason,
+            reviewed_at: new Date().toISOString().split("T")[0],
+          })
+          .eq('id', applicationId)
+          .select()
+          .single();
+
+        if (error) throw error;
+
+        // Update state
+        setApplications(prev =>
+          prev.map(app => (app.id === applicationId ? mapApplicationRow(data) : app))
+        );
+      } catch (error) {
+        console.error('Failed to decline application:', error);
+      }
     },
     []
   );
 
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.from('applications').select('*');
+      if (error) throw error;
+      setApplications((data ?? []).map((row) => mapApplicationRow(row)));
+    } catch (error) {
+      console.error('Failed to refresh applications:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const value: ApplicationsContextValue = {
+    applications,
+    createApplication,
+    getApplicationsForTeam,
+    getApplicationForListing,
+    getApplicationsByListingId,
+    getApplicationById,
+    acceptApplication,
+    declineApplication,
+    refresh,
+  };
+
+  if (loading) {
+    // We still want to render the children, but we can show a loading indicator if needed.
+    // For now, we'll just return the context with empty applications.
+    // The components that use this provider should handle loading state themselves.
+    // Alternatively, we can throw a promise or use a suspense pattern, but we'll keep it simple.
+  }
+
   return (
-    <ApplicationsContext.Provider
-      value={{
-        applications,
-        createApplication,
-        getApplicationsForTeam,
-        getApplicationForListing,
-        getApplicationsByListingId,
-        getApplicationById,
-        acceptApplication,
-        declineApplication,
-      }}
-    >
+    <ApplicationsContext.Provider value={value}>
       {children}
     </ApplicationsContext.Provider>
   );

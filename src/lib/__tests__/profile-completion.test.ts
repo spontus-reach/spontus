@@ -50,16 +50,6 @@ type TeamProfileDraft = {
   photo?: string;
 };
 
-// Mock BUILDER_SECTIONS from team onboarding page
-const BUILDER_SECTIONS = [
-  { id: 'basics', label: 'Basics' },
-  { id: 'social', label: 'Social' },
-  { id: 'competition', label: 'Competition' },
-  { id: 'assets', label: 'Assets' },
-  { id: 'hosted', label: 'Hosted Events' },
-  { id: 'looking', label: 'Looking For' },
-  { id: 'media', label: 'Media' },
-];
 
 // Implementation of computeCompleteness from team onboarding page
 const computeCompleteness = (draft: TeamProfileDraft, hostedEventsReviewed: boolean): number => {

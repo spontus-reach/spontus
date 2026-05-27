@@ -72,7 +72,7 @@ export default function TeamOnboardingPage() {
     // Check if router state has signup data from team signup
     if (typeof window !== 'undefined') {
       try {
-        // @ts-ignore
+        // @ts-expect-error Next.js router.state is not properly typed
         const state = router.state as { signupData?: {
           university: string;
           teamName: string;

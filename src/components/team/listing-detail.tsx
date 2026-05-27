@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { MapPin, Calendar, Users, Check, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,6 @@ import { Card } from "@/components/ui/card";
 import { SponsorProfileCard } from "@/components/sponsor/sponsor-profile-card";
 import { ApplicationModal } from "./application-modal";
 import { useApplications } from "@/components/providers/applications-provider";
-import { useVerification } from "@/components/providers/verification-provider";
 import {
   SPONSORSHIP_ASSET_DEFINITIONS,
   CATEGORY_LABELS,
@@ -67,7 +66,7 @@ export function ListingDetail({ listing }: { listing: SponsorshipListing }) {
     }
 
     fetchDetails();
-  }, [listing.sponsorId, listing.id, ACTIVE_TEAM_ID]);
+  }, [listing.sponsorId, listing.id, getApplicationForListing]);
 
   if (loading) {
     return (

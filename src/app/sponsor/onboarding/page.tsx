@@ -19,7 +19,7 @@ export default function SponsorOnboardingPage() {
     if (typeof window !== 'undefined') {
       try {
         // Access router state properly
-        // @ts-ignore
+        // @ts-expect-error Next.js router state typing - router.state is not properly typed in Next.js
         const state = router.state as { signupData?: {
           companyName: string;
           websiteUrl: string;

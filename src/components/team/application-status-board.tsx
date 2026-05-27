@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { ApplicationCard } from "./application-card";
 import { getApplicationsForTeam } from "@/lib/db";
 import { ACTIVE_TEAM_ID } from "@/lib/mock-data";
-import type { ApplicationStatus } from "@/lib/types";
+import type { ApplicationStatus, Application } from "@/lib/types";
 
 const COLUMNS: { status: ApplicationStatus; label: string }[] = [
   { status: "submitted", label: "Submitted" },
@@ -14,8 +14,8 @@ const COLUMNS: { status: ApplicationStatus; label: string }[] = [
 ];
 
 export function ApplicationStatusBoard() {
-  const [applications, setApplications] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchApplications() {
@@ -32,7 +32,7 @@ export function ApplicationStatusBoard() {
     }
 
     fetchApplications();
-  }, [ACTIVE_TEAM_ID]);
+  }, []);
 
   if (loading) {
     return (

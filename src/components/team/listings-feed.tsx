@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { ListingCard } from "./listing-card";
 import {
   ListingFilters,
@@ -11,12 +11,31 @@ import { useApplications } from "@/components/providers/applications-provider";
 import { useVerification } from "@/components/providers/verification-provider";
 import { isListingFromVerifiedSponsor } from "@/lib/marketplace-gating";
 import { getOpenListings, ACTIVE_TEAM_ID } from "@/lib/mock-data";
+import type { SponsorshipListing } from "@/lib/types";
 
 export function ListingsFeed() {
   const [filters, setFilters] = useState<ListingFilterState>(DEFAULT_FILTERS);
   const { getApplicationForListing } = useApplications();
   const { getSponsorById } = useVerification();
-  const openListings = getOpenListings();
+  const [openListings, setOpenListings] = useState<SponsorshipListing[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    async function fetchOpenListings() {
+      setLoading(true);
+      try {
+        const listings = await getOpenListings();
+        setOpenListings(listings);
+      } catch (error) {
+        console.error('Failed to fetch open listings:', error);
+        setOpenListings([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchOpenListings();
+  }, []);
 
   const verifiedOpenListings = useMemo(
     () =>
@@ -28,12 +47,11 @@ export function ListingsFeed() {
 
   const filtered = useMemo(() => {
     return verifiedOpenListings.filter((l) => {
-
       if (
         filters.sport &&
         l.sportPreferences.length > 0 &&
         !l.sportPreferences.some(
-          (sp) => sp.toLowerCase() === filters.sport.toLowerCase()
+          (sp: string) => sp.toLowerCase() === filters.sport.toLowerCase()
         )
       ) {
         return false;
@@ -62,6 +80,14 @@ export function ListingsFeed() {
       return true;
     });
   }, [verifiedOpenListings, filters, getApplicationForListing]);
+
+  if (loading) {
+    return (
+      <div className="mt-6 text-center">
+        <p className="text-sm text-muted-foreground">Loading listings...</p>
+      </div>
+    );
+  }
 
   return (
     <div>
