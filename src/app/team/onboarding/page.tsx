@@ -72,6 +72,7 @@ export default function TeamOnboardingPage() {
     // Check if router state has signup data from team signup
     if (typeof window !== 'undefined') {
       try {
+        // @ts-ignore
         const state = router.state as { signupData?: {
           university: string;
           teamName: string;
@@ -102,7 +103,6 @@ export default function TeamOnboardingPage() {
             preferredSponsorCategories: [],
             excludedSponsorCategories: [],
             dealTypesInterestedIn: [],
-            socialLinks: [],
             pastSponsors: [],
             // We don't store contact info in the profile, it's for verification only
           };

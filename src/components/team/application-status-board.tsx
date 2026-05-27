@@ -1,7 +1,8 @@
 "use client";
 
-import { useApplications } from "./applications-provider";
+import { useState, useEffect } from "react";
 import { ApplicationCard } from "./application-card";
+import { getApplicationsForTeam } from "@/lib/db";
 import { ACTIVE_TEAM_ID } from "@/lib/mock-data";
 import type { ApplicationStatus } from "@/lib/types";
 
@@ -13,8 +14,35 @@ const COLUMNS: { status: ApplicationStatus; label: string }[] = [
 ];
 
 export function ApplicationStatusBoard() {
-  const { getApplicationsForTeam } = useApplications();
-  const applications = getApplicationsForTeam(ACTIVE_TEAM_ID);
+  const [applications, setApplications] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    async function fetchApplications() {
+      setLoading(true);
+      try {
+        const apps = await getApplicationsForTeam(ACTIVE_TEAM_ID);
+        setApplications(apps);
+      } catch (error) {
+        console.error('Failed to fetch applications:', error);
+        setApplications([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchApplications();
+  }, [ACTIVE_TEAM_ID]);
+
+  if (loading) {
+    return (
+      <div className="space-y-8">
+        <div className="text-center py-8">
+          <p className="text-sm text-muted-foreground">Loading applications...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">

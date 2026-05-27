@@ -27,6 +27,35 @@ interface TeamSignupFormProps {
   }) => void;
 }
 
+// Enhanced email validation with more specific error messages
+export function getEmailValidationError(value: string): string {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return "Email is required";
+  }
+
+  if (!trimmed.includes("@")) {
+    return "Please enter a valid email address";
+  }
+
+  const [localPart, domainPart] = trimmed.split("@");
+  if (!localPart || !domainPart) {
+    return "Please enter a valid email address";
+  }
+
+  if (!domainPart.endsWith(".edu")) {
+    return "Must be a .edu email address";
+  }
+
+  // Check if it's a reasonable .edu domain (at least domain.tld.edu format)
+  const domainParts = domainPart.split(".");
+  if (domainParts.length < 2 || domainParts[domainParts.length - 2].length === 0) {
+    return "Please enter a valid .edu email address";
+  }
+
+  return "";
+}
+
 export function TeamSignupForm({ onSubmit }: TeamSignupFormProps = {}) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -43,36 +72,6 @@ export function TeamSignupForm({ onSubmit }: TeamSignupFormProps = {}) {
            normalized.length > 5 &&  // At least "a@b.edu"
            normalized.includes("@") &&
            normalized.lastIndexOf(".edu") === normalized.length - 4;
-  }
-
-  
-  // Enhanced email validation with more specific error messages
-  export function getEmailValidationError(value: string): string {
-    const trimmed = value.trim();
-    if (!trimmed) {
-      return "Email is required";
-    }
-
-    if (!trimmed.includes("@")) {
-      return "Please enter a valid email address";
-    }
-
-    const [localPart, domainPart] = trimmed.split("@");
-    if (!localPart || !domainPart) {
-      return "Please enter a valid email address";
-    }
-
-    if (!domainPart.endsWith(".edu")) {
-      return "Must be a .edu email address";
-    }
-
-    // Check if it's a reasonable .edu domain (at least domain.tld.edu format)
-    const domainParts = domainPart.split(".");
-    if (domainParts.length < 2 || domainParts[domainParts.length - 2].length === 0) {
-      return "Please enter a valid .edu email address";
-    }
-
-    return "";
   }
 
   function handleFormSubmit(e: React.FormEvent) {

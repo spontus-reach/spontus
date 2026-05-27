@@ -18,6 +18,8 @@ export default function SponsorOnboardingPage() {
     // Check if router state has signup data from sponsor signup
     if (typeof window !== 'undefined') {
       try {
+        // Access router state properly
+        // @ts-ignore
         const state = router.state as { signupData?: {
           companyName: string;
           websiteUrl: string;

@@ -29,6 +29,40 @@ interface SponsorSignupFormProps {
   }) => void;
 }
 
+export function getWorkEmailValidationError(value: string): string {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return "Email is required";
+  }
+
+  if (!trimmed.includes("@")) {
+    return "Please enter a valid email address";
+  }
+
+  const [localPart, domainPart] = trimmed.split("@");
+  if (!localPart || !domainPart) {
+    return "Please enter a valid email address";
+  }
+
+  // Check if it's a .edu email (not allowed for sponsors)
+  if (domainPart.endsWith(".edu")) {
+    return "Work email cannot be a .edu address";
+  }
+
+  // Domain should have at least one dot and valid parts
+  if (!domainPart.includes(".")) {
+    return "Please enter a valid email address with domain";
+  }
+
+  const domainParts = domainPart.split(".");
+  if (domainParts.length < 2 ||
+      domainParts.some(part => part.length === 0)) {
+    return "Please enter a valid email address";
+  }
+
+  return "";
+}
+
 export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps = {}) {
   const [companyName, setCompanyName] = useState("");
   const [contactName, setContactName] = useState("");
@@ -37,42 +71,6 @@ export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps = {}) {
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [industryCategory, setIndustryCategory] = useState("");
   const [emailError, setEmailError] = useState("");
-
-  
-  // Enhanced email validation with more specific error messages
-  export function getWorkEmailValidationError(value: string): string {
-    const trimmed = value.trim();
-    if (!trimmed) {
-      return "Email is required";
-    }
-
-    if (!trimmed.includes("@")) {
-      return "Please enter a valid email address";
-    }
-
-    const [localPart, domainPart] = trimmed.split("@");
-    if (!localPart || !domainPart) {
-      return "Please enter a valid email address";
-    }
-
-    // Check if it's a .edu email (not allowed for sponsors)
-    if (domainPart.endsWith(".edu")) {
-      return "Work email cannot be a .edu address";
-    }
-
-    // Domain should have at least one dot and valid parts
-    if (!domainPart.includes(".")) {
-      return "Please enter a valid email address with domain";
-    }
-
-    const domainParts = domainPart.split(".");
-    if (domainParts.length < 2 ||
-        domainParts.some(part => part.length === 0)) {
-      return "Please enter a valid email address";
-    }
-
-    return "";
-  }
 
   function handleFormSubmit(e: React.FormEvent) {
     e.preventDefault();
