@@ -1,13 +1,13 @@
 ## Issue 1: Implement Email Validation Functions
-**Type**: AFK  
-**Blocked by**: None - can start immediately  
-**User stories covered**: 
+**Type**: AFK
+**Blocked by**: None - can start immediately
+**User stories covered**:
 - As a college sports team representative, I want to sign up with my .edu email address so that I can verify I'm affiliated with an educational institution
 - As a team representative, I want to see a clear error message if I try to sign up with a non-.edu email so I know I need to use my school email
 - As a business representative, I want to sign up with my work email address so that I can verify I'm affiliated with a legitimate company
 - As a business representative, I want to see a clear error message if I try to sign up with a .edu email so I know I need to use my work email
 
-**What to build**: 
+**What to build**:
 Create standalone email validation functions that check:
 - For teams: email ends with ".edu" and passes basic email format validation
 - For sponsors: email does NOT end with ".edu" and passes basic email format validation
@@ -21,8 +21,8 @@ Create standalone email validation functions that check:
 - [ ] Functions are exported and usable in signup form components
 
 ## Issue 2: Implement Verification Status Tracking System
-**Type**: AFK  
-**Blocked by**: None - can start immediately  
+**Type**: AFK
+**Blocked by**: None - can start immediately
 **User stories covered**:
 - As a team representative, I want to see my verification status (draft, submitted_for_verification, verified, needs_changes, suspended) so I know where I stand in the process
 - As a business representative, I want to see my verification status (draft, submitted_for_verification, verified, needs_changes, suspended) so I know where I stand in the process
@@ -43,8 +43,8 @@ Create a verification status system that:
 - [ ] Functions are unit tested for all state transitions and edge cases
 
 ## Issue 3: Implement Profile Completion Calculation
-**Type**: AFK  
-**Blocked by**: None - can start immediately  
+**Type**: AFK
+**Blocked by**: None - can start immediately
 **User stories covered**:
 - As a team representative, I want to see my profile completion percentage so I know how much more information I need to provide
 - As a business representative, I want to see my profile completion percentage so I know how much more information I need to provide
@@ -64,8 +64,8 @@ Create profile completion calculation system that:
 - [ ] Functions are imported and used in onboarding page components
 
 ## Issue 4: Implement Supabase Data Integration Layer
-**Type**: AFK  
-**Blocked by**: None - can start immediately  
+**Type**: AFK
+**Blocked by**: None - can start immediately
 **User stories covered**:
 - As a system, I want to store user data securely in Supabase so that information persists between sessions and is protected
 
@@ -86,8 +86,8 @@ Create data access layer that:
 - [ ] Functions are unit tested with mock Supabase responses
 
 ## Issue 5: Implement Mock Data Shaping from Database Queries
-**Type**: AFK  
-**Blocked by**: Issue 4  
+**Type**: AFK
+**Blocked by**: Issue 4
 **User stories covered**:
 - As a system, I want to maintain mock data for development and testing so that developers can work without external dependencies
 
@@ -107,8 +107,8 @@ Create mock data functions that:
 - [ ] Functions are unit tested with various database response scenarios
 
 ## Issue 6: Implement Team Signup and Onboarding Flow
-**Type**: AFK  
-**Blocked by**: Issue 1, Issue 2, Issue 3  
+**Type**: AFK
+**Blocked by**: Issue 1, Issue 2, Issue 3
 **User stories covered**:
 - As a college sports team representative, I want to sign up with my .edu email address so that I can verify I'm affiliated with an educational institution
 - As a team representative, after signing up, I want to be guided through completing my team profile so that my sponsorship listing is attractive to potential sponsors
@@ -134,8 +134,8 @@ Create complete team user flow that:
 - [ ] Flow works end-to-end without errors
 
 ## Issue 7: Implement Sponsor Signup and Onboarding Flow
-**Type**: AFK  
-**Blocked by**: Issue 1, Issue 2, Issue 3  
+**Type**: AFK
+**Blocked by**: Issue 1, Issue 2, Issue 3
 **User stories covered**:
 - As a business representative, I want to sign up with my work email address so that I can verify I'm affiliated with a legitimate company
 - As a business representative, after signing up, I want to be guided through completing my sponsor profile so that teams can evaluate my suitability as a sponsor
@@ -161,9 +161,9 @@ Create complete sponsor user flow that:
 - [ ] Flow works end-to-end without errors
 
 ## Issue 8: Implement Listing Detail Application Logic
-**Type**: AFK  
-**Blocked by**: Issue 4, Issue 5  
-**User stories covered**: 
+**Type**: AFK
+**Blocked by**: Issue 4, Issue 5
+**User stories covered**:
 - (Implicit in verification flow) As a team representative, I can apply to listings when my team is verified and the sponsor is verified
 
 **What to build**:
@@ -183,8 +183,8 @@ Enhance listing detail page to:
 - [ ] Error handling for failed submissions
 
 ## Issue 9: Implement Application Status Board with Real Data
-**Type**: AFK  
-**Blocked by**: Issue 4, Issue 5  
+**Type**: AFK
+**Blocked by**: Issue 4, Issue 5
 **User stories covered**:
 - (Supports verification flow) As a team representative, I want to see my applications and their statuses
 
@@ -203,8 +203,8 @@ Replace mock data usage in application status board with real Supabase data:
 - [ ] Component handles empty application state gracefully
 
 ## Issue 10: Create Database Schema Update Script
-**Type**: HITL  
-**Blocked by**: None - can start immediately (requires decision on exact schema)  
+**Type**: HITL
+**Blocked by**: None - can start immediately (requires decision on exact schema)
 **User stories covered**:
 - As a system, I want to store complete profile data so that all profile sections can be persisted
 
@@ -221,8 +221,8 @@ Create SQL script to add missing columns to support full profile data:
 - [ ] Script includes rollback/down migration statements
 
 ## Issue 11: Implement Unit Tests for Validation and Calculation Functions
-**Type**: AFK  
-**Blocked by**: Issue 1, Issue 2, Issue 3  
+**Type**: AFK
+**Blocked by**: Issue 1, Issue 2, Issue 3
 **User stories covered**:
 - (Supports all user stories through quality assurance)
 
@@ -241,8 +241,8 @@ Create comprehensive unit tests for:
 - [ ] Tests follow existing codebase testing patterns
 
 ## Issue 12: Implement Integration Tests for Signup → Onboarding → Verification Flow
-**Type**: AFK  
-**Blocked by**: Issue 6, Issue 7  
+**Type**: AFK
+**Blocked by**: Issue 6, Issue 7
 **User stories covered**:
 - As a college sports team representative, I want to sign up with my .edu email address so that I can verify I'm affiliated with an educational institution
 - As a business representative, I want to sign up with my work email address so that I can verify I'm affiliated with a legitimate company

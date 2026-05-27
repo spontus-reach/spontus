@@ -29,7 +29,7 @@ All requested tasks for implementing user authentication & verification have bee
 
 ## 📁 Files Changed
 - src/components/team/team-signup-form.tsx
-- src/components/sponsor/sponsor-signup-form.tsx  
+- src/components/sponsor/sponsor-signup-form.tsx
 - src/app/signup/team/page.tsx
 - src/app/signup/sponsor/page.tsx
 - src/app/team/onboarding/page.tsx

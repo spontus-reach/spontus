@@ -1,7 +1,7 @@
 # Codebase Review: Spontus Sponsorship Marketplace
 
-**Reviewed:** Entire codebase  
-**Date:** 2026-05-25  
+**Reviewed:** Entire codebase
+**Date:** 2026-05-25
 
 ---
 

@@ -1,9 +1,9 @@
 # Code Review: PR #8 — Manual Verification Workflow
 
-**PR:** [spontus-reach/spontus#8](https://github.com/spontus-reach/spontus/pull/8)  
-**Branch:** `feat/slice-5-admin-verification` → `feat/slice-4-sponsor-review`  
-**Author:** joshnaim1  
-**Scope:** Slice 5 (+ stacked Slices 2–4, docs, QA artifacts) — 65 files, +5,905 / −29  
+**PR:** [spontus-reach/spontus#8](https://github.com/spontus-reach/spontus/pull/8)
+**Branch:** `feat/slice-5-admin-verification` → `feat/slice-4-sponsor-review`
+**Author:** joshnaim1
+**Scope:** Slice 5 (+ stacked Slices 2–4, docs, QA artifacts) — 65 files, +5,905 / −29
 **Date:** 2026-05-24
 
 ---

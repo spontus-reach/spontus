@@ -40,7 +40,7 @@ Implement a complete authentication and verification system that:
 ## Implementation Decisions
 
 ### Modules to Build/Modify
-1. **Authentication Module**: 
+1. **Authentication Module**:
    - Email validation functions (.edu for teams, work email for sponsors)
    - Signup form validation and submission handling
    - Data transfer from signup to onboarding pages
@@ -180,7 +180,7 @@ These schema changes are noted in the code comments but not yet implemented in t
 
 ### Testing Approach
 1. **Unit Tests**:
-   - Create __tests__ folders alongside components and lib files
+   - Create **tests** folders alongside components and lib files
    - Use Jest or Vitest for unit testing JavaScript/TypeScript functions
    - Mock Supabase calls where necessary
    - Focus on pure functions (validation, calculations)
@@ -205,7 +205,7 @@ These schema changes are noted in the code comments but not yet implemented in t
 
 ## Out of Scope
 
-1. **Password-based Authentication**: 
+1. **Password-based Authentication**:
    - This PRD focuses on email verification and profile completion, not password authentication
    - Future work could add secure password handling with hashing and salt
 

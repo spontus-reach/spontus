@@ -2,7 +2,7 @@
 
 ## Completed Work
 - [x] Enhanced .edu email verification for team signup
-- [x] Added work email validation for sponsor signup  
+- [x] Added work email validation for sponsor signup
 - [x] Created email validation implementation documentation
 - [x] Codebase review completed and documented
 
