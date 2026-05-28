@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { MapPin, Calendar, Users, Check, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,16 +8,18 @@ import { Card } from "@/components/ui/card";
 import { SponsorProfileCard } from "@/components/sponsor/sponsor-profile-card";
 import { ApplicationModal } from "./application-modal";
 import { useApplications } from "@/components/providers/applications-provider";
-import { useVerification } from "@/components/providers/verification-provider";
 import {
   SPONSORSHIP_ASSET_DEFINITIONS,
   CATEGORY_LABELS,
 } from "@/lib/constants";
 import { getAssetOverlap } from "@/lib/asset-overlap";
-import { ACTIVE_TEAM_ID } from "@/lib/mock-data";
+import { getTeamById, getSponsorById, ACTIVE_TEAM_ID } from "@/lib/mock-data";
 import type {
   SponsorshipListing,
   SponsorshipAssetCategory,
+  SponsorProfile,
+  TeamProfile,
+  Application,
 } from "@/lib/types";
 
 const CATEGORIES: SponsorshipAssetCategory[] = [
@@ -27,14 +29,57 @@ const CATEGORIES: SponsorshipAssetCategory[] = [
 ];
 
 export function ListingDetail({ listing }: { listing: SponsorshipListing }) {
-  const { getSponsorById, getTeamById } = useVerification();
-  const sponsor = getSponsorById(listing.sponsorId);
-  const activeTeam = getTeamById(ACTIVE_TEAM_ID);
+  const [sponsor, setSponsor] = useState<SponsorProfile | null>(null);
+  const [activeTeam, setActiveTeam] = useState<TeamProfile | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [existingApp, setExistingApp] = useState<Application | null>(null);
   const { getApplicationForListing, createApplication } = useApplications();
-  const existingApp = getApplicationForListing(ACTIVE_TEAM_ID, listing.id);
-  const [showModal, setShowModal] = useState(false);
 
-  if (!activeTeam) return null;
+  useEffect(() => {
+    async function fetchDetails() {
+      setLoading(true);
+      try {
+        // Fetch sponsor
+        if (listing.sponsorId) {
+          const sponsorData = await getSponsorById(listing.sponsorId);
+          setSponsor(sponsorData ?? null);
+        }
+        // Fetch active team
+        if (ACTIVE_TEAM_ID) {
+          const teamData = await getTeamById(ACTIVE_TEAM_ID);
+          setActiveTeam(teamData ?? null);
+          // If we have the team, check for existing application
+          if (teamData) {
+            const existingApplication = await getApplicationForListing(listing.id, teamData.id);
+            setExistingApp(existingApplication ?? null);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch details:', error);
+        setSponsor(null);
+        setActiveTeam(null);
+        setExistingApp(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchDetails();
+  }, [listing.sponsorId, listing.id, getApplicationForListing]);
+
+  if (loading) {
+    return (
+      <div className="mx-auto max-w-5xl px-6 py-10">
+        <p className="text-center text-sm text-muted-foreground">Loading...</p>
+      </div>
+    );
+  }
+
+  if (!activeTeam) {
+    // If we couldn't fetch the active team, we still want to show something?
+    return null;
+  }
 
   const overlap = getAssetOverlap(listing.requestedAssets, activeTeam.sponsorshipAssets);
   const teamStatus = activeTeam.verificationStatus;

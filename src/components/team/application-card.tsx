@@ -1,7 +1,9 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { getSeedListingById, getSeedSponsorById } from "@/lib/mock-data";
+import { getListingById, getSponsorById } from "@/lib/mock-data";
+import type { SponsorProfile, SponsorshipListing } from "@/lib/types";
 import { getDeclineReasonLabel } from "@/lib/constants";
 import type { Application } from "@/lib/types";
 
@@ -24,17 +26,69 @@ const statusLabels: Record<string, string> = {
 };
 
 export function ApplicationCard({ application }: { application: Application }) {
-  const listing = getSeedListingById(application.listingId);
-  const sponsor = listing ? getSeedSponsorById(listing.sponsorId) : undefined;
-  const style = statusStyles[application.status] ?? statusStyles.draft;
-  const isRoutable = listing?.status === "open";
+  const [listing, setListing] = useState<SponsorshipListing | null>(null);
+  const [sponsor, setSponsor] = useState<SponsorProfile | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const initials = (sponsor?.brandName ?? sponsor?.companyName ?? "??")
+  useEffect(() => {
+    async function fetchDetails() {
+      setLoading(true);
+      try {
+        // Fetch listing
+        if (application.listingId) {
+          const listingData = await getListingById(application.listingId);
+          setListing(listingData ?? null);
+
+          // Fetch sponsor if we have a listing and it has a sponsorId
+          if (listingData && listingData.sponsorId) {
+            const sponsorData = await getSponsorById(listingData.sponsorId);
+            setSponsor(sponsorData ?? null);
+          } else {
+            setSponsor(null);
+          }
+        } else {
+          setListing(null);
+          setSponsor(null);
+        }
+      } catch (error) {
+        console.error('Failed to fetch listing/sponsor details:', error);
+        setListing(null);
+        setSponsor(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchDetails();
+  }, [application.listingId]);
+
+  if (loading) {
+    return (
+      <div className="border rounded-lg p-4">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-lg font-medium">Loading...</h3>
+          <span className="rounded-full px-2 py-0.5 text-[10px] font-medium bg-gray-50 text-gray-700">
+            Loading
+          </span>
+        </div>
+        <p className="text-sm text-muted-foreground">Loading application details...</p>
+      </div>
+    );
+  }
+
+  // If we failed to load listing, we can still show something based on the application data
+  const listingTitle = listing?.title ?? 'Unknown Listing';
+  const sponsorName = sponsor?.brandName ?? sponsor?.companyName ?? (listing?.sponsorId ? 'Unknown Sponsor' : 'No Sponsor');
+
+  const initials = (sponsorName ?? "??")
     .split(" ")
-    .map((w) => w[0])
+    .map((w: string) => w[0])
     .join("")
     .slice(0, 2)
     .toUpperCase();
+
+  const style = statusStyles[application.status] ?? statusStyles.draft;
+  const isRoutable = listing?.status === "open";
 
   const content = (
     <div
@@ -49,10 +103,10 @@ export function ApplicationCard({ application }: { application: Application }) {
       </div>
       <div className="min-w-0 flex-1">
         <div className="text-sm font-medium" style={{ color: "#1a1a18" }}>
-          {sponsor?.brandName ?? sponsor?.companyName ?? "Sponsor"}
+          {sponsorName}
         </div>
         <div className="truncate text-xs" style={{ color: "#6b6960" }}>
-          {listing?.title ?? "Listing"}
+          {listingTitle}
         </div>
       </div>
       <div className="flex flex-col items-end gap-1">

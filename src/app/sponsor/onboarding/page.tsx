@@ -10,9 +10,42 @@ import { ACTIVE_SPONSOR_ID } from "@/lib/constants";
 import type { SponsorProfileDraft } from "@/lib/types";
 
 export default function SponsorOnboardingPage() {
-  const [draft, setDraft] = useState<SponsorProfileDraft>({
-    verificationStatus: "draft",
-    typicalOfferTypes: [],
+  // Check if we have signup data from sessionStorage (from sponsor signup page)
+  const [draft, setDraft] = useState<SponsorProfileDraft>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const storedData = sessionStorage.getItem('sponsorSignupData');
+        if (storedData) {
+          const data = JSON.parse(storedData);
+          // Clear the stored data after reading it
+          sessionStorage.removeItem('sponsorSignupData');
+
+          // Map signup data to draft profile format
+          return {
+            verificationStatus: "draft",
+            companyName: data.companyName,
+            brandName: "",
+            oneLiner: "",
+            description: "",
+            logoUrl: "",
+            websiteUrl: data.websiteUrl,
+            instagramUrl: "",
+            industryCategory: data.industryCategory,
+            targetAudience: "",
+            geographicFocus: "",
+            typicalOfferTypes: [],
+            pastSponsorships: "",
+          };
+        }
+      } catch (e) {
+        console.log("Could not access sessionStorage data:", e);
+      }
+    }
+    // Default draft state
+    return {
+      verificationStatus: "draft",
+      typicalOfferTypes: [],
+    };
   });
 
   const { getSponsorById, submitForVerification } = useVerification();

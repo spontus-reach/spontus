@@ -3,6 +3,11 @@ exclude_path = [
   "node_modules",
 ]
 
+exclude = [
+  "http://localhost:*",
+  "https://localhost:*"
+]
+
 max_retries = 2
 timeout = 20
 accept = [200, 206, 429]

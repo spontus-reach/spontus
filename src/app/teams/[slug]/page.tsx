@@ -8,8 +8,9 @@ import { HostedEventsSection } from "@/components/profile/hosted-events-section"
 import { AudienceReachSection } from "@/components/profile/audience-reach-section";
 import { PastSponsorsSection } from "@/components/profile/past-sponsors-section";
 
-export function generateStaticParams() {
-  return MOCK_TEAMS.map((t) => ({ slug: t.slug }));
+export async function generateStaticParams() {
+  const teams = MOCK_TEAMS;
+  return teams.map((t) => ({ slug: t.slug }));
 }
 
 type PageProps = {
@@ -18,7 +19,7 @@ type PageProps = {
 
 export default async function TeamProfilePage({ params }: PageProps) {
   const { slug } = await params;
-  const team = getTeamBySlug(slug);
+  const team = await getTeamBySlug(slug);
   if (!team) notFound();
 
   return (

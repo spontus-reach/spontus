@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,8 +18,52 @@ import {
 } from "@/lib/constants";
 import type { SponsorMemberRole } from "@/lib/types";
 
-export function SponsorSignupForm() {
-  const router = useRouter();
+interface SponsorSignupFormProps {
+  onSubmit?: (data: {
+    companyName: string;
+    contactName: string;
+    role: string;
+    email: string;
+    websiteUrl: string;
+    industryCategory: string;
+  }) => void;
+}
+
+export function getWorkEmailValidationError(value: string): string {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return "Email is required";
+  }
+
+  if (!trimmed.includes("@")) {
+    return "Please enter a valid email address";
+  }
+
+  const [localPart, domainPart] = trimmed.split("@");
+  if (!localPart || !domainPart) {
+    return "Please enter a valid email address";
+  }
+
+  // Check if it's a .edu email (not allowed for sponsors)
+  if (domainPart.endsWith(".edu")) {
+    return "Work email cannot be a .edu address";
+  }
+
+  // Domain should have at least one dot and valid parts
+  if (!domainPart.includes(".")) {
+    return "Please enter a valid email address with domain";
+  }
+
+  const domainParts = domainPart.split(".");
+  if (domainParts.length < 2 ||
+      domainParts.some(part => part.length === 0)) {
+    return "Please enter a valid email address";
+  }
+
+  return "";
+}
+
+export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps = {}) {
   const [companyName, setCompanyName] = useState("");
   const [contactName, setContactName] = useState("");
   const [role, setRole] = useState<SponsorMemberRole | "">("");
@@ -29,79 +72,26 @@ export function SponsorSignupForm() {
   const [industryCategory, setIndustryCategory] = useState("");
   const [emailError, setEmailError] = useState("");
 
-  function isWorkEmail(value: string) {
-    const normalized = value.trim().toLowerCase();
-    // Work email should NOT be .edu and should be a valid email format
-    if (!normalized) return false;
-    if (normalized.endsWith(".edu")) return false; // Not a school email
-    if (!normalized.includes("@")) return false; // Must have @ symbol
-
-    const [localPart, domainPart] = normalized.split("@");
-    if (!localPart || !domainPart) return false; // Valid email format
-
-    // Domain should have at least one dot (e.g., company.com)
-    return domainPart.includes(".") &&
-           domainPart.split(".").length >= 2 &&
-           domainPart.split(".").every(part => part.length > 0);
-  }
-
-  function validateWorkEmail(value: string) {
-    const normalized = value.trim().toLowerCase();
-    if (!normalized) {
-      setEmailError("");
-      return;
-    }
-
-    if (!isWorkEmail(normalized)) {
-      setEmailError("Please enter a valid work email address (non-.edu)");
-    } else {
-      setEmailError("");
-    }
-  }
-
-  // Enhanced email validation with more specific error messages
-  function getWorkEmailValidationError(value: string): string {
-    const trimmed = value.trim();
-    if (!trimmed) {
-      return "Email is required";
-    }
-
-    if (!trimmed.includes("@")) {
-      return "Please enter a valid email address";
-    }
-
-    const [localPart, domainPart] = trimmed.split("@");
-    if (!localPart || !domainPart) {
-      return "Please enter a valid email address";
-    }
-
-    // Check if it's a .edu email (not allowed for sponsors)
-    if (domainPart.endsWith(".edu")) {
-      return "Work email cannot be a .edu address";
-    }
-
-    // Domain should have at least one dot and valid parts
-    if (!domainPart.includes(".")) {
-      return "Please enter a valid email address with domain";
-    }
-
-    const domainParts = domainPart.split(".");
-    if (domainParts.length < 2 ||
-        domainParts.some(part => part.length === 0)) {
-      return "Please enter a valid email address";
-    }
-
-    return "";
-  }
-
-  function handleSubmit(e: React.FormEvent) {
+  function handleFormSubmit(e: React.FormEvent) {
     e.preventDefault();
     // Validate email before proceeding
     if (email) {
-      validateWorkEmail(email);
+      const error = getWorkEmailValidationError(email);
+      setEmailError(error);
     }
-    if (!emailError) {
-      router.push("/sponsor/onboarding");
+    // Check if there's no error after setting it (using the computed error variable)
+    if (email && !getWorkEmailValidationError(email)) {
+      // Call the onSubmit handler if provided
+      if (onSubmit) {
+        onSubmit({
+          companyName,
+          contactName,
+          role,
+          email,
+          websiteUrl,
+          industryCategory
+        });
+      }
     }
   }
 
@@ -128,7 +118,7 @@ export function SponsorSignupForm() {
         className="mt-8 p-6"
         style={{ border: "0.5px solid #d5d3cd", background: "white" }}
       >
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleFormSubmit} className="space-y-5">
           <Field label="Company name">
             <Input
               placeholder="Fluid Nutrition"

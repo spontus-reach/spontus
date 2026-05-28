@@ -496,3 +496,15 @@ export function getOpenListings(): SponsorshipListing[] {
 export function getTeamById(teamId: string): TeamProfile | undefined {
   return MOCK_TEAMS.find((t) => t.id === teamId);
 }
+
+export async function getMockTeams(): Promise<TeamProfile[]> {
+  return MOCK_TEAMS;
+}
+
+export function getApplicationsForTeam(teamId: string): Application[] {
+  return MOCK_SEED_APPLICATIONS.filter((a) => a.teamId === teamId);
+}
+
+export function getApplicationsForListing(listingId: string): Application[] {
+  return MOCK_SEED_APPLICATIONS.filter((a) => a.listingId === listingId);
+}

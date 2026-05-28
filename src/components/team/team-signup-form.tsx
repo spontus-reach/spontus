@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,8 +16,47 @@ import { Field } from "@/components/team/form-field";
 import { TEAM_MEMBER_ROLES } from "@/lib/constants";
 import type { TeamMemberRole } from "@/lib/types";
 
-export function TeamSignupForm() {
-  const router = useRouter();
+interface TeamSignupFormProps {
+  onSubmit?: (data: {
+    fullName: string;
+    email: string;
+    university: string;
+    teamName: string;
+    sport: string;
+    role: string;
+  }) => void;
+}
+
+// Enhanced email validation with more specific error messages
+export function getEmailValidationError(value: string): string {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return "Email is required";
+  }
+
+  if (!trimmed.includes("@")) {
+    return "Please enter a valid email address";
+  }
+
+  const [localPart, domainPart] = trimmed.split("@");
+  if (!localPart || !domainPart) {
+    return "Please enter a valid email address";
+  }
+
+  if (!domainPart.endsWith(".edu")) {
+    return "Must be a .edu email address";
+  }
+
+  // Check if it's a reasonable .edu domain (at least domain.tld.edu format)
+  const domainParts = domainPart.split(".");
+  if (domainParts.length < 2 || domainParts[domainParts.length - 2].length === 0) {
+    return "Please enter a valid .edu email address";
+  }
+
+  return "";
+}
+
+export function TeamSignupForm({ onSubmit }: TeamSignupFormProps = {}) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [university, setUniversity] = useState("");
@@ -36,56 +74,27 @@ export function TeamSignupForm() {
            normalized.lastIndexOf(".edu") === normalized.length - 4;
   }
 
-  function validateEmail(value: string) {
-    const normalized = value.trim().toLowerCase();
-    if (!normalized) {
-      setEmailError("");
-      return;
-    }
-
-    if (!isEduEmail(normalized)) {
-      setEmailError("Must be a valid .edu email address (e.g., name@university.edu)");
-    } else {
-      setEmailError("");
-    }
-  }
-
-  // Enhanced email validation with more specific error messages
-  export function getEmailValidationError(value: string): string {
-    const trimmed = value.trim();
-    if (!trimmed) {
-      return "Email is required";
-    }
-
-    if (!trimmed.includes("@")) {
-      return "Please enter a valid email address";
-    }
-
-    const [localPart, domainPart] = trimmed.split("@");
-    if (!localPart || !domainPart) {
-      return "Please enter a valid email address";
-    }
-
-    if (!domainPart.endsWith(".edu")) {
-      return "Must be a .edu email address";
-    }
-
-    // Check if it's a reasonable .edu domain (at least domain.tld.edu format)
-    const domainParts = domainPart.split(".");
-    if (domainParts.length < 2 || domainParts[domainParts.length - 2].length === 0) {
-      return "Please enter a valid .edu email address";
-    }
-
-    return "";
-  }
-
-  function handleSubmit(e: React.FormEvent) {
+  function handleFormSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!isEduEmail(email)) {
-      setEmailError("Must be a .edu email address");
-      return;
+    // Validate email before proceeding
+    if (email) {
+      const error = getEmailValidationError(email);
+      setEmailError(error);
     }
-    router.push("/team/onboarding");
+    // Check if there's no error after setting it (using the computed error variable)
+    if (email && !getEmailValidationError(email)) {
+      // Call the onSubmit handler if provided
+      if (onSubmit) {
+        onSubmit({
+          fullName,
+          email,
+          university,
+          teamName,
+          sport,
+          role
+        });
+      }
+    }
   }
 
   const isValid = Boolean(
@@ -107,7 +116,7 @@ export function TeamSignupForm() {
       </p>
 
       <Card className="mt-8 border-border bg-card p-6">
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleFormSubmit} className="space-y-5">
           <Field label="Full name">
             <Input
               placeholder="Maya Hernandez"
