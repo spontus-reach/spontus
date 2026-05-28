@@ -17,7 +17,6 @@ import { LookingForForm } from "@/components/team/looking-for-form";
 import { MediaUploadForm } from "@/components/team/media-upload-form";
 import { VerificationStatusBadge } from "@/components/team/verification-status-badge";
 import { useVerification } from "@/components/providers/verification-provider";
-import { useRouter } from "next/navigation";
 import { ACTIVE_TEAM_ID } from "@/lib/mock-data";
 import type { TeamProfileDraft, TeamSponsorshipAsset } from "@/lib/types";
 
@@ -65,27 +64,22 @@ function computeSectionComplete(
 }
 
 export default function TeamOnboardingPage() {
-  const router = useRouter();
-
-  // Check if we have signup data from URL state (from signup page)
+  // Check if we have signup data from sessionStorage (from signup page)
   const [draft, setDraft] = useState<TeamProfileDraft>(() => {
-    // Check if router state has signup data from team signup
     if (typeof window !== 'undefined') {
       try {
-        // @ts-expect-error Next.js router.state is not properly typed
-        const state = router.state as { signupData?: {
-          university: string;
-          teamName: string;
-          sport: string;
-        } } | null;
-        if (state && state.signupData) {
-          const { university, teamName, sport } = state.signupData;
+        const storedData = sessionStorage.getItem('teamSignupData');
+        if (storedData) {
+          const data = JSON.parse(storedData);
+          // Clear the stored data after reading it
+          sessionStorage.removeItem('teamSignupData');
+
           // Map signup data to draft profile format
           return {
             verificationStatus: "draft",
-            name: teamName,
-            university,
-            sport,
+            name: data.teamName,
+            university: data.university,
+            sport: data.sport,
             oneLiner: "",
             description: "",
             league: "",
@@ -108,8 +102,7 @@ export default function TeamOnboardingPage() {
           };
         }
       } catch (e) {
-        // If we can't access state, fall back to default
-        console.log("Could not access router state:", e);
+        console.log("Could not access sessionStorage data:", e);
       }
     }
     // Default draft state

@@ -14,12 +14,9 @@ export default function TeamSignupPage() {
     sport: string;
     role: string;
   }) {
-    // Navigate to onboarding with signup data as state
-    // @ts-expect-error Next.js router state typing
-    router.push({
-      pathname: "/team/onboarding",
-      state: { signupData: data }
-    });
+    // Store signup data in sessionStorage for onboarding page
+    sessionStorage.setItem('teamSignupData', JSON.stringify(data));
+    router.push("/team/onboarding");
   }
 
   return <TeamSignupForm onSubmit={handleSubmit} />;

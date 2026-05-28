@@ -79,7 +79,8 @@ export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps = {}) {
       const error = getWorkEmailValidationError(email);
       setEmailError(error);
     }
-    if (!emailError) {
+    // Check if there's no error after setting it (using the computed error variable)
+    if (email && !getWorkEmailValidationError(email)) {
       // Call the onSubmit handler if provided
       if (onSubmit) {
         onSubmit({

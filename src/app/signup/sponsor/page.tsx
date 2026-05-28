@@ -14,12 +14,9 @@ export default function SponsorSignupPage() {
     websiteUrl: string;
     industryCategory: string;
   }) {
-    // Navigate to onboarding with signup data as state
-    // @ts-expect-error Next.js router state typing - router.state is not properly typed in Next.js
-    router.push({
-      pathname: "/sponsor/onboarding",
-      state: { signupData: data }
-    });
+    // Store signup data in sessionStorage for onboarding page
+    sessionStorage.setItem('sponsorSignupData', JSON.stringify(data));
+    router.push("/sponsor/onboarding");
   }
 
   return <SponsorSignupForm onSubmit={handleSubmit} />;

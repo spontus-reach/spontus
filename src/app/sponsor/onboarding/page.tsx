@@ -6,38 +6,31 @@ import { Button } from "@/components/ui/button";
 import { SponsorProfileForm } from "@/components/sponsor/sponsor-profile-form";
 import { VerificationStatusBadge } from "@/components/team/verification-status-badge";
 import { useVerification } from "@/components/providers/verification-provider";
-import { useRouter } from "next/navigation";
 import { ACTIVE_SPONSOR_ID } from "@/lib/constants";
 import type { SponsorProfileDraft } from "@/lib/types";
 
 export default function SponsorOnboardingPage() {
-  const router = useRouter();
-
-  // Check if we have signup data from URL state (from sponsor signup page)
+  // Check if we have signup data from sessionStorage (from sponsor signup page)
   const [draft, setDraft] = useState<SponsorProfileDraft>(() => {
-    // Check if router state has signup data from sponsor signup
     if (typeof window !== 'undefined') {
       try {
-        // Access router state properly
-        // @ts-expect-error Next.js router state typing - router.state is not properly typed in Next.js
-        const state = router.state as { signupData?: {
-          companyName: string;
-          websiteUrl: string;
-          industryCategory: string;
-        } } | null;
-        if (state && state.signupData) {
-          const { companyName, websiteUrl, industryCategory } = state.signupData;
+        const storedData = sessionStorage.getItem('sponsorSignupData');
+        if (storedData) {
+          const data = JSON.parse(storedData);
+          // Clear the stored data after reading it
+          sessionStorage.removeItem('sponsorSignupData');
+
           // Map signup data to draft profile format
           return {
             verificationStatus: "draft",
-            companyName,
+            companyName: data.companyName,
             brandName: "",
             oneLiner: "",
             description: "",
             logoUrl: "",
-            websiteUrl,
+            websiteUrl: data.websiteUrl,
             instagramUrl: "",
-            industryCategory,
+            industryCategory: data.industryCategory,
             targetAudience: "",
             geographicFocus: "",
             typicalOfferTypes: [],
@@ -45,8 +38,7 @@ export default function SponsorOnboardingPage() {
           };
         }
       } catch (e) {
-        // If we can't access state, fall back to default
-        console.log("Could not access router state:", e);
+        console.log("Could not access sessionStorage data:", e);
       }
     }
     // Default draft state
