@@ -51,7 +51,10 @@ export function ListingDetail({ listing }: { listing: SponsorshipListing }) {
           setActiveTeam(teamData ?? null);
           // If we have the team, check for existing application
           if (teamData) {
-            const existingApplication = await getApplicationForListing(listing.id, teamData.id);
+            const existingApplication = getApplicationForListing(
+              teamData.id,
+              listing.id
+            );
             setExistingApp(existingApplication ?? null);
           }
         }
