@@ -150,7 +150,7 @@ export function VerificationProvider({
         entityType,
         entityId,
         status,
-        note,
+        note: note ?? "",
         reviewedAt: new Date().toISOString().split("T")[0],
         reviewedBy: "Admin (demo)",
       };
