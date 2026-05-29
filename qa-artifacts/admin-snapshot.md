@@ -1,0 +1,77 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Spontus" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+        - generic [ref=e8]: Spontus
+      - navigation [ref=e9]:
+        - link "For Teams" [ref=e10] [cursor=pointer]:
+          - /url: /signup/team
+        - link "For Sponsors" [ref=e11] [cursor=pointer]:
+          - /url: /signup/sponsor
+        - link "Browse Listings" [ref=e12] [cursor=pointer]:
+          - /url: /team/listings
+        - link "My Applications" [ref=e13] [cursor=pointer]:
+          - /url: /team/applications
+        - link "Admin" [ref=e14] [cursor=pointer]:
+          - /url: /admin/verification
+      - generic [ref=e15]:
+        - generic [ref=e16]: Sign in
+        - link "Get started" [ref=e17] [cursor=pointer]:
+          - /url: /signup/team
+  - main [ref=e18]:
+    - generic [ref=e19]:
+      - heading "Create your team profile" [level=1] [ref=e20]
+      - paragraph [ref=e21]: Takes under 30 seconds. You can edit everything later.
+      - generic [ref=e23]:
+        - generic [ref=e24]:
+          - generic [ref=e25]: Full name
+          - textbox "Full name" [ref=e26]:
+            - /placeholder: Maya Hernandez
+        - generic [ref=e27]:
+          - generic [ref=e28]: .edu email
+          - textbox "you@calpoly.edu" [ref=e29]
+        - generic [ref=e30]:
+          - generic [ref=e31]: University
+          - textbox "University" [ref=e32]:
+            - /placeholder: Cal Poly San Luis Obispo
+        - generic [ref=e33]:
+          - generic [ref=e34]: Club sport team name
+          - textbox "Club sport team name" [ref=e35]:
+            - /placeholder: Cal Poly Triathlon
+        - generic [ref=e36]:
+          - generic [ref=e37]: Sport
+          - textbox "Sport" [ref=e38]:
+            - /placeholder: e.g. Triathlon, Soccer, Rugby
+        - generic [ref=e39]:
+          - generic [ref=e40]: Role on team
+          - combobox "Role on team" [ref=e41]:
+            - generic [ref=e42]: Select your role
+            - img: ▼
+          - textbox [ref=e43]
+        - paragraph [ref=e44]:
+          - img [ref=e45]
+          - text: Your profile belongs to the team — it survives graduation.
+        - button "Create team profile" [disabled]
+  - contentinfo [ref=e48]:
+    - generic [ref=e49]:
+      - generic [ref=e50]: © 2026 Spontus
+      - generic [ref=e51]:
+        - link "Home" [ref=e52] [cursor=pointer]:
+          - /url: /
+        - link "For Teams" [ref=e53] [cursor=pointer]:
+          - /url: /signup/team
+        - generic [ref=e54]: For Sponsors
+  - generic [ref=e59] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e60]:
+      - img [ref=e61]
+    - generic [ref=e64]:
+      - button "Open issues overlay" [ref=e65]:
+        - generic [ref=e66]:
+          - generic [ref=e67]: "0"
+          - generic [ref=e68]: "1"
+        - generic [ref=e69]: Issue
+      - button "Collapse issues badge" [ref=e70]:
+        - img [ref=e71]
+  - alert [ref=e73]
