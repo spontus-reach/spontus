@@ -4,11 +4,11 @@
 **Owner:** Brian + Joshua
 **Last reviewed:** 2026-05-28
 **Source:** Agent roster specification
-**Use this for:** Understanding available agent roles and when to leverage them for Spontus development tasks.
+**Use this for:** Understanding available agent roles, Claude subagents, and matching repo-local executable skills.
 
 ## Summary
 
-This document defines a roster of specialized agent roles for Spontus development work. The roster reflects the project's current shape: a Next.js/React/TypeScript/Tailwind app with Supabase-ready marketplace data model, targeting Netlify deployment, following a Cal Poly-first go-to-market approach, and utilizing repo-local `.agents/skills` for reusable workflows.
+This document defines a roster of specialized agent roles for Spontus development work. Each role is implemented as a Claude subagent under `.claude/agents/spontus-*.md` and as a repo-local skill under `.agents/skills/spontus-*`. The roster reflects the project's current shape: a Next.js/React/TypeScript/Tailwind app with Supabase-ready marketplace data model, targeting Netlify deployment, following a Cal Poly-first go-to-market approach, and utilizing repo-local `.agents/skills` for reusable workflows.
 
 All agent roles use Spontus-domain terminology: `Team`, `Sponsor`, `SponsorshipListing`, `Application`, `Deal`, `Deliverable`, `Proof`, and `VerificationStatus`.
 
@@ -52,7 +52,7 @@ All agent roles use Spontus-domain terminology: `Team`, `Sponsor`, `SponsorshipL
 
 ## Shared Rules For All Agents
 
-- Read the relevant canonical docs before acting: `docs/README.md`, `docs/domain-glossary.md`, `docs/product/mvp-overview.md`, `docs/product/domain-model.md`, `docs/product/mvp-build-slices.md`, and area-specific docs.
+- Read the relevant canonical docs before acting: `docs/README.md`, `docs/domain-glossary.md`, `docs/product/mvp-overview.md`, `docs/product/domain-model.md`, `docs/product/mvp-build-slices.md`, `docs/agents/agent-roster.md`, and area-specific docs.
 - Keep work aligned to the MVP build order: Team profile, Sponsor profile/listing, Team application, Sponsor review, Admin verification.
 - Avoid out-of-scope MVP features unless explicitly requested: payments, escrow, AI contracts, advanced analytics, automated matching, full CRM, native mobile, and complex compliance workflows.
 - Prefer existing repo patterns, small PRs, explicit TypeScript types, and mock data shaped like future Supabase rows.
@@ -63,4 +63,5 @@ All agent roles use Spontus-domain terminology: `Team`, `Sponsor`, `SponsorshipL
 - The roster covers product, design, frontend, backend, data, security, QA, docs, GTM, research, deployment, and agent operations.
 - Each agent has a clear "what it does" and "when to use it."
 - The list reflects Spontus-specific domain language and MVP constraints.
-- No implementation or file edits are required.
+- Matching Claude subagent files exist under `.claude/agents/spontus-*.md`.
+- Matching repo-local skill files exist under `.agents/skills/spontus-*`.

@@ -15,7 +15,9 @@ This directory contains documentation about agent roles used in Spontus developm
 
 ## Important Notes
 
-- The agent roster is **documentation only** - it describes roles and responsibilities but does not implement actual agents
-- Repo-local `.agents/skills` already exist and should be preferred when they match a workflow.
+- The agent roster is implemented as Claude subagents under `.claude/agents/spontus-*.md`.
+- The same behaviors are also implemented as repo-local skills under `.agents/skills/spontus-*`.
+- Use the matching `spontus-*` agent or skill when a workflow maps to a roster role.
+- General-purpose repo-local `.agents/skills` still exist and should be preferred when they match a workflow more directly.
 - Agent roles use Spontus-specific domain terminology: `Team`, `Sponsor`, `SponsorshipListing`, `Application`, `Deal`, `Deliverable`, `Proof`, and `VerificationStatus`
 - Work should align with the MVP build order: Team profile, Sponsor profile/listing, Team application, Sponsor review, Admin verification
