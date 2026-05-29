@@ -1,4 +1,4 @@
-import type { TeamProfile, SponsorProfile, SponsorshipListing, Application } from './types';
+import type { TeamProfile, SponsorProfile, SponsorshipListing } from './types';
 
 export const MOCK_TEAMS: TeamProfile[] = [
   {
@@ -157,7 +157,7 @@ export const MOCK_TEAMS: TeamProfile[] = [
       'Discount codes',
       'Gift cards',
     ],
-    verificationStatus: 'submitted_for_verification',
+    verificationStatus: 'draft',
     profileCompleteness: 68,
     photo: 'https://images.unsplash.com/photo-1517927033932-b3d18e61fb3a?auto=format&fit=crop&w=1200&q=70',
     pastSponsors: [],
@@ -234,7 +234,7 @@ export const MOCK_TEAMS: TeamProfile[] = [
     preferredSponsorCategories: ['Apparel', 'Nutrition', 'Recovery/Fitness', 'Equipment'],
     excludedSponsorCategories: ['Supplements we cannot verify', 'Tobacco/Nicotine'],
     dealTypesInterestedIn: ['Free product for team use', 'Discount codes', 'Gift cards'],
-    verificationStatus: 'needs_changes',
+    verificationStatus: 'verified',
     profileCompleteness: 60,
     photo: 'https://images.unsplash.com/photo-1519315901367-f34ff9154487?auto=format&fit=crop&w=1200&q=70',
     pastSponsors: [
@@ -292,7 +292,7 @@ export const MOCK_SPONSORS: SponsorProfile[] = [
     typicalOfferTypes: ['Discount codes', 'Gift cards'],
     pastSponsorships:
       'Supported Cal Poly Club Swim and Cal Poly Running Club with discount cards and event coffee service.',
-    verificationStatus: 'submitted_for_verification',
+    verificationStatus: 'verified',
   },
 ];
 
@@ -352,159 +352,4 @@ export function getListingById(id: string): SponsorshipListing | undefined {
 
 export function getListingsForSponsor(sponsorId: string): SponsorshipListing[] {
   return MOCK_LISTINGS.filter((l) => l.sponsorId === sponsorId);
-}
-
-// --- Application-side mock data (Slice 3) ---
-
-export const ACTIVE_TEAM_ID = 'cp-tri';
-
-export const MOCK_SEED_SPONSORS: SponsorProfile[] = [
-  {
-    id: 'sp-seed-gnarly',
-    companyName: 'Gnarly Nutrition',
-    brandName: 'Gnarly Nutrition',
-    oneLiner: 'Plant-based performance fuel for endurance athletes.',
-    websiteUrl: 'https://gnarlynutrition.com',
-    industryCategory: 'Nutrition & supplements',
-    geographicFocus: 'West Coast + Mountain',
-    typicalOfferTypes: ['Free product for team use', 'Event prizes'],
-    verificationStatus: 'verified',
-  },
-  {
-    id: 'sp-seed-ccpt',
-    companyName: 'Central Coast Physical Therapy',
-    brandName: 'Central Coast PT',
-    oneLiner: 'Sports rehab and injury prevention for Cal Poly athletes.',
-    description:
-      'Local sports medicine practice providing rehab, injury prevention, and pre-season screenings for Cal Poly club sports teams.',
-    websiteUrl: 'https://centralcoastpt.com',
-    industryCategory: 'Recovery & wellness',
-    targetAudience: 'Cal Poly club athletes',
-    geographicFocus: 'San Luis Obispo',
-    typicalOfferTypes: ['On-site services', 'Discount codes'],
-    verificationStatus: 'needs_changes',
-  },
-  {
-    id: 'sp-seed-onrunning',
-    companyName: 'On Running',
-    brandName: 'On Running',
-    oneLiner: 'Swiss-engineered running shoes and apparel.',
-    websiteUrl: 'https://on-running.com',
-    industryCategory: 'Apparel & gear',
-    geographicFocus: 'Nationwide',
-    typicalOfferTypes: ['Discount codes', 'Free product for team use'],
-    verificationStatus: 'verified',
-  },
-];
-
-export const MOCK_SEED_LISTINGS: SponsorshipListing[] = [
-  {
-    id: 'lst-seed-1',
-    sponsorId: 'sp-seed-gnarly',
-    title: 'Spring endurance team partnerships',
-    status: 'closed',
-    offerTypes: ['Free product for team use', 'Event prizes'],
-    offerSummary: 'Free product (6-month supply per athlete)',
-    numberOfTeams: 8,
-    geography: 'California',
-    sportPreferences: ['Triathlon', 'Cycling', 'Running'],
-    duration: 'Spring 2026 season',
-    applicationDeadline: '2026-03-14',
-    requestedAssets: [
-      { assetId: 'jersey_logo', required: true },
-      { assetId: 'instagram_post', required: true },
-      { assetId: 'athlete_packet_stuffing', required: false },
-    ],
-    publishedAt: '2026-01-10',
-  },
-  {
-    id: 'lst-seed-2',
-    sponsorId: 'sp-seed-onrunning',
-    title: 'College club running & tri partnerships',
-    status: 'closed',
-    offerTypes: ['Discount codes', 'Free product for team use'],
-    offerSummary: 'Discount codes + 20% team kit',
-    numberOfTeams: 20,
-    geography: 'Nationwide',
-    sportPreferences: ['Running', 'Triathlon'],
-    duration: '2025-26 academic year',
-    applicationDeadline: '2025-08-30',
-    requestedAssets: [
-      { assetId: 'jersey_logo', required: true },
-      { assetId: 'highlight_video_logo', required: true },
-      { assetId: 'instagram_post', required: false },
-    ],
-    publishedAt: '2025-07-01',
-  },
-];
-
-export const MOCK_SEED_APPLICATIONS: Application[] = [
-  {
-    id: 'app-seed-1',
-    listingId: 'lst-seed-1',
-    teamId: 'cp-tri',
-    status: 'under_review',
-    fitNote: 'We host an 800-athlete tri in May and would love to plug Gnarly at packet pickup.',
-    submittedAt: '2026-05-15',
-  },
-  {
-    id: 'app-seed-2',
-    listingId: 'lst-seed-2',
-    teamId: 'cp-tri',
-    status: 'accepted',
-    submittedAt: '2026-05-01',
-    reviewedAt: '2026-05-10',
-  },
-  // Seed applications for sponsor review (Slice 4) — submitted to the open Fluid Nutrition listing
-  {
-    id: 'app-seed-fluid-tri',
-    listingId: 'lst-fluid-fall',
-    teamId: 'cp-tri',
-    status: 'submitted',
-    fitNote: 'We host the MTS with 500+ athletes and can offer on-course sampling, packet stuffing, and podium prizes.',
-    submittedAt: '2026-05-22',
-  },
-  {
-    id: 'app-seed-fluid-rugby',
-    listingId: 'lst-fluid-fall',
-    teamId: 'cp-rugby',
-    status: 'submitted',
-    fitNote: 'Strong sideline crowd at home matches. We can offer jersey logos and game-day banners.',
-    submittedAt: '2026-05-23',
-  },
-  {
-    id: 'app-seed-fluid-swim',
-    listingId: 'lst-fluid-fall',
-    teamId: 'cp-swim',
-    status: 'submitted',
-    submittedAt: '2026-05-24',
-  },
-];
-
-export function getSeedSponsorById(id: string): SponsorProfile | undefined {
-  return [...MOCK_SPONSORS, ...MOCK_SEED_SPONSORS].find((s) => s.id === id);
-}
-
-export function getSeedListingById(id: string): SponsorshipListing | undefined {
-  return [...MOCK_LISTINGS, ...MOCK_SEED_LISTINGS].find((l) => l.id === id);
-}
-
-export function getOpenListings(): SponsorshipListing[] {
-  return MOCK_LISTINGS.filter((l) => l.status === 'open');
-}
-
-export function getTeamById(teamId: string): TeamProfile | undefined {
-  return MOCK_TEAMS.find((t) => t.id === teamId);
-}
-
-export async function getMockTeams(): Promise<TeamProfile[]> {
-  return MOCK_TEAMS;
-}
-
-export function getApplicationsForTeam(teamId: string): Application[] {
-  return MOCK_SEED_APPLICATIONS.filter((a) => a.teamId === teamId);
-}
-
-export function getApplicationsForListing(listingId: string): Application[] {
-  return MOCK_SEED_APPLICATIONS.filter((a) => a.listingId === listingId);
 }

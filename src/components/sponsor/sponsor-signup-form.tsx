@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Field } from "@/components/forms/form-field";
 import {
   Select,
   SelectContent,
@@ -18,85 +19,28 @@ import {
 } from "@/lib/constants";
 import type { SponsorMemberRole } from "@/lib/types";
 
-interface SponsorSignupFormProps {
-  onSubmit?: (data: {
-    companyName: string;
-    contactName: string;
-    role: string;
-    email: string;
-    websiteUrl: string;
-    industryCategory: string;
-  }) => void;
-}
-
-export function getWorkEmailValidationError(value: string): string {
-  const trimmed = value.trim();
-  if (!trimmed) {
-    return "Email is required";
-  }
-
-  if (!trimmed.includes("@")) {
-    return "Please enter a valid email address";
-  }
-
-  const [localPart, domainPart] = trimmed.split("@");
-  if (!localPart || !domainPart) {
-    return "Please enter a valid email address";
-  }
-
-  // Check if it's a .edu email (not allowed for sponsors)
-  if (domainPart.endsWith(".edu")) {
-    return "Work email cannot be a .edu address";
-  }
-
-  // Domain should have at least one dot and valid parts
-  if (!domainPart.includes(".")) {
-    return "Please enter a valid email address with domain";
-  }
-
-  const domainParts = domainPart.split(".");
-  if (domainParts.length < 2 ||
-      domainParts.some(part => part.length === 0)) {
-    return "Please enter a valid email address";
-  }
-
-  return "";
-}
-
-export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps = {}) {
+export function SponsorSignupForm() {
+  const router = useRouter();
   const [companyName, setCompanyName] = useState("");
   const [contactName, setContactName] = useState("");
   const [role, setRole] = useState<SponsorMemberRole | "">("");
   const [email, setEmail] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [industryCategory, setIndustryCategory] = useState("");
-  const [emailError, setEmailError] = useState("");
 
-  function handleFormSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // Validate email before proceeding
-    if (email) {
-      const error = getWorkEmailValidationError(email);
-      setEmailError(error);
-    }
-    // Check if there's no error after setting it (using the computed error variable)
-    if (email && !getWorkEmailValidationError(email)) {
-      // Call the onSubmit handler if provided
-      if (onSubmit) {
-        onSubmit({
-          companyName,
-          contactName,
-          role,
-          email,
-          websiteUrl,
-          industryCategory
-        });
-      }
-    }
+    router.push("/sponsor/onboarding");
   }
 
-  const isValid =
-    companyName && contactName && role && email && websiteUrl && industryCategory;
+  const isValid = Boolean(
+    companyName.trim() &&
+      contactName.trim() &&
+      role &&
+      email.trim() &&
+      websiteUrl.trim() &&
+      industryCategory
+  );
 
   return (
     <div className="mx-auto max-w-xl px-6 py-16">
@@ -118,7 +62,7 @@ export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps = {}) {
         className="mt-8 p-6"
         style={{ border: "0.5px solid #d5d3cd", background: "white" }}
       >
-        <form onSubmit={handleFormSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <Field label="Company name">
             <Input
               placeholder="Fluid Nutrition"
@@ -158,22 +102,8 @@ export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps = {}) {
               type="email"
               placeholder="jordan@fluidnutrition.com"
               value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                if (emailError) {
-                  const error = getWorkEmailValidationError(e.target.value);
-                  setEmailError(error);
-                }
-              }}
-              onBlur={(e) => {
-                const error = getWorkEmailValidationError(e.target.value);
-                setEmailError(error);
-              }}
-              className={emailError ? "border-destructive" : ""}
+              onChange={(e) => setEmail(e.target.value)}
             />
-            {emailError && (
-              <p className="mt-1 text-xs text-destructive">{emailError}</p>
-            )}
           </Field>
 
           <Field label="Company website">
@@ -215,21 +145,6 @@ export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps = {}) {
           </div>
         </form>
       </Card>
-    </div>
-  );
-}
-
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <Label className="mb-1.5 block text-sm">{label}</Label>
-      {children}
     </div>
   );
 }

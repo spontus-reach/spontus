@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import {
   SPONSORSHIP_ASSET_DEFINITIONS,
   CATEGORY_LABELS,
+  LISTING_STATUS_LABELS,
 } from "@/lib/constants";
 import { SponsorProfileCard } from "./sponsor-profile-card";
 import type {
@@ -49,7 +50,7 @@ export function ListingPreview({
                     }
               }
             >
-              {listing.status === "open" ? "Open" : listing.status}
+              {LISTING_STATUS_LABELS[listing.status]}
             </div>
             <h2
               className="mt-3"
@@ -199,7 +200,7 @@ export function ListingPreview({
               Deadline {listing.applicationDeadline}
             </span>
           )}
-          {listing.numberOfTeams && (
+          {listing.numberOfTeams != null && (
             <span className="flex items-center gap-1">
               <Users className="h-3.5 w-3.5" />
               {listing.numberOfTeams} spots
@@ -209,10 +210,10 @@ export function ListingPreview({
           {listing.sportPreferences && listing.sportPreferences.length > 0 && (
             <span>Sports: {listing.sportPreferences.join(", ")}</span>
           )}
-          {listing.teamSizeMin && (
+          {listing.teamSizeMin != null && (
             <span>{listing.teamSizeMin}+ athletes</span>
           )}
-          {listing.socialReachMin && (
+          {listing.socialReachMin != null && (
             <span>{listing.socialReachMin.toLocaleString()}+ reach</span>
           )}
         </div>
@@ -234,7 +235,7 @@ export function ListingPreview({
           Apply
         </button>
         <p className="mt-3 text-xs" style={{ color: "#6b6960" }}>
-          Teams apply from the listings feed once your profile and listing are verified.
+          Team application flow coming in Slice 3
         </p>
       </Card>
     </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { Field } from "@/components/team/form-field";
+import { Field } from "@/components/forms/form-field";
 import { optionalInteger } from "@/lib/form-values";
 import type { TeamProfileDraft } from "@/lib/types";
 

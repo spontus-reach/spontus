@@ -1,7 +1,8 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Field } from "@/components/forms/form-field";
+import { optionalInteger } from "@/lib/form-values";
 import type { ListingDraft } from "@/lib/types";
 
 type Props = {
@@ -51,7 +52,7 @@ export function EligibilityCriteriaForm({ data, onUpdate }: Props) {
             value={data.teamSizeMin ?? ""}
             onChange={(e) =>
               onUpdate({
-                teamSizeMin: parseInt(e.target.value) || undefined,
+                teamSizeMin: optionalInteger(e.target.value),
               })
             }
             placeholder="30"
@@ -63,7 +64,7 @@ export function EligibilityCriteriaForm({ data, onUpdate }: Props) {
             value={data.socialReachMin ?? ""}
             onChange={(e) =>
               onUpdate({
-                socialReachMin: parseInt(e.target.value) || undefined,
+                socialReachMin: optionalInteger(e.target.value),
               })
             }
             placeholder="1000"
@@ -86,21 +87,6 @@ export function EligibilityCriteriaForm({ data, onUpdate }: Props) {
           />
         </Field>
       </div>
-    </div>
-  );
-}
-
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <Label className="mb-1.5 block text-sm">{label}</Label>
-      {children}
     </div>
   );
 }

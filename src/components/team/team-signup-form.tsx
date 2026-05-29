@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
-import { Field } from "@/components/team/form-field";
+import { Field } from "@/components/forms/form-field";
 import { TEAM_MEMBER_ROLES } from "@/lib/constants";
 import type { TeamMemberRole } from "@/lib/types";
 

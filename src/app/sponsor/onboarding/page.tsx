@@ -5,61 +5,23 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { SponsorProfileForm } from "@/components/sponsor/sponsor-profile-form";
 import { VerificationStatusBadge } from "@/components/team/verification-status-badge";
-import { useVerification } from "@/components/providers/verification-provider";
-import { ACTIVE_SPONSOR_ID } from "@/lib/constants";
 import type { SponsorProfileDraft } from "@/lib/types";
 
 export default function SponsorOnboardingPage() {
-  // Check if we have signup data from sessionStorage (from sponsor signup page)
-  const [draft, setDraft] = useState<SponsorProfileDraft>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const storedData = sessionStorage.getItem('sponsorSignupData');
-        if (storedData) {
-          const data = JSON.parse(storedData);
-          // Clear the stored data after reading it
-          sessionStorage.removeItem('sponsorSignupData');
-
-          // Map signup data to draft profile format
-          return {
-            verificationStatus: "draft",
-            companyName: data.companyName,
-            brandName: "",
-            oneLiner: "",
-            description: "",
-            logoUrl: "",
-            websiteUrl: data.websiteUrl,
-            instagramUrl: "",
-            industryCategory: data.industryCategory,
-            targetAudience: "",
-            geographicFocus: "",
-            typicalOfferTypes: [],
-            pastSponsorships: "",
-          };
-        }
-      } catch (e) {
-        console.log("Could not access sessionStorage data:", e);
-      }
-    }
-    // Default draft state
-    return {
-      verificationStatus: "draft",
-      typicalOfferTypes: [],
-    };
+  const [draft, setDraft] = useState<SponsorProfileDraft>({
+    verificationStatus: "draft",
+    typicalOfferTypes: [],
   });
-
-  const { getSponsorById, submitForVerification } = useVerification();
-  const liveSponsor = getSponsorById(ACTIVE_SPONSOR_ID);
-  const liveStatus =
-    liveSponsor?.verificationStatus ?? draft.verificationStatus ?? "draft";
-  const canSubmit = liveStatus === "draft" || liveStatus === "needs_changes";
 
   function updateDraft(patch: Partial<SponsorProfileDraft>) {
     setDraft((prev) => ({ ...prev, ...patch }));
   }
 
   function handleSubmitForVerification() {
-    submitForVerification("sponsor", ACTIVE_SPONSOR_ID);
+    setDraft((prev) => ({
+      ...prev,
+      verificationStatus: "submitted_for_verification",
+    }));
   }
 
   return (
@@ -75,19 +37,18 @@ export default function SponsorOnboardingPage() {
                 color: "#1a1a18",
               }}
             >
-              {draft.brandName ||
-                draft.companyName ||
-                liveSponsor?.brandName ||
-                "Your sponsor profile"}
+              {draft.brandName || draft.companyName || "Your sponsor profile"}
             </h1>
-            <VerificationStatusBadge status={liveStatus} />
+            <VerificationStatusBadge
+              status={draft.verificationStatus ?? "draft"}
+            />
           </div>
           <p className="mt-1 text-sm" style={{ color: "#6b6960" }}>
             Build your sponsor profile
           </p>
         </div>
         <div className="flex gap-2">
-          {canSubmit && (
+          {draft.verificationStatus === "draft" && (
             <Button
               variant="outline"
               onClick={handleSubmitForVerification}

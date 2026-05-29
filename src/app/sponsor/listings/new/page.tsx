@@ -3,13 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Field } from "@/components/forms/form-field";
 import { OfferTypeSelector } from "@/components/sponsor/offer-type-selector";
 import { RequestedAssetsSelector } from "@/components/sponsor/requested-assets-selector";
 import { EligibilityCriteriaForm } from "@/components/sponsor/eligibility-criteria-form";
+import { optionalInteger } from "@/lib/form-values";
 import type { ListingDraft, ListingRequestedAsset } from "@/lib/types";
 
 export default function NewListingPage() {
@@ -85,7 +86,7 @@ export default function NewListingPage() {
                 value={draft.numberOfTeams ?? ""}
                 onChange={(e) =>
                   updateDraft({
-                    numberOfTeams: parseInt(e.target.value) || undefined,
+                    numberOfTeams: optionalInteger(e.target.value),
                   })
                 }
                 placeholder="3"
@@ -156,21 +157,6 @@ export default function NewListingPage() {
           </Button>
         </div>
       </div>
-    </div>
-  );
-}
-
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <Label className="mb-1.5 block text-sm">{label}</Label>
-      {children}
     </div>
   );
 }
