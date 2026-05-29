@@ -19,7 +19,11 @@ function loadLocalEnv() {
 async function testConnection() {
   try {
     loadLocalEnv();
-    const { supabase } = await import('./src/lib/supabase');
+    const { supabase, isSupabaseConfigured } = await import('./src/lib/supabase');
+    if (!isSupabaseConfigured() || !supabase) {
+      console.error('Supabase is not configured. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to .env.local');
+      return false;
+    }
     const { data, error } = await supabase.from('teams').select('*').limit(1);
 
     if (error) {

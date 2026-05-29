@@ -1,5 +1,13 @@
 import { supabase } from './supabase';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import type { TeamProfile, SponsorProfile, SponsorshipListing, Application } from './types';
+
+function requireSupabase(): SupabaseClient {
+  if (!supabase) {
+    throw new Error('Supabase is not configured');
+  }
+  return supabase;
+}
 
 type ApplicationRow = {
   id: string;
@@ -27,7 +35,7 @@ export function mapApplicationRow(row: ApplicationRow): Application {
 
 // Team functions
 export async function getTeamBySlug(slug: string): Promise<TeamProfile | null> {
-  const { data, error } = await supabase
+  const { data, error } = await requireSupabase()
     .from('teams')
     .select('*')
     .eq('slug', slug)
@@ -40,7 +48,7 @@ export async function getTeamBySlug(slug: string): Promise<TeamProfile | null> {
 }
 
 export async function getTeamByIdForMock(id: string): Promise<TeamProfile | null> {
-  const { data, error } = await supabase
+  const { data, error } = await requireSupabase()
     .from('teams')
     .select('*')
     .eq('id', id)
@@ -54,7 +62,7 @@ export async function getTeamByIdForMock(id: string): Promise<TeamProfile | null
 
 // Sponsor functions
 export async function getSponsorById(id: string): Promise<SponsorProfile | null> {
-  const { data, error } = await supabase
+  const { data, error } = await requireSupabase()
     .from('sponsors')
     .select('*')
     .eq('id', id)
@@ -68,7 +76,7 @@ export async function getSponsorById(id: string): Promise<SponsorProfile | null>
 
 // Listing functions
 export async function getListingById(id: string): Promise<SponsorshipListing | null> {
-  const { data, error } = await supabase
+  const { data, error } = await requireSupabase()
     .from('sponsorship_listings')
     .select('*')
     .eq('id', id)
@@ -81,7 +89,7 @@ export async function getListingById(id: string): Promise<SponsorshipListing | n
 }
 
 export async function getOpenListings(): Promise<SponsorshipListing[]> {
-  const { data, error } = await supabase
+  const { data, error } = await requireSupabase()
     .from('sponsorship_listings')
     .select('*')
     .eq('status', 'open');
@@ -97,7 +105,7 @@ export async function getOpenListingsFromDB(): Promise<SponsorshipListing[]> {
 }
 
 export async function getListingsForSponsor(sponsorId: string): Promise<SponsorshipListing[]> {
-  const { data, error } = await supabase
+  const { data, error } = await requireSupabase()
     .from('sponsorship_listings')
     .select('*')
     .eq('sponsor_id', sponsorId);
@@ -114,7 +122,7 @@ export async function getListingsForSponsorFromDB(sponsorId: string): Promise<Sp
 
 // Application functions
 export async function getApplicationsForTeam(teamId: string): Promise<Application[]> {
-  const { data, error } = await supabase
+  const { data, error } = await requireSupabase()
     .from('applications')
     .select('*')
     .eq('team_id', teamId);
@@ -126,7 +134,7 @@ export async function getApplicationsForTeam(teamId: string): Promise<Applicatio
 }
 
 export async function getApplicationsForListing(listingId: string): Promise<Application[]> {
-  const { data, error } = await supabase
+  const { data, error } = await requireSupabase()
     .from('applications')
     .select('*')
     .eq('listing_id', listingId);
@@ -139,25 +147,25 @@ export async function getApplicationsForListing(listingId: string): Promise<Appl
 
 // Functions to get all data (for mock data constants)
 export async function getAllTeams(): Promise<TeamProfile[]> {
-  const { data, error } = await supabase.from('teams').select('*');
+  const { data, error } = await requireSupabase().from('teams').select('*');
   if (error) throw error;
   return data ?? [];
 }
 
 export async function getAllSponsors(): Promise<SponsorProfile[]> {
-  const { data, error } = await supabase.from('sponsors').select('*');
+  const { data, error } = await requireSupabase().from('sponsors').select('*');
   if (error) throw error;
   return data ?? [];
 }
 
 export async function getAllListings(): Promise<SponsorshipListing[]> {
-  const { data, error } = await supabase.from('sponsorship_listings').select('*');
+  const { data, error } = await requireSupabase().from('sponsorship_listings').select('*');
   if (error) throw error;
   return data ?? [];
 }
 
 export async function getAllApplications(): Promise<Application[]> {
-  const { data, error } = await supabase.from('applications').select('*');
+  const { data, error } = await requireSupabase().from('applications').select('*');
   if (error) throw error;
   return (data ?? []).map((row) => mapApplicationRow(row as ApplicationRow));
 }
@@ -184,7 +192,7 @@ export async function getAllApplications(): Promise<Application[]> {
 
 export async function getTeamBySlugForMock(slug: string): Promise<TeamProfile | null> {
   // Fetch team
-  const { data: teamData, error: teamError } = await supabase
+  const { data: teamData, error: teamError } = await requireSupabase()
     .from('teams')
     .select('*')
     .eq('slug', slug)
@@ -194,20 +202,20 @@ export async function getTeamBySlugForMock(slug: string): Promise<TeamProfile | 
   if (!teamData) return null;
 
   // Fetch team profile
-  const { data: profileData, error: profileError } = await supabase
+  const { data: profileData, error: profileError } = await requireSupabase()
     .from('team_profiles')
     .select('*')
     .eq('team_id', teamData.id)
     .single();
 
   // Fetch team events
-  const { data: eventsData, error: eventsError } = await supabase
+  const { data: eventsData, error: eventsError } = await requireSupabase()
     .from('team_events')
     .select('*')
     .eq('team_id', teamData.id);
 
   // Fetch team sponsorship assets with asset definitions
-  const { data: sponsorshipAssetsData, error: sponsorshipAssetsError } = await supabase
+  const { data: sponsorshipAssetsData, error: sponsorshipAssetsError } = await requireSupabase()
     .from('team_sponsorship_assets')
     .select(`
       *,
@@ -279,7 +287,7 @@ export async function getTeamBySlugForMock(slug: string): Promise<TeamProfile | 
 // Similarly for sponsor
 export async function getSponsorByIdForMock(id: string): Promise<SponsorProfile | null> {
   // Fetch sponsor
-  const { data: sponsorData, error: sponsorError } = await supabase
+  const { data: sponsorData, error: sponsorError } = await requireSupabase()
     .from('sponsors')
     .select('*')
     .eq('id', id)
@@ -289,7 +297,7 @@ export async function getSponsorByIdForMock(id: string): Promise<SponsorProfile 
   if (!sponsorData) return null;
 
   // Fetch sponsor profile
-  const { data: profileData, error: profileError } = await supabase
+  const { data: profileData, error: profileError } = await requireSupabase()
     .from('sponsor_profiles')
     .select('*')
     .eq('sponsor_id', id)
@@ -320,7 +328,7 @@ export async function getSponsorByIdForMock(id: string): Promise<SponsorProfile 
 // And for listing
 export async function getListingByIdForMock(id: string): Promise<SponsorshipListing | null> {
   // Fetch listing
-  const { data: listingData, error: listingError } = await supabase
+  const { data: listingData, error: listingError } = await requireSupabase()
     .from('sponsorship_listings')
     .select('*')
     .eq('id', id)
@@ -330,7 +338,7 @@ export async function getListingByIdForMock(id: string): Promise<SponsorshipList
   if (!listingData) return null;
 
   // Fetch requested assets with asset definitions
-  const { data: requestedAssetsData, error: requestedAssetsError } = await supabase
+  const { data: requestedAssetsData, error: requestedAssetsError } = await requireSupabase()
     .from('listing_requested_assets')
     .select(`
       *,

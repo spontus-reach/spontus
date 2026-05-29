@@ -2,8 +2,14 @@
 
 import { createContext, useContext, useState, useCallback, useEffect } from "react";
 import type { Application, DeclineReason } from "@/lib/types";
-import { supabase } from "@/lib/supabase";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { mapApplicationRow } from "@/lib/db";
+import {
+  acceptMockApplication,
+  createMockApplication,
+  declineMockApplication,
+  getSeedApplications,
+} from "@/lib/applications-mock";
 
 interface ApplicationsContextValue {
   applications: Application[];
@@ -21,39 +27,48 @@ interface ApplicationsContextValue {
   getApplicationById: (applicationId: string) => Application | undefined;
   acceptApplication: (applicationId: string) => Promise<void>;
   declineApplication: (applicationId: string, reason: DeclineReason) => Promise<void>;
-  // We might also need a function to refetch or update the state from the database
   refresh: () => Promise<void>;
 }
 
 const ApplicationsContext = createContext<ApplicationsContextValue | null>(null);
-
 
 export function ApplicationsProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [applications, setApplications] = useState<Application[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [applications, setApplications] = useState<Application[]>(() =>
+    isSupabaseConfigured() ? [] : getSeedApplications()
+  );
 
-  // Fetch all applications from the database on mount
-  useEffect(() => {
-    async function fetchApplications() {
-      setLoading(true);
-      try {
-        const { data, error } = await supabase.from('applications').select('*');
-        if (error) throw error;
-        setApplications((data ?? []).map((row) => mapApplicationRow(row)));
-      } catch (error) {
-        console.error('Failed to fetch applications:', error);
-        setApplications([]);
-      } finally {
-        setLoading(false);
-      }
+  const loadApplications = useCallback(async () => {
+    if (!isSupabaseConfigured() || !supabase) {
+      return;
     }
 
-    fetchApplications();
+    try {
+      const { data, error } = await supabase.from("applications").select("*");
+      if (error) throw error;
+      setApplications((data ?? []).map((row) => mapApplicationRow(row)));
+    } catch (error) {
+      console.error("Failed to fetch applications:", error);
+      setApplications([]);
+    }
   }, []);
+
+  useEffect(() => {
+    if (!isSupabaseConfigured()) {
+      return;
+    }
+    let cancelled = false;
+    void (async () => {
+      await loadApplications();
+      if (cancelled) return;
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [loadApplications]);
 
   const getApplicationsForTeam = useCallback(
     (teamId: string) => applications.filter((a) => a.teamId === teamId),
@@ -81,57 +96,81 @@ export function ApplicationsProvider({
   );
 
   const createApplication = useCallback(
-    async (listingId: string, teamId: string, fitNote?: string): Promise<Application | null> => {
+    async (
+      listingId: string,
+      teamId: string,
+      fitNote?: string
+    ): Promise<Application | null> => {
+      if (!isSupabaseConfigured() || !supabase) {
+        let created: Application | null = null;
+        setApplications((prev) => {
+          const next = createMockApplication(prev, listingId, teamId, fitNote);
+          created = next;
+          return next ? [...prev, next] : prev;
+        });
+        return created;
+      }
+
       try {
+        const existing = applications.find(
+          (a) => a.teamId === teamId && a.listingId === listingId
+        );
+        if (existing) return null;
+
         const newApp = {
           listing_id: listingId,
           team_id: teamId,
-          status: "submitted",
+          status: "submitted" as const,
           fit_note: fitNote || null,
           submitted_at: new Date().toISOString().split("T")[0],
         };
 
         const { data, error } = await supabase
-          .from('applications')
+          .from("applications")
           .insert(newApp)
           .select()
           .single();
 
         if (error) throw error;
 
-        // Update state optimistically
         const application = mapApplicationRow(data);
-        setApplications(prev => [...prev, application]);
+        setApplications((prev) => [...prev, application]);
         return application;
       } catch (error) {
-        console.error('Failed to create application:', error);
+        console.error("Failed to create application:", error);
         return null;
       }
     },
-    []
+    [applications]
   );
 
   const acceptApplication = useCallback(
     async (applicationId: string) => {
+      if (!isSupabaseConfigured() || !supabase) {
+        setApplications((prev) => acceptMockApplication(prev, applicationId));
+        return;
+      }
+
       try {
         const { data, error } = await supabase
-          .from('applications')
+          .from("applications")
           .update({
             status: "accepted",
             reviewed_at: new Date().toISOString().split("T")[0],
           })
-          .eq('id', applicationId)
+          .eq("id", applicationId)
           .select()
           .single();
 
         if (error) throw error;
 
-        // Update state
-        setApplications(prev =>
-          prev.map(app => (app.id === applicationId ? mapApplicationRow(data) : app))
+        setApplications((prev) =>
+          prev.map((app) =>
+            app.id === applicationId ? mapApplicationRow(data) : app
+          )
         );
       } catch (error) {
-        console.error('Failed to accept application:', error);
+        console.error("Failed to accept application:", error);
       }
     },
     []
@@ -139,43 +178,42 @@ export function ApplicationsProvider({
 
   const declineApplication = useCallback(
     async (applicationId: string, reason: DeclineReason) => {
+      if (!isSupabaseConfigured() || !supabase) {
+        setApplications((prev) =>
+          declineMockApplication(prev, applicationId, reason)
+        );
+        return;
+      }
+
       try {
         const { data, error } = await supabase
-          .from('applications')
+          .from("applications")
           .update({
             status: "declined",
             decline_reason: reason,
             reviewed_at: new Date().toISOString().split("T")[0],
           })
-          .eq('id', applicationId)
+          .eq("id", applicationId)
           .select()
           .single();
 
         if (error) throw error;
 
-        // Update state
-        setApplications(prev =>
-          prev.map(app => (app.id === applicationId ? mapApplicationRow(data) : app))
+        setApplications((prev) =>
+          prev.map((app) =>
+            app.id === applicationId ? mapApplicationRow(data) : app
+          )
         );
       } catch (error) {
-        console.error('Failed to decline application:', error);
+        console.error("Failed to decline application:", error);
       }
     },
     []
   );
 
   const refresh = useCallback(async () => {
-    setLoading(true);
-    try {
-      const { data, error } = await supabase.from('applications').select('*');
-      if (error) throw error;
-      setApplications((data ?? []).map((row) => mapApplicationRow(row)));
-    } catch (error) {
-      console.error('Failed to refresh applications:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    await loadApplications();
+  }, [loadApplications]);
 
   const value: ApplicationsContextValue = {
     applications,
@@ -188,13 +226,6 @@ export function ApplicationsProvider({
     declineApplication,
     refresh,
   };
-
-  if (loading) {
-    // We still want to render the children, but we can show a loading indicator if needed.
-    // For now, we'll just return the context with empty applications.
-    // The components that use this provider should handle loading state themselves.
-    // Alternatively, we can throw a promise or use a suspense pattern, but we'll keep it simple.
-  }
 
   return (
     <ApplicationsContext.Provider value={value}>
