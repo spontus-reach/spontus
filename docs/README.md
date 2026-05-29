@@ -86,6 +86,7 @@ Spontus helps grassroots teams and sponsors find each other, structure credible 
 | [Business](./business/index.md) | GTM, customer segments, sponsor pipeline, outreach, and sales process. | Founders, GTM collaborators | [Business Index](./business/index.md) |
 | [Market](./market/index.md) | Market evidence, competitor comparisons, and category context. | Founders, advisors | [Market Index](./market/index.md) |
 | [Engineering](./engineering/index.md) | Development readiness, stack choices, implementation notes, and tooling context. | Engineers, technical collaborators | [Engineering Index](./engineering/index.md) |
+| [Agents](./agents/) | Agent roster, roles, and workflow definitions for AI-assisted development. | All contributors | [Agent Roster](./agents/agent-roster.md) |
 | [Meetings](./meetings/index.md) | Dated working sessions, brainstorms, and meeting outputs. | Founders, collaborators | [Meetings Index](./meetings/index.md) |
 | [Templates](./_templates/) | Reusable templates for specs, decisions, research, and meetings. | Everyone creating durable docs | Template folder |
 
