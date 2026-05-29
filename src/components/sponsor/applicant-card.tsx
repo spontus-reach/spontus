@@ -104,12 +104,12 @@ export function ApplicantCard({
         </div>
       </div>
 
-      {application.fitNote && (
+      {application.fitResponse && (
         <p
           className="mt-3 rounded-md p-3 text-xs italic"
           style={{ background: "#f0efeb", color: "#6b6960" }}
         >
-          &ldquo;{application.fitNote}&rdquo;
+          &ldquo;{application.fitResponse}&rdquo;
         </p>
       )}
 

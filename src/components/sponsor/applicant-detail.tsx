@@ -14,7 +14,7 @@ import { useApplications } from "@/components/providers/applications-provider";
 import { useVerification } from "@/components/providers/verification-provider";
 import { getAssetOverlap } from "@/lib/asset-overlap";
 import { APPLICATION_STATUS_LABELS, ACTIVE_SPONSOR_ID, getDeclineReasonLabel } from "@/lib/constants";
-import { getSeedListingById } from "@/lib/mock-data";
+import { getListingById } from "@/lib/mock-data";
 import type { DeclineReason } from "@/lib/types";
 
 export function ApplicantDetail({
@@ -41,7 +41,7 @@ export function ApplicantDetail({
   }
 
   const team = getTeamById(application.teamId);
-  const listing = getSeedListingById(application.listingId);
+  const listing = getListingById(application.listingId);
   const sponsor = listing ? getSponsorById(listing.sponsorId) : undefined;
 
   if (!team || !listing) {
