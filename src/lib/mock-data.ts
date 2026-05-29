@@ -296,6 +296,46 @@ export const MOCK_SPONSORS: SponsorProfile[] = [
   },
 ];
 
+export const ACTIVE_TEAM_ID = 'cp-tri';
+export const ACTIVE_SPONSOR_ID = 'sp-fluid';
+
+export const MOCK_SEED_SPONSORS: SponsorProfile[] = [
+  {
+    id: 'sp-seed-1',
+    companyName: 'Seed Sponsor Co',
+    brandName: 'SeedCo',
+    oneLiner: 'Early stage sponsor supporting emerging teams',
+    description: 'We focus on helping new teams get established with basic equipment and travel support.',
+    websiteUrl: 'https://seedco.com',
+    instagramUrl: 'https://instagram.com/seedcosponsor',
+    industryCategory: 'Equipment',
+    targetAudience: 'Emerging athletes',
+    geographicFocus: 'National',
+    typicalOfferTypes: ['Free product for team use', 'Cash sponsorship'],
+    pastSponsorships: 'Supported 5 new teams in their first year of competition',
+    verificationStatus: 'verified',
+  },
+  {
+    id: 'sp-seed-2',
+    companyName: 'Growth Partners Inc',
+    brandName: 'GrowthPartners',
+    oneLiner: 'Helping established teams reach the next level',
+    description: 'We work with teams that have proven track records and want to scale their impact.',
+    websiteUrl: 'https://growthpartners.com',
+    instagramUrl: 'https://instagram.com/growthpartners',
+    industryCategory: 'Financial Services',
+    targetAudience: 'Established competitive teams',
+    geographicFocus: 'Regional',
+    typicalOfferTypes: ['Cash sponsorship', 'Event prizes'],
+    pastSponsorships: 'Partnered with 8 teams across 3 seasons for regional events',
+    verificationStatus: 'verified',
+  },
+];
+
+// Mock applications for testing
+export const MOCK_SEED_APPLICATIONS: any[] = []; // Will be filled with proper type later
+
+
 export const MOCK_LISTINGS: SponsorshipListing[] = [
   {
     id: 'lst-fluid-fall',
@@ -342,6 +382,10 @@ export const MOCK_LISTINGS: SponsorshipListing[] = [
   },
 ];
 
+export function getTeamById(id: string): TeamProfile | undefined {
+  return MOCK_TEAMS.find((t) => t.id === id);
+}
+
 export function getSponsorById(id: string): SponsorProfile | undefined {
   return MOCK_SPONSORS.find((s) => s.id === id);
 }
@@ -352,4 +396,8 @@ export function getListingById(id: string): SponsorshipListing | undefined {
 
 export function getListingsForSponsor(sponsorId: string): SponsorshipListing[] {
   return MOCK_LISTINGS.filter((l) => l.sponsorId === sponsorId);
+}
+
+export function getOpenListings(): SponsorshipListing[] {
+  return MOCK_LISTINGS.filter((listing) => listing.status === 'open');
 }

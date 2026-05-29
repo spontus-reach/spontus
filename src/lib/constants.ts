@@ -112,3 +112,32 @@ export const VERIFICATION_STATUS_LABELS: Record<VerificationStatus, string> = {
   needs_changes: 'Needs changes',
   suspended: 'Suspended',
 };
+
+export const ACTIVE_TEAM_ID = 'cp-tri';
+export const ACTIVE_SPONSOR_ID = 'sp-fluid';
+
+export const DECLINE_REASONS: Array<{ value: DeclineReason; label: string }> = [
+  { value: 'schedule_conflict', label: 'Schedule Conflict' },
+  { value: 'budget_limitations', label: 'Budget Limitations' },
+  { value: 'poor_fit', label: 'Poor Fit' },
+  { value: 'insufficient_assets', label: 'Insufficient Assets' },
+  { value: 'incomplete_application', label: 'Incomplete Application' },
+];
+
+export const APPLICATION_STATUS_LABELS: Record<DeclineReason | 'accepted' | 'declined' | 'under_review' | 'submitted' | 'withdrawn', string> = {
+  submitted: 'Submitted',
+  under_review: 'Under Review',
+  accepted: 'Accepted',
+  declined: 'Declined',
+  withdrawn: 'Withdrawn',
+  schedule_conflict: 'Schedule Conflict',
+  budget_limitations: 'Budget Limitations',
+  poor_fit: 'Poor Fit',
+  insufficient_assets: 'Insufficient Assets',
+  incomplete_application: 'Incomplete Application',
+};
+
+export function getDeclineReasonLabel(reason: DeclineReason | undefined): string {
+  if (!reason) return '';
+  return APPLICATION_STATUS_LABELS[reason] || reason;
+}

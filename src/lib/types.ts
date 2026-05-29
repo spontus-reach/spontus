@@ -147,6 +147,44 @@ export type SponsorshipListing = {
 
 export type ListingDraft = Partial<SponsorshipListing>;
 
+export type VerificationEntityType = 'team' | 'sponsor';
+
+export type VerificationReviewNote = {
+  id: string;
+  entityType: VerificationEntityType;
+  entityId: string;
+  status: VerificationStatus;
+  note: string;
+  reviewedAt: string;
+  reviewedBy: string;
+};
+
+export type Application = {
+  id: string;
+  listingId: string;
+  teamId: string;
+  status: ApplicationStatus;
+  submittedAt?: string;
+  reviewedAt?: string;
+  declineReason?: DeclineReason;
+  fitResponse?: string;
+};
+
+export type ApplicationStatus =
+  | 'draft'
+  | 'submitted'
+  | 'under_review'
+  | 'accepted'
+  | 'declined'
+  | 'withdrawn';
+
+export type DeclineReason =
+  | 'schedule_conflict'
+  | 'budget_limitations'
+  | 'poor_fit'
+  | 'insufficient_assets'
+  | 'incomplete_application';
+
 export type SponsorMemberRole =
   | 'owner'
   | 'admin'
