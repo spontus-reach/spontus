@@ -1,8 +1,72 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Zap } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Zap, LogOut } from "lucide-react";
+import { useAuth } from "@/components/providers/auth-provider";
+
+function AuthNav() {
+  const { user, loading, signOut } = useAuth();
+  const router = useRouter();
+
+  async function handleSignOut() {
+    await signOut();
+    router.push("/");
+    router.refresh();
+  }
+
+  if (loading) {
+    return (
+      <span className="text-sm" style={{ color: "#6b6960", opacity: 0.5 }}>
+        ...
+      </span>
+    );
+  }
+
+  if (user) {
+    return (
+      <>
+        <span className="text-sm" style={{ color: "#6b6960" }}>
+          {user.email}
+        </span>
+        <button
+          onClick={handleSignOut}
+          className="inline-flex items-center gap-1 text-sm transition-opacity hover:opacity-70"
+          style={{ color: "#6b6960" }}
+        >
+          <LogOut className="h-3.5 w-3.5" />
+          Sign out
+        </button>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Link
+        href="/login"
+        className="text-sm transition-colors hover:text-[#1a1a18]"
+        style={{ color: "#6b6960" }}
+      >
+        Sign in
+      </Link>
+      <Link
+        href="/signup/team"
+        className="inline-flex items-center justify-center px-4 transition-opacity hover:opacity-90"
+        style={{
+          height: 36,
+          borderRadius: 8,
+          background: "#1a3a6e",
+          color: "#f0efeb",
+          fontSize: 14,
+          fontWeight: 500,
+        }}
+      >
+        Get started
+      </Link>
+    </>
+  );
+}
 
 export function TopNav() {
   const pathname = usePathname();
@@ -101,26 +165,7 @@ export function TopNav() {
         </nav>
 
         <div className="flex items-center gap-4">
-          <span
-            className="cursor-not-allowed text-sm"
-            style={{ color: "#6b6960", opacity: 0.5 }}
-          >
-            Sign in
-          </span>
-          <Link
-            href="/signup/team"
-            className="inline-flex items-center justify-center px-4 transition-opacity hover:opacity-90"
-            style={{
-              height: 36,
-              borderRadius: 8,
-              background: "#1a3a6e",
-              color: "#f0efeb",
-              fontSize: 14,
-              fontWeight: 500,
-            }}
-          >
-            Get started
-          </Link>
+          <AuthNav />
         </div>
       </div>
     </header>
