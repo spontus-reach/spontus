@@ -1,5 +1,5 @@
-import { MOCK_SEED_APPLICATIONS } from "@/lib/mock-data";
-import type { Application, DeclineReason } from "@/lib/types";
+import { MOCK_SEED_APPLICATIONS } from "./mock-data.ts";
+import type { Application, DeclineReason } from "./types.ts";
 
 export function getSeedApplications(): Application[] {
   return MOCK_SEED_APPLICATIONS.map((app) => ({ ...app }));
