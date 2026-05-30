@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useCallback, useEffect } from "react";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Application, DeclineReason } from "@/lib/types";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { mapApplicationRow } from "@/lib/db";
@@ -32,22 +33,30 @@ interface ApplicationsContextValue {
 
 const ApplicationsContext = createContext<ApplicationsContextValue | null>(null);
 
+function getSupabaseApplicationsClient(): SupabaseClient | null {
+  return isSupabaseConfigured() ? supabase : null;
+}
+
 export function ApplicationsProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const [applications, setApplications] = useState<Application[]>(() =>
-    isSupabaseConfigured() ? [] : getSeedApplications()
+    getSupabaseApplicationsClient() ? [] : getSeedApplications()
   );
 
   const loadApplications = useCallback(async () => {
-    if (!isSupabaseConfigured() || !supabase) {
+    const applicationsClient = getSupabaseApplicationsClient();
+    if (!applicationsClient) {
+      setApplications(getSeedApplications());
       return;
     }
 
     try {
-      const { data, error } = await supabase.from("applications").select("*");
+      const { data, error } = await applicationsClient
+        .from("applications")
+        .select("*");
       if (error) throw error;
       setApplications((data ?? []).map((row) => mapApplicationRow(row)));
     } catch (error) {
@@ -57,7 +66,7 @@ export function ApplicationsProvider({
   }, []);
 
   useEffect(() => {
-    if (!isSupabaseConfigured()) {
+    if (!getSupabaseApplicationsClient()) {
       return;
     }
     let cancelled = false;
@@ -101,13 +110,21 @@ export function ApplicationsProvider({
       teamId: string,
       fitNote?: string
     ): Promise<Application | null> => {
-      if (!isSupabaseConfigured() || !supabase) {
-        let created: Application | null = null;
-        setApplications((prev) => {
-          const next = createMockApplication(prev, listingId, teamId, fitNote);
-          created = next;
-          return next ? [...prev, next] : prev;
-        });
+      const applicationsClient = getSupabaseApplicationsClient();
+      if (!applicationsClient) {
+        const created = createMockApplication(
+          applications,
+          listingId,
+          teamId,
+          fitNote
+        );
+        if (!created) return null;
+
+        setApplications((prev) =>
+          prev.some((app) => app.teamId === teamId && app.listingId === listingId)
+            ? prev
+            : [...prev, created]
+        );
         return created;
       }
 
@@ -125,7 +142,7 @@ export function ApplicationsProvider({
           submitted_at: new Date().toISOString().split("T")[0],
         };
 
-        const { data, error } = await supabase
+        const { data, error } = await applicationsClient
           .from("applications")
           .insert(newApp)
           .select()
@@ -146,13 +163,14 @@ export function ApplicationsProvider({
 
   const acceptApplication = useCallback(
     async (applicationId: string) => {
-      if (!isSupabaseConfigured() || !supabase) {
+      const applicationsClient = getSupabaseApplicationsClient();
+      if (!applicationsClient) {
         setApplications((prev) => acceptMockApplication(prev, applicationId));
         return;
       }
 
       try {
-        const { data, error } = await supabase
+        const { data, error } = await applicationsClient
           .from("applications")
           .update({
             status: "accepted",
@@ -178,7 +196,8 @@ export function ApplicationsProvider({
 
   const declineApplication = useCallback(
     async (applicationId: string, reason: DeclineReason) => {
-      if (!isSupabaseConfigured() || !supabase) {
+      const applicationsClient = getSupabaseApplicationsClient();
+      if (!applicationsClient) {
         setApplications((prev) =>
           declineMockApplication(prev, applicationId, reason)
         );
@@ -186,7 +205,7 @@ export function ApplicationsProvider({
       }
 
       try {
-        const { data, error } = await supabase
+        const { data, error } = await applicationsClient
           .from("applications")
           .update({
             status: "declined",

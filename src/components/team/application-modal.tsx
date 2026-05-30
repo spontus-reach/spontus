@@ -11,7 +11,7 @@ import type { TeamProfile, SponsorshipListing } from "@/lib/types";
 type Props = {
   listing: SponsorshipListing;
   team: TeamProfile;
-  onSubmit: (fitNote?: string) => boolean;
+  onSubmit: (fitNote?: string) => Promise<boolean>;
   onClose: () => void;
 };
 
@@ -64,8 +64,8 @@ export function ApplicationModal({
     };
   }, [onClose]);
 
-  function handleSubmit() {
-    const success = onSubmit(fitNote.trim() || undefined);
+  async function handleSubmit() {
+    const success = await onSubmit(fitNote.trim() || undefined);
     if (success) {
       setSubmitted(true);
       setError(false);
