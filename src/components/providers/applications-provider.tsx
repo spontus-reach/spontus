@@ -112,19 +112,11 @@ export function ApplicationsProvider({
     ): Promise<Application | null> => {
       const applicationsClient = getSupabaseApplicationsClient();
       if (!applicationsClient) {
-        const created = createMockApplication(
-          applications,
-          listingId,
-          teamId,
-          fitNote
-        );
-        if (!created) return null;
-
-        setApplications((prev) =>
-          prev.some((app) => app.teamId === teamId && app.listingId === listingId)
-            ? prev
-            : [...prev, created]
-        );
+        let created: Application | null = null;
+        setApplications((prev) => {
+          created = createMockApplication(prev, listingId, teamId, fitNote);
+          return created ? [...prev, created] : prev;
+        });
         return created;
       }
 
