@@ -292,7 +292,7 @@ export const MOCK_SPONSORS: SponsorProfile[] = [
     typicalOfferTypes: ['Discount codes', 'Gift cards'],
     pastSponsorships:
       'Supported Cal Poly Club Swim and Cal Poly Running Club with discount cards and event coffee service.',
-    verificationStatus: 'submitted_for_verification',
+    verificationStatus: 'verified',
   },
 ];
 

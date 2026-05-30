@@ -92,9 +92,13 @@ export function ListingDetail({ listing }: { listing: SponsorshipListing }) {
     listing.applicationDeadline &&
     new Date(listing.applicationDeadline) < new Date();
 
-  function handleApply(fitNote?: string): boolean {
+  async function handleApply(fitNote?: string): Promise<boolean> {
     if (teamStatus !== "verified" || !sponsorVerified) return false;
-    return createApplication(listing.id, ACTIVE_TEAM_ID, fitNote) !== null;
+    const created = await createApplication(listing.id, ACTIVE_TEAM_ID, fitNote);
+    if (!created) return false;
+
+    setExistingApp(created);
+    return true;
   }
 
   return (
