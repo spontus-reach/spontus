@@ -8,6 +8,10 @@ import {
   DEFAULT_VER_FILTERS,
   type VerificationFilterState,
 } from "./verification-filters";
+import {
+  filterVerificationSponsors,
+  filterVerificationTeams,
+} from "@/lib/verification-filters";
 import { VerificationQueueCard } from "./verification-queue-card";
 import { VerificationDetailPanel } from "./verification-detail-panel";
 import type {
@@ -29,45 +33,11 @@ export function VerificationDashboard() {
   const [selected, setSelected] = useState<SelectedEntity>(null);
 
   const filteredTeams = useMemo(() => {
-    if (filters.entityType === "sponsor") return [];
-    return teams.filter((t) => {
-      if (
-        filters.status &&
-        t.verificationStatus !== filters.status
-      )
-        return false;
-      if (filters.search) {
-        const q = filters.search.toLowerCase();
-        if (
-          !t.name.toLowerCase().includes(q) &&
-          !t.university.toLowerCase().includes(q) &&
-          !t.sport.toLowerCase().includes(q)
-        )
-          return false;
-      }
-      return true;
-    });
+    return filterVerificationTeams(teams, filters);
   }, [teams, filters]);
 
   const filteredSponsors = useMemo(() => {
-    if (filters.entityType === "team") return [];
-    return sponsors.filter((s) => {
-      if (
-        filters.status &&
-        s.verificationStatus !== filters.status
-      )
-        return false;
-      if (filters.search) {
-        const q = filters.search.toLowerCase();
-        if (
-          !s.companyName.toLowerCase().includes(q) &&
-          !(s.brandName ?? "").toLowerCase().includes(q) &&
-          !(s.industryCategory ?? "").toLowerCase().includes(q)
-        )
-          return false;
-      }
-      return true;
-    });
+    return filterVerificationSponsors(sponsors, filters);
   }, [sponsors, filters]);
 
   const totalResults = filteredTeams.length + filteredSponsors.length;

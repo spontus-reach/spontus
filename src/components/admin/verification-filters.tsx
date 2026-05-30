@@ -9,18 +9,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { VerificationEntityType } from "@/lib/types";
-
-export type VerificationFilterState = {
-  entityType: VerificationEntityType | "all";
-  status: string;
-  search: string;
-};
-
-export const DEFAULT_VER_FILTERS: VerificationFilterState = {
-  entityType: "all",
-  status: "submitted_for_verification",
-  search: "",
-};
+import type { VerificationFilterState } from "@/lib/verification-filters";
+export type { VerificationFilterState } from "@/lib/verification-filters";
+export { DEFAULT_VER_FILTERS } from "@/lib/verification-filters";
 
 type Props = {
   filters: VerificationFilterState;
@@ -64,7 +55,13 @@ export function VerificationFilters({ filters, onChange, onClear }: Props) {
         <Select
           value={filters.status || "all"}
           onValueChange={(v) =>
-            onChange({ ...filters, status: v === "all" ? "" : (v ?? "") })
+            onChange({
+              ...filters,
+              status:
+                v === "all"
+                  ? ""
+                  : ((v ?? "") as VerificationFilterState["status"]),
+            })
           }
         >
           <SelectTrigger className="h-9 text-xs">
