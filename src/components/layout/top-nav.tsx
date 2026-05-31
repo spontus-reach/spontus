@@ -156,18 +156,6 @@ export function TopNav() {
               My Applications
             </Link>
           )}
-          {isLoggedIn && (
-            <Link
-              href="/admin/verification"
-              className={`text-sm transition-colors ${
-                pathname.startsWith("/admin")
-                  ? "text-[#1a1a18]"
-                  : "text-[#8a8880] hover:text-[#6b6960]"
-              }`}
-            >
-              Admin
-            </Link>
-          )}
         </nav>
 
         <div className="flex items-center gap-4">

@@ -88,22 +88,13 @@ export function MobileNav() {
                 Browse Listings
               </NavLink>
               {user && (
-                <>
-                  <NavLink
-                    href="/team/applications"
-                    active={pathname === "/team/applications"}
-                    onClick={close}
-                  >
-                    My Applications
-                  </NavLink>
-                  <NavLink
-                    href="/admin/verification"
-                    active={pathname.startsWith("/admin")}
-                    onClick={close}
-                  >
-                    Admin
-                  </NavLink>
-                </>
+                <NavLink
+                  href="/team/applications"
+                  active={pathname === "/team/applications"}
+                  onClick={close}
+                >
+                  My Applications
+                </NavLink>
               )}
             </nav>
 
