@@ -4,7 +4,7 @@ import { use } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Users } from "lucide-react";
-import { getListingById, getSponsorById, MOCK_LISTINGS } from "@/lib/mock-data";
+import { getListingById, getSponsorById } from "@/lib/mock-data";
 import { ListingPreview } from "@/components/sponsor/listing-preview";
 import { useIdentity } from "@/components/providers/identity-provider";
 
