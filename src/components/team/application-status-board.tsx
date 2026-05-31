@@ -2,7 +2,7 @@
 
 import { ApplicationCard } from "./application-card";
 import { useApplications } from "@/components/providers/applications-provider";
-import { ACTIVE_TEAM_ID } from "@/lib/mock-data";
+import { useIdentity } from "@/components/providers/identity-provider";
 import type { ApplicationStatus } from "@/lib/types";
 
 const COLUMNS: { status: ApplicationStatus; label: string }[] = [
@@ -14,7 +14,8 @@ const COLUMNS: { status: ApplicationStatus; label: string }[] = [
 
 export function ApplicationStatusBoard() {
   const { getApplicationsForTeam } = useApplications();
-  const applications = getApplicationsForTeam(ACTIVE_TEAM_ID);
+  const { activeTeamId } = useIdentity();
+  const applications = getApplicationsForTeam(activeTeamId ?? "");
 
   return (
     <div className="space-y-8">

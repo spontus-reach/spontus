@@ -10,13 +10,15 @@ import {
 import { useApplications } from "@/components/providers/applications-provider";
 import { useVerification } from "@/components/providers/verification-provider";
 import { isListingFromVerifiedSponsor } from "@/lib/marketplace-gating";
-import { getOpenListings, ACTIVE_TEAM_ID } from "@/lib/mock-data";
+import { getOpenListings } from "@/lib/mock-data";
+import { useIdentity } from "@/components/providers/identity-provider";
 import type { SponsorshipListing } from "@/lib/types";
 
 export function ListingsFeed() {
   const [filters, setFilters] = useState<ListingFilterState>(DEFAULT_FILTERS);
   const { getApplicationForListing } = useApplications();
   const { getSponsorById } = useVerification();
+  const { activeTeamId } = useIdentity();
   const [openListings, setOpenListings] = useState<SponsorshipListing[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -73,13 +75,13 @@ export function ListingsFeed() {
       }
 
       if (filters.hideApplied) {
-        const app = getApplicationForListing(ACTIVE_TEAM_ID, l.id);
+        const app = getApplicationForListing(activeTeamId ?? "", l.id);
         if (app) return false;
       }
 
       return true;
     });
-  }, [verifiedOpenListings, filters, getApplicationForListing]);
+  }, [verifiedOpenListings, filters, getApplicationForListing, activeTeamId]);
 
   if (loading) {
     return (
@@ -128,9 +130,9 @@ export function ListingsFeed() {
           </button>
         </div>
       ) : (
-        <div className="mt-6 grid gap-5 md:grid-cols-2">
+        <div className="mt-8 grid gap-6 md:grid-cols-2">
           {filtered.map((listing) => {
-            const app = getApplicationForListing(ACTIVE_TEAM_ID, listing.id);
+            const app = getApplicationForListing(activeTeamId ?? "", listing.id);
             return (
               <ListingCard
                 key={listing.id}

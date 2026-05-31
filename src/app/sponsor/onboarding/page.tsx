@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { SponsorProfileForm } from "@/components/sponsor/sponsor-profile-form";
 import { VerificationStatusBadge } from "@/components/team/verification-status-badge";
 import { useVerification } from "@/components/providers/verification-provider";
-import { ACTIVE_SPONSOR_ID } from "@/lib/constants";
+import { useIdentity } from "@/components/providers/identity-provider";
 import type { SponsorProfileDraft } from "@/lib/types";
 
 export default function SponsorOnboardingPage() {
@@ -49,7 +49,8 @@ export default function SponsorOnboardingPage() {
   });
 
   const { getSponsorById, submitForVerification } = useVerification();
-  const liveSponsor = getSponsorById(ACTIVE_SPONSOR_ID);
+  const { activeSponsorId } = useIdentity();
+  const liveSponsor = getSponsorById(activeSponsorId ?? "");
   const liveStatus =
     liveSponsor?.verificationStatus ?? draft.verificationStatus ?? "draft";
   const canSubmit = liveStatus === "draft" || liveStatus === "needs_changes";
@@ -59,7 +60,7 @@ export default function SponsorOnboardingPage() {
   }
 
   function handleSubmitForVerification() {
-    submitForVerification("sponsor", ACTIVE_SPONSOR_ID);
+    if (activeSponsorId) submitForVerification("sponsor", activeSponsorId);
   }
 
   return (

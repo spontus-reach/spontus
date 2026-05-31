@@ -9,8 +9,7 @@ const ease = [0.22, 1, 0.36, 1] as const;
 export function Hero() {
   return (
     <section
-      className="mx-auto max-w-[1120px] px-6 text-center"
-      style={{ paddingTop: 72, paddingBottom: 144 }}
+      className="mx-auto max-w-[1120px] px-6 pt-12 pb-20 text-center md:pt-[72px] md:pb-[144px]"
     >
       <motion.div
         initial={{ opacity: 0, y: 8 }}
@@ -37,9 +36,8 @@ export function Hero() {
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease, delay: 0.08 }}
-        className="mx-auto mt-8"
+        className="mx-auto mt-8 text-[40px] md:text-[56px] lg:text-[76px]"
         style={{
-          fontSize: 76,
           fontWeight: 500,
           lineHeight: 1.02,
           letterSpacing: "-0.035em",
