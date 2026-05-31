@@ -35,7 +35,7 @@ export function ListingCard({
   return (
     <Link
       href={`/team/listings/${listing.id}`}
-      className="block rounded-xl transition-transform hover:-translate-y-0.5"
+      className="group block rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
       style={{ border: "0.5px solid #d5d3cd", background: "white" }}
     >
       <div className="p-5">

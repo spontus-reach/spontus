@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Zap, LogOut } from "lucide-react";
 import { useAuth } from "@/components/providers/auth-provider";
+import { MobileNav } from "./mobile-nav";
 
 function AuthNav() {
   const { user, loading, signOut } = useAuth();
@@ -26,7 +27,7 @@ function AuthNav() {
   if (user) {
     return (
       <>
-        <span className="text-sm" style={{ color: "#6b6960" }}>
+        <span className="hidden text-sm sm:inline" style={{ color: "#6b6960" }}>
           {user.email}
         </span>
         <button
@@ -35,7 +36,7 @@ function AuthNav() {
           style={{ color: "#6b6960" }}
         >
           <LogOut className="h-3.5 w-3.5" />
-          Sign out
+          <span className="hidden sm:inline">Sign out</span>
         </button>
       </>
     );
@@ -70,9 +71,12 @@ function AuthNav() {
 
 export function TopNav() {
   const pathname = usePathname();
-  const isTeamRoute = pathname.startsWith("/team") || pathname === "/signup/team";
+  const { user } = useAuth();
+  const isTeamRoute =
+    pathname.startsWith("/team") || pathname === "/signup/team";
   const isSponsorRoute =
     pathname.startsWith("/sponsor") || pathname === "/signup/sponsor";
+  const isLoggedIn = !!user;
 
   return (
     <header
@@ -140,7 +144,7 @@ export function TopNav() {
           >
             Browse Listings
           </Link>
-          {isTeamRoute && (
+          {isLoggedIn && isTeamRoute && (
             <Link
               href="/team/applications"
               className={`text-sm transition-colors ${
@@ -152,20 +156,23 @@ export function TopNav() {
               My Applications
             </Link>
           )}
-          <Link
-            href="/admin/verification"
-            className={`text-sm transition-colors ${
-              pathname.startsWith("/admin")
-                ? "text-[#1a1a18]"
-                : "text-[#8a8880] hover:text-[#6b6960]"
-            }`}
-          >
-            Admin
-          </Link>
+          {isLoggedIn && (
+            <Link
+              href="/admin/verification"
+              className={`text-sm transition-colors ${
+                pathname.startsWith("/admin")
+                  ? "text-[#1a1a18]"
+                  : "text-[#8a8880] hover:text-[#6b6960]"
+              }`}
+            >
+              Admin
+            </Link>
+          )}
         </nav>
 
         <div className="flex items-center gap-4">
           <AuthNav />
+          <MobileNav />
         </div>
       </div>
     </header>
