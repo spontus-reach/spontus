@@ -24,12 +24,12 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section className="mx-auto max-w-[1120px] px-6" style={{ paddingBottom: 160 }}>
+    <section className="mx-auto max-w-[1120px] px-6" style={{ paddingBottom: 88 }}>
       <motion.div
-        initial={{ opacity: 0, y: 12 }}
+        initial={{ opacity: 0, y: 8 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.7, ease }}
+        viewport={{ once: true, margin: "-40px" }}
+        transition={{ duration: 0.4, ease }}
         className="text-center"
       >
         <span
@@ -68,10 +68,10 @@ export function HowItWorks() {
         {steps.map((step, i) => (
           <motion.div
             key={step.n}
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 8 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.7, ease, delay: i * 0.08 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.4, ease, delay: i * 0.05 }}
             style={{ paddingTop: 28 }}
           >
             <div

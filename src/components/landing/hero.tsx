@@ -9,12 +9,12 @@ const ease = [0.22, 1, 0.36, 1] as const;
 export function Hero() {
   return (
     <section
-      className="mx-auto max-w-[1120px] px-6 pt-12 pb-20 text-center md:pt-[72px] md:pb-[144px]"
+      className="mx-auto max-w-[1120px] px-6 pt-12 pb-16 text-center md:pt-[56px] md:pb-[88px]"
     >
       <motion.div
-        initial={{ opacity: 0, y: 8 }}
+        initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease }}
+        transition={{ duration: 0.35, ease }}
       >
         <span
           style={{
@@ -33,9 +33,9 @@ export function Hero() {
       </motion.div>
 
       <motion.h1
-        initial={{ opacity: 0, y: 14 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease, delay: 0.08 }}
+        transition={{ duration: 0.4, ease, delay: 0.04 }}
         className="mx-auto mt-8 text-[40px] md:text-[56px] lg:text-[76px]"
         style={{
           fontWeight: 500,
@@ -49,9 +49,9 @@ export function Hero() {
       </motion.h1>
 
       <motion.p
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease, delay: 0.18 }}
+        transition={{ duration: 0.4, ease, delay: 0.08 }}
         className="mx-auto mt-8"
         style={{
           fontSize: 17,
@@ -66,9 +66,9 @@ export function Hero() {
       </motion.p>
 
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease, delay: 0.28 }}
+        transition={{ duration: 0.4, ease, delay: 0.12 }}
         className="mt-10 flex items-center justify-center gap-6"
       >
         <Link

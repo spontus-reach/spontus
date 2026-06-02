@@ -8,6 +8,15 @@ import { HostedEventsSection } from "@/components/profile/hosted-events-section"
 import { AudienceReachSection } from "@/components/profile/audience-reach-section";
 import { PastSponsorsSection } from "@/components/profile/past-sponsors-section";
 
+function formatDate(dateStr: string): string {
+  const d = new Date(dateStr + "T00:00:00");
+  return d.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 export async function generateStaticParams() {
   const teams = MOCK_TEAMS;
   return teams.map((t) => ({ slug: t.slug }));
@@ -41,11 +50,8 @@ export default async function TeamProfilePage({ params }: PageProps) {
             </Card>
           )}
 
-          <Card className="border-border bg-card p-6">
+          <Card className="!overflow-visible border-border bg-card p-6">
             <h3 className="text-lg font-semibold">Sponsorship assets</h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              What this team can offer sponsors.
-            </p>
             <div className="mt-5">
               <AssetGrid assets={team.sponsorshipAssets} />
             </div>
@@ -71,7 +77,7 @@ export default async function TeamProfilePage({ params }: PageProps) {
                   {team.events.map((evt) => (
                     <li key={evt.id}>
                       &bull; {evt.name}
-                      {evt.startsOn && ` — ${evt.startsOn}`}
+                      {evt.startsOn && ` — ${formatDate(evt.startsOn)}`}
                       {evt.location && ` · ${evt.location}`}
                     </li>
                   ))}
@@ -108,7 +114,7 @@ export default async function TeamProfilePage({ params }: PageProps) {
                 {team.events.map((evt) => (
                   <li key={evt.id}>
                     &bull; {evt.name}
-                    {evt.startsOn && ` — ${evt.startsOn}`}
+                    {evt.startsOn && ` — ${formatDate(evt.startsOn)}`}
                   </li>
                 ))}
               </ul>
