@@ -76,7 +76,7 @@ export function AssetGrid({ assets }: { assets: TeamSponsorshipAsset[] }) {
                     )}
                     {a.notes && (
                       <div
-                        className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 hidden -translate-x-1/2 whitespace-nowrap rounded-md px-3 py-2 text-xs shadow-lg group-hover:block"
+                        className="pointer-events-none absolute left-1/2 top-full z-10 mt-2 hidden -translate-x-1/2 whitespace-nowrap rounded-md px-3 py-2 text-xs shadow-lg group-hover:block"
                         style={{
                           background: "white",
                           color: "#6b6960",
