@@ -186,7 +186,7 @@ export default function TeamOnboardingPage() {
               Submit for verification
             </Button>
           )}
-          <Link href="/team/listings">
+          <Link href="/browse">
             <Button variant="outline" style={{ borderColor: "#d5d3cd" }}>
               Browse listings
             </Button>

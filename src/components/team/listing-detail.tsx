@@ -106,7 +106,7 @@ export function ListingDetail({ listing }: { listing: SponsorshipListing }) {
   return (
     <div className="mx-auto max-w-5xl px-6 py-10">
       <Link
-        href="/team/listings"
+        href="/browse"
         className="mb-6 inline-flex items-center gap-1 text-sm transition-colors hover:opacity-70"
         style={{ color: "#6b6960" }}
       >

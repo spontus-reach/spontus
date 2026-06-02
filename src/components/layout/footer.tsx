@@ -12,10 +12,12 @@ export function Footer() {
           <Link href="/" className="hover:text-[#1a1a18]">
             Home
           </Link>
-          <Link href="/signup/team" className="hover:text-[#1a1a18]">
+          <Link href="/for-teams" className="hover:text-[#1a1a18]">
             For Teams
           </Link>
-          <span className="cursor-not-allowed opacity-50">For Sponsors</span>
+          <Link href="/for-brands" className="hover:text-[#1a1a18]">
+            For Sponsors
+          </Link>
         </div>
       </div>
     </footer>

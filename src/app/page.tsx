@@ -226,7 +226,7 @@ export default function LandingPage() {
           className="mt-10 flex items-center justify-center gap-6"
         >
           <Link
-            href="/signup/team"
+            href="/for-teams"
             className="inline-flex items-center justify-center transition-opacity hover:opacity-90"
             style={{
               height: 48,
@@ -242,7 +242,7 @@ export default function LandingPage() {
             <ArrowRight className="ml-2 h-4 w-4" strokeWidth={2} />
           </Link>
           <Link
-            href="/signup/sponsor"
+            href="/for-brands"
             className="inline-flex items-center justify-center transition-colors hover:bg-[#e8e6e0]"
             style={{
               height: 48,

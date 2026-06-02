@@ -45,14 +45,14 @@ function AuthNav() {
   return (
     <>
       <Link
-        href="/login"
+        href="/login?mode=signin"
         className="text-sm transition-colors hover:text-[#1a1a18]"
         style={{ color: "#6b6960" }}
       >
         Sign in
       </Link>
       <Link
-        href="/signup/team"
+        href="/login?mode=signup"
         className="inline-flex items-center justify-center px-4 transition-opacity hover:opacity-90"
         style={{
           height: 36,
@@ -73,9 +73,13 @@ export function TopNav() {
   const pathname = usePathname();
   const { user } = useAuth();
   const isTeamRoute =
-    pathname.startsWith("/team") || pathname === "/signup/team";
+    pathname === "/for-teams" ||
+    pathname.startsWith("/team") ||
+    pathname === "/signup/team";
   const isSponsorRoute =
-    pathname.startsWith("/sponsor") || pathname === "/signup/sponsor";
+    pathname === "/for-brands" ||
+    pathname.startsWith("/sponsor") ||
+    pathname === "/signup/sponsor";
   const isLoggedIn = !!user;
 
   return (
@@ -115,17 +119,15 @@ export function TopNav() {
 
         <nav className="hidden items-center gap-8 md:flex">
           <Link
-            href="/signup/team"
+            href="/for-teams"
             className={`text-sm transition-colors ${
-              pathname === "/signup/team" || pathname === "/team/onboarding"
-                ? "text-[#1a1a18]"
-                : "text-[#6b6960] hover:text-[#1a1a18]"
+              isTeamRoute ? "text-[#1a1a18]" : "text-[#6b6960] hover:text-[#1a1a18]"
             }`}
           >
             For Teams
           </Link>
           <Link
-            href="/signup/sponsor"
+            href="/for-brands"
             className={`text-sm transition-colors ${
               isSponsorRoute
                 ? "text-[#1a1a18]"
@@ -135,9 +137,9 @@ export function TopNav() {
             For Sponsors
           </Link>
           <Link
-            href="/team/listings"
+            href="/browse"
             className={`text-sm transition-colors ${
-              pathname.startsWith("/team/listings")
+              pathname === "/browse" || pathname.startsWith("/team/listings")
                 ? "text-[#1a1a18]"
                 : "text-[#6b6960] hover:text-[#1a1a18]"
             }`}

@@ -61,8 +61,9 @@ export function MobileNav() {
 
             <nav className="mt-8 flex flex-col gap-1">
               <NavLink
-                href="/signup/team"
+                href="/for-teams"
                 active={
+                  pathname === "/for-teams" ||
                   pathname === "/signup/team" ||
                   pathname === "/team/onboarding"
                 }
@@ -71,8 +72,9 @@ export function MobileNav() {
                 For Teams
               </NavLink>
               <NavLink
-                href="/signup/sponsor"
+                href="/for-brands"
                 active={
+                  pathname === "/for-brands" ||
                   pathname.startsWith("/sponsor") ||
                   pathname === "/signup/sponsor"
                 }
@@ -81,8 +83,10 @@ export function MobileNav() {
                 For Sponsors
               </NavLink>
               <NavLink
-                href="/team/listings"
-                active={pathname.startsWith("/team/listings")}
+                href="/browse"
+                active={
+                  pathname === "/browse" || pathname.startsWith("/team/listings")
+                }
                 onClick={close}
               >
                 Browse Listings
@@ -122,7 +126,7 @@ export function MobileNav() {
               ) : (
                 <div className="flex flex-col gap-3">
                   <Link
-                    href="/login"
+                    href="/login?mode=signin"
                     onClick={close}
                     className="inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium transition-colors hover:bg-[#e8e6e0]"
                     style={{ color: "#1a1a18", border: "0.5px solid #d5d3cd" }}
@@ -130,7 +134,7 @@ export function MobileNav() {
                     Sign in
                   </Link>
                   <Link
-                    href="/signup/team"
+                    href="/login?mode=signup"
                     onClick={close}
                     className="inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium transition-opacity hover:opacity-90"
                     style={{
