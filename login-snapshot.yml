@@ -1,0 +1,42 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Spontus" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+        - generic [ref=e8]: Spontus
+      - generic [ref=e9]:
+        - link "Sign in" [ref=e10] [cursor=pointer]:
+          - /url: /login
+        - link "Get started" [ref=e11] [cursor=pointer]:
+          - /url: /signup/team
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - heading "Sign in to Spontus" [level=1] [ref=e14]
+      - paragraph [ref=e15]: Welcome back. Sign in to manage your team or sponsorships.
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - button "Password" [ref=e18]
+          - button "Magic link" [ref=e19]
+        - generic [ref=e20]:
+          - generic [ref=e21]:
+            - text: Email
+            - textbox "you@example.com" [ref=e22]
+          - generic [ref=e23]:
+            - text: Password
+            - textbox "Your password" [ref=e24]
+          - button "Sign in" [ref=e25]
+      - paragraph [ref=e26]:
+        - text: Don't have an account?
+        - link "Sign up" [ref=e27] [cursor=pointer]:
+          - /url: /signup/team
+  - contentinfo [ref=e28]:
+    - generic [ref=e29]:
+      - generic [ref=e30]: © 2026 Spontus
+      - generic [ref=e31]:
+        - link "Home" [ref=e32] [cursor=pointer]:
+          - /url: /
+        - link "For Teams" [ref=e33] [cursor=pointer]:
+          - /url: /signup/team
+        - generic [ref=e34]: For Sponsors
+  - alert [ref=e35]

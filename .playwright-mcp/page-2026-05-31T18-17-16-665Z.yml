@@ -1,0 +1,167 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Spontus" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img [ref=e6]
+        - generic [ref=e8]: Spontus
+      - navigation [ref=e9]:
+        - link "For Teams" [ref=e10] [cursor=pointer]:
+          - /url: /signup/team
+        - link "For Sponsors" [ref=e11] [cursor=pointer]:
+          - /url: /signup/sponsor
+        - link "Browse Listings" [ref=e12] [cursor=pointer]:
+          - /url: /team/listings
+        - link "Admin" [ref=e13] [cursor=pointer]:
+          - /url: /admin/verification
+      - generic [ref=e14]:
+        - link "Sign in" [ref=e15] [cursor=pointer]:
+          - /url: /login
+        - link "Get started" [ref=e16] [cursor=pointer]:
+          - /url: /signup/team
+  - main [ref=e17]:
+    - generic [ref=e18]:
+      - generic [ref=e19]:
+        - generic [ref=e20]: For college club sports
+        - heading "The sponsorship marketplace for college club sports." [level=1] [ref=e21]
+        - paragraph [ref=e22]: Verified teams find relevant sponsors. Sponsors discover teams worth backing.
+        - generic [ref=e23]:
+          - link "I'm a team" [ref=e24] [cursor=pointer]:
+            - /url: /signup/team
+            - text: I'm a team
+            - img [ref=e25]
+          - link "I'm a sponsor" [ref=e27] [cursor=pointer]:
+            - /url: /signup/sponsor
+      - generic [ref=e29]:
+        - generic [ref=e31]:
+          - img "Cal Poly Triathlon" [ref=e32]
+          - generic [ref=e34]:
+            - generic [ref=e35]: Featured team
+            - generic [ref=e36]:
+              - text: Cal Poly
+              - text: Triathlon
+        - generic [ref=e37]:
+          - generic [ref=e38]: CASE · 01
+          - heading "Real inventory beats a cold email every time." [level=2] [ref=e39]
+          - paragraph [ref=e40]: Eighty athletes, a hosted race with 500+ participants, and 10 brand partnerships already running. Spontus turns the things a team already does into sponsorship packages sponsors can actually evaluate.
+          - generic [ref=e41]:
+            - generic [ref=e42]:
+              - generic [ref=e43]: "80"
+              - generic [ref=e44]: Athletes
+            - generic [ref=e45]:
+              - generic [ref=e46]: 500+
+              - generic [ref=e47]: Race participants
+            - generic [ref=e48]:
+              - generic [ref=e49]: "10"
+              - generic [ref=e50]: Active sponsors
+          - link "View team profile" [ref=e52] [cursor=pointer]:
+            - /url: /teams/cal-poly-triathlon
+            - text: View team profile
+            - img [ref=e53]
+      - generic [ref=e56]:
+        - generic [ref=e57]:
+          - text: How it works
+          - heading "Three steps. No middlemen." [level=2] [ref=e58]
+        - generic [ref=e59]:
+          - generic [ref=e60]:
+            - generic [ref=e61]: "01"
+            - generic [ref=e62]: Sponsors post
+            - paragraph [ref=e63]: Cash, product, the assets they want, and a deadline.
+          - generic [ref=e64]:
+            - generic [ref=e65]: "02"
+            - generic [ref=e66]: Teams apply
+            - paragraph [ref=e67]: Verified clubs match instantly using their pre-built sponsorship menu.
+          - generic [ref=e68]:
+            - generic [ref=e69]: "03"
+            - generic [ref=e70]: Deals happen
+            - paragraph [ref=e71]: Proof of posts, photos, and activations tracked in one place.
+      - generic [ref=e72]:
+        - heading "Active teams" [level=2] [ref=e74]
+        - generic [ref=e75]:
+          - link "Cal Poly Triathlon Cal Poly Triathlon Cal Poly San Luis Obispo 80 athletes 500+ athletes at hosted race Jersey logo Brand booth Product sampling" [ref=e77] [cursor=pointer]:
+            - /url: /teams/cal-poly-triathlon
+            - img "Cal Poly Triathlon" [ref=e79]
+            - generic [ref=e80]:
+              - generic [ref=e81]: Cal Poly Triathlon
+              - generic [ref=e82]: Cal Poly San Luis Obispo
+              - generic [ref=e83]:
+                - generic [ref=e84]:
+                  - img [ref=e85]
+                  - text: 80 athletes
+                - generic [ref=e90]:
+                  - img [ref=e91]
+                  - text: 500+ athletes at hosted race
+              - generic [ref=e97]:
+                - generic [ref=e98]: Jersey logo
+                - generic [ref=e99]: Brand booth
+                - generic [ref=e100]: Product sampling
+          - link "Cal Poly Men's Soccer Cal Poly Men's Soccer Cal Poly San Luis Obispo 50 athletes 12000 combined reach Livestream ad placement Highlight video logo Instagram post" [ref=e102] [cursor=pointer]:
+            - /url: /teams/cal-poly-mens-soccer
+            - img "Cal Poly Men's Soccer" [ref=e104]
+            - generic [ref=e105]:
+              - generic [ref=e106]: Cal Poly Men's Soccer
+              - generic [ref=e107]: Cal Poly San Luis Obispo
+              - generic [ref=e108]:
+                - generic [ref=e109]:
+                  - img [ref=e110]
+                  - text: 50 athletes
+                - generic [ref=e115]:
+                  - img [ref=e116]
+                  - text: 12000 combined reach
+              - generic [ref=e119]:
+                - generic [ref=e120]: Livestream ad placement
+                - generic [ref=e121]: Highlight video logo
+                - generic [ref=e122]: Instagram post
+          - link "Cal Poly Men's Rugby Cal Poly Men's Rugby Cal Poly San Luis Obispo 45 athletes 4 sponsors Jersey logo Banner at games/events Instagram post" [ref=e124] [cursor=pointer]:
+            - /url: /teams/cal-poly-mens-rugby
+            - img "Cal Poly Men's Rugby" [ref=e126]
+            - generic [ref=e127]:
+              - generic [ref=e128]: Cal Poly Men's Rugby
+              - generic [ref=e129]: Cal Poly San Luis Obispo
+              - generic [ref=e130]:
+                - generic [ref=e131]:
+                  - img [ref=e132]
+                  - text: 45 athletes
+                - generic [ref=e137]:
+                  - img [ref=e138]
+                  - text: 4 sponsors
+              - generic [ref=e144]:
+                - generic [ref=e145]: Jersey logo
+                - generic [ref=e146]: Banner at games/events
+                - generic [ref=e147]: Instagram post
+          - link "Cal Poly Club Swim Cal Poly Club Swim Cal Poly San Luis Obispo 40 athletes 7 sponsors Instagram post Instagram story Product sampling" [ref=e149] [cursor=pointer]:
+            - /url: /teams/cal-poly-club-swim
+            - img "Cal Poly Club Swim" [ref=e151]
+            - generic [ref=e152]:
+              - generic [ref=e153]: Cal Poly Club Swim
+              - generic [ref=e154]: Cal Poly San Luis Obispo
+              - generic [ref=e155]:
+                - generic [ref=e156]:
+                  - img [ref=e157]
+                  - text: 40 athletes
+                - generic [ref=e162]:
+                  - img [ref=e163]
+                  - text: 7 sponsors
+              - generic [ref=e169]:
+                - generic [ref=e170]: Instagram post
+                - generic [ref=e171]: Instagram story
+                - generic [ref=e172]: Product sampling
+      - generic [ref=e173]:
+        - heading "Run a real season of sponsorships." [level=2] [ref=e174]
+        - generic [ref=e175]:
+          - link "I'm a team" [ref=e176] [cursor=pointer]:
+            - /url: /signup/team
+            - text: I'm a team
+            - img [ref=e177]
+          - link "I'm a sponsor" [ref=e179] [cursor=pointer]:
+            - /url: /signup/sponsor
+  - contentinfo [ref=e180]:
+    - generic [ref=e181]:
+      - generic [ref=e182]: © 2026 Spontus
+      - generic [ref=e183]:
+        - link "Home" [ref=e184] [cursor=pointer]:
+          - /url: /
+        - link "For Teams" [ref=e185] [cursor=pointer]:
+          - /url: /signup/team
+        - generic [ref=e186]: For Sponsors
+  - alert [ref=e187]

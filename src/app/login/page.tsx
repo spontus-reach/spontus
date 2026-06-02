@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState, type FormEvent } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,35 +9,37 @@ import { Card } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/supabase";
 
-type Tab = "password" | "magic-link";
-
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
-  const [tab, setTab] = useState<Tab>("password");
+  const searchParams = useSearchParams();
+  const modeParam = searchParams.get("mode");
+  const redirectParam = searchParams.get("redirect");
+  const mode = modeParam === "signup" ? "signup" : "signin";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [magicLinkSent, setMagicLinkSent] = useState(false);
 
   if (!isSupabaseConfigured()) {
     return (
       <div className="mx-auto max-w-md px-6 py-20 text-center">
-        <h1
-          className="text-2xl font-semibold"
-          style={{ color: "#1a1a18" }}
-        >
+        <h1 className="text-2xl font-semibold" style={{ color: "#1a1a18" }}>
           Sign in
         </h1>
         <p className="mt-4 text-sm" style={{ color: "#6b6960" }}>
-          Authentication is not configured yet. Set Supabase environment
-          variables to enable sign in.
+          Authentication is not configured yet. Set Supabase environment variables to
+          enable sign in.
         </p>
       </div>
     );
   }
 
-  async function handlePasswordLogin(e: React.FormEvent) {
+  const afterAuthPath = () => {
+    if (redirectParam && redirectParam.startsWith("/")) return redirectParam;
+    return "/browse";
+  };
+
+  async function handlePasswordLogin(e: FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError("");
@@ -54,31 +56,8 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/");
+    router.push(afterAuthPath());
     router.refresh();
-  }
-
-  async function handleMagicLink(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    const supabase = createClient();
-    const { error: authError } = await supabase.auth.signInWithOtp({
-      email: email.trim(),
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-
-    if (authError) {
-      setError(authError.message);
-      setLoading(false);
-      return;
-    }
-
-    setMagicLinkSent(true);
-    setLoading(false);
   }
 
   return (
@@ -87,143 +66,106 @@ export default function LoginPage() {
         className="text-center text-2xl font-semibold"
         style={{ color: "#1a1a18" }}
       >
-        Sign in to Spontus
+        {mode === "signup" ? "Create your account" : "Sign in to Spontus"}
       </h1>
-      <p
-        className="mt-2 text-center text-sm"
-        style={{ color: "#6b6960" }}
-      >
-        Welcome back. Sign in to manage your team or sponsorships.
+      <p className="mt-2 text-center text-sm" style={{ color: "#6b6960" }}>
+        {redirectParam === "/browse"
+          ? "Sign in to browse listings and apply or post sponsorship opportunities."
+          : mode === "signup"
+            ? "Use your .edu email for teams or work email for sponsors."
+            : "Welcome back. Sign in to manage your team or sponsorships."}
       </p>
 
       <Card
         className="mt-8 p-6"
         style={{ border: "0.5px solid #d5d3cd", background: "white" }}
       >
-        <div className="flex gap-1 rounded-lg p-1" style={{ background: "#f5f4f0" }}>
-          <button
-            type="button"
-            onClick={() => setTab("password")}
-            className="flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors"
-            style={{
-              background: tab === "password" ? "white" : "transparent",
-              color: tab === "password" ? "#1a1a18" : "#6b6960",
-              boxShadow: tab === "password" ? "0 1px 2px rgba(0,0,0,0.05)" : "none",
-            }}
-          >
-            Password
-          </button>
-          <button
-            type="button"
-            onClick={() => setTab("magic-link")}
-            className="flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors"
-            style={{
-              background: tab === "magic-link" ? "white" : "transparent",
-              color: tab === "magic-link" ? "#1a1a18" : "#6b6960",
-              boxShadow: tab === "magic-link" ? "0 1px 2px rgba(0,0,0,0.05)" : "none",
-            }}
-          >
-            Magic link
-          </button>
-        </div>
-
-        {magicLinkSent ? (
-          <div className="mt-6 text-center">
-            <p className="text-sm font-medium" style={{ color: "#1a1a18" }}>
-              Check your email
-            </p>
-            <p className="mt-2 text-sm" style={{ color: "#6b6960" }}>
-              We sent a sign-in link to <strong>{email}</strong>
-            </p>
-            <button
-              type="button"
-              onClick={() => setMagicLinkSent(false)}
-              className="mt-4 text-sm underline"
-              style={{ color: "#1a3a6e" }}
-            >
-              Try a different email
-            </button>
+        <form onSubmit={handlePasswordLogin} className="space-y-4">
+          <div>
+            <label className="text-sm font-medium" style={{ color: "#1a1a18" }}>
+              Email
+            </label>
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              required
+              className="mt-1"
+            />
           </div>
-        ) : tab === "password" ? (
-          <form onSubmit={handlePasswordLogin} className="mt-6 space-y-4">
-            <div>
-              <label className="text-sm font-medium" style={{ color: "#1a1a18" }}>
-                Email
-              </label>
-              <Input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                required
-                className="mt-1"
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium" style={{ color: "#1a1a18" }}>
-                Password
-              </label>
-              <Input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Your password"
-                required
-                className="mt-1"
-              />
-            </div>
-            {error && (
-              <p className="text-sm" style={{ color: "#dc2626" }}>
-                {error}
-              </p>
-            )}
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full"
-              style={{ background: "#1a3a6e", color: "#f0efeb" }}
-            >
-              {loading ? "Signing in..." : "Sign in"}
-            </Button>
-          </form>
-        ) : (
-          <form onSubmit={handleMagicLink} className="mt-6 space-y-4">
-            <div>
-              <label className="text-sm font-medium" style={{ color: "#1a1a18" }}>
-                Email
-              </label>
-              <Input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                required
-                className="mt-1"
-              />
-            </div>
-            {error && (
-              <p className="text-sm" style={{ color: "#dc2626" }}>
-                {error}
-              </p>
-            )}
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full"
-              style={{ background: "#1a3a6e", color: "#f0efeb" }}
-            >
-              {loading ? "Sending link..." : "Send magic link"}
-            </Button>
-          </form>
-        )}
+          <div>
+            <label className="text-sm font-medium" style={{ color: "#1a1a18" }}>
+              Password
+            </label>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Your password"
+              required
+              className="mt-1"
+            />
+          </div>
+          {error && (
+            <p className="text-sm" style={{ color: "#dc2626" }}>
+              {error}
+            </p>
+          )}
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full"
+            style={{ background: "#1a3a6e", color: "#f0efeb" }}
+          >
+            {loading ? "…" : mode === "signup" ? "Sign in" : "Sign in"}
+          </Button>
+        </form>
       </Card>
 
       <p className="mt-6 text-center text-sm" style={{ color: "#6b6960" }}>
-        Don&apos;t have an account?{" "}
-        <Link href="/signup/team" className="underline" style={{ color: "#1a3a6e" }}>
-          Sign up
-        </Link>
+        {mode === "signup" ? (
+          <>
+            Register as a team or sponsor:{" "}
+            <Link href="/signup/team" className="underline" style={{ color: "#1a3a6e" }}>
+              Team signup
+            </Link>
+            {" · "}
+            <Link
+              href="/signup/sponsor"
+              className="underline"
+              style={{ color: "#1a3a6e" }}
+            >
+              Sponsor signup
+            </Link>
+          </>
+        ) : (
+          <>
+            New here?{" "}
+            <Link
+              href="/login?mode=signup"
+              className="underline"
+              style={{ color: "#1a3a6e" }}
+            >
+              Create an account
+            </Link>
+          </>
+        )}
       </p>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="mx-auto max-w-md px-6 py-20 text-center text-sm text-[#6b6960]">
+          Loading…
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }
