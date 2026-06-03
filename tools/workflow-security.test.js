@@ -98,6 +98,30 @@ jobs:
   );
 });
 
+test("allows pull_request_target checkout of the trusted base commit", () => {
+  const issues = lintWorkflowSecurity(`name: Metadata
+
+on:
+  pull_request_target:
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: \${{ github.event.pull_request.base.sha }}
+      - run: node tools/pr-review-hints.js pr.json changed-files.txt
+`);
+
+  assert.deepEqual(issues, []);
+});
+
 test("allows pull_request_target metadata-only advisory workflow", () => {
   const issues = lintWorkflowSecurity(`name: Advisory
 

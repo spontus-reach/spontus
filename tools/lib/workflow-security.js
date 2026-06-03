@@ -30,6 +30,15 @@ function isTrustedTaggedAction(action) {
   );
 }
 
+function checksOutPullRequestBaseSha(content) {
+  return (
+    /uses:\s*actions\/checkout@/m.test(content) &&
+    /ref:\s*\$\{\{\s*github\.event\.pull_request\.base\.sha\s*\}\}/m.test(
+      content,
+    )
+  );
+}
+
 function lintWorkflowSecurity(content, file = "workflow.yml") {
   const issues = [];
 
@@ -69,7 +78,11 @@ function lintWorkflowSecurity(content, file = "workflow.yml") {
   }
 
   const pullRequestTarget = content.match(/^\s*pull_request_target:\s*$/m);
-  if (pullRequestTarget && /uses:\s*actions\/checkout@/m.test(content)) {
+  if (
+    pullRequestTarget &&
+    /uses:\s*actions\/checkout@/m.test(content) &&
+    !checksOutPullRequestBaseSha(content)
+  ) {
     addIssue(
       issues,
       content,
@@ -83,6 +96,7 @@ function lintWorkflowSecurity(content, file = "workflow.yml") {
   if (
     pullRequestTarget &&
     /\brun:\s*(?:\||[^\n]*)/m.test(content) &&
+    !checksOutPullRequestBaseSha(content) &&
     !/gh api --paginate "repos\/\$\{GH_REPO\}\/pulls\/\$\{PR_NUMBER\}\/files"/.test(
       content,
     )
@@ -149,6 +163,7 @@ function lintWorkflowSecurity(content, file = "workflow.yml") {
 }
 
 module.exports = {
+  checksOutPullRequestBaseSha,
   isTrustedTaggedAction,
   lintWorkflowSecurity,
 };

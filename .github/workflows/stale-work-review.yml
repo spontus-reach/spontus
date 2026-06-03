@@ -1,0 +1,81 @@
+name: Stale Work Review
+
+on:
+  schedule:
+    - cron: "0 17 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Advisory stale work review
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Find stale work
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          gh pr list --state open --limit 100 --json number,title,updatedAt,isDraft,labels > prs.json
+          gh issue list --state open --label "needs-triage" --limit 100 --json number,title,updatedAt,labels > issues.json
+          node tools/stale-work-review.js prs.json issues.json > stale-work.json
+
+      - name: Label and comment stale work
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          gh label create "stale-review" --color "cfd3d7" --description "Needs stale work follow-up" 2>/dev/null || true
+
+          count="$(node -e "const r=require('./stale-work.json'); console.log(r.items.length)")"
+          if [[ "$count" == "0" ]]; then
+            echo "No stale work found." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          node - <<'NODE'
+          const fs = require("fs");
+          const result = require("./stale-work.json");
+          for (const item of result.items) {
+            fs.writeFileSync(`stale-${item.number}.md`, item.comment);
+          }
+          NODE
+
+          node -e "const r=require('./stale-work.json'); for (const i of r.items) console.log(i.number)" | while read -r number; do
+            gh issue edit "$number" --add-label "stale-review"
+            existing_comment_id="$(
+              gh api "repos/${GH_REPO}/issues/${number}/comments" \
+                --jq '.[] | select(.body | contains("<!-- spontus-stale-work-review -->")) | .id' \
+                | head -n 1
+            )"
+            if [[ -n "${existing_comment_id:-}" ]]; then
+              gh api --method PATCH "repos/${GH_REPO}/issues/comments/${existing_comment_id}" \
+                --field body="$(cat "stale-${number}.md")" >/dev/null
+            else
+              gh issue comment "$number" --body-file "stale-${number}.md"
+            fi
+            echo "- Updated #${number}" >> "$GITHUB_STEP_SUMMARY"
+          done
