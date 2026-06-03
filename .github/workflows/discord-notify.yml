@@ -71,16 +71,31 @@ jobs:
         run: |
           set -euo pipefail
 
-          webhook_url="${DISCORD_WEBHOOK_URL:-}"
+          is_discord_webhook_url() {
+            [[ "$1" =~ ^https://(discord|discordapp)\.com/api/webhooks/[0-9]+/.+ ]]
+          }
+
+          webhook_url=""
           if [[ "${EVENT_NAME}" == "discussion_comment" ]]; then
-            webhook_url="${DISCORD_DAILY_UPDATES_WEBHOOK_URL:-}"
+            if is_discord_webhook_url "${DISCORD_DAILY_UPDATES_WEBHOOK_URL:-}"; then
+              webhook_url="${DISCORD_DAILY_UPDATES_WEBHOOK_URL}"
+            else
+              echo "::warning::DISCORD_DAILY_UPDATES_WEBHOOK_URL is missing or invalid. Falling back to DISCORD_WEBHOOK_URL."
+              if is_discord_webhook_url "${DISCORD_WEBHOOK_URL:-}"; then
+                webhook_url="${DISCORD_WEBHOOK_URL}"
+              fi
+            fi
+          elif is_discord_webhook_url "${DISCORD_WEBHOOK_URL:-}"; then
+            webhook_url="${DISCORD_WEBHOOK_URL}"
+          else
+            echo "::warning::DISCORD_WEBHOOK_URL is missing or invalid."
           fi
 
           if [[ -z "${webhook_url:-}" ]]; then
             if [[ "${EVENT_NAME}" == "discussion_comment" ]]; then
-              echo "DISCORD_DAILY_UPDATES_WEBHOOK_URL is not configured. Skipping daily update notification."
+              echo "No valid Discord webhook is configured. Skipping daily update notification."
             else
-              echo "DISCORD_WEBHOOK_URL is not configured. Skipping Discord notification."
+              echo "No valid Discord webhook is configured. Skipping Discord notification."
             fi
             exit 0
           fi

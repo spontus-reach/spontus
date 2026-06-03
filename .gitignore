@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+.playwright-mcp/
+login-snapshot.yml
 
 # next.js
 /.next/

@@ -17,7 +17,7 @@ import { LookingForForm } from "@/components/team/looking-for-form";
 import { MediaUploadForm } from "@/components/team/media-upload-form";
 import { VerificationStatusBadge } from "@/components/team/verification-status-badge";
 import { useVerification } from "@/components/providers/verification-provider";
-import { ACTIVE_TEAM_ID } from "@/lib/mock-data";
+import { useIdentity } from "@/components/providers/identity-provider";
 import type { TeamProfileDraft, TeamSponsorshipAsset } from "@/lib/types";
 
 function computeCompleteness(
@@ -143,12 +143,13 @@ export default function TeamOnboardingPage() {
   }, [draft, hostedEventsReviewed]);
 
   const { getTeamById, submitForVerification } = useVerification();
-  const liveTeam = getTeamById(ACTIVE_TEAM_ID);
+  const { activeTeamId } = useIdentity();
+  const liveTeam = getTeamById(activeTeamId ?? "");
   const liveStatus = liveTeam?.verificationStatus ?? draft.verificationStatus ?? "draft";
   const canSubmit = liveStatus === "draft" || liveStatus === "needs_changes";
 
   function handleSubmitForVerification() {
-    submitForVerification("team", ACTIVE_TEAM_ID);
+    if (activeTeamId) submitForVerification("team", activeTeamId);
   }
 
   function handleMarkComplete() {
@@ -185,7 +186,7 @@ export default function TeamOnboardingPage() {
               Submit for verification
             </Button>
           )}
-          <Link href="/team/listings">
+          <Link href="/browse">
             <Button variant="outline" style={{ borderColor: "#d5d3cd" }}>
               Browse listings
             </Button>

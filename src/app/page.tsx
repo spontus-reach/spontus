@@ -13,10 +13,10 @@ const ease = [0.22, 1, 0.36, 1] as const;
 
 function fadeUp(delay = 0) {
   return {
-    initial: { opacity: 0, y: 12 },
+    initial: { opacity: 0, y: 8 },
     whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, margin: "-60px" as const },
-    transition: { duration: 0.7, ease, delay },
+    viewport: { once: true, margin: "-40px" as const },
+    transition: { duration: 0.4, ease, delay },
   };
 }
 
@@ -31,7 +31,7 @@ export default function LandingPage() {
       {triTeam && (
         <section
           className="mx-auto max-w-[1120px] px-6"
-          style={{ paddingBottom: 160 }}
+          style={{ paddingBottom: 88 }}
         >
           <motion.div {...fadeUp(0)} className="grid gap-12 md:grid-cols-12">
             <div className="md:col-span-5">
@@ -180,7 +180,7 @@ export default function LandingPage() {
       {/* Active teams grid */}
       <section
         className="mx-auto max-w-[1120px] px-6"
-        style={{ paddingBottom: 160 }}
+        style={{ paddingBottom: 88 }}
       >
         <motion.div {...fadeUp(0)} className="flex items-end justify-between">
           <h2
@@ -205,7 +205,7 @@ export default function LandingPage() {
       {/* Closing CTA */}
       <section
         className="mx-auto max-w-[1120px] px-6 text-center"
-        style={{ paddingBottom: 160 }}
+        style={{ paddingBottom: 88 }}
       >
         <motion.h2
           {...fadeUp(0)}
@@ -226,7 +226,7 @@ export default function LandingPage() {
           className="mt-10 flex items-center justify-center gap-6"
         >
           <Link
-            href="/signup/team"
+            href="/for-teams"
             className="inline-flex items-center justify-center transition-opacity hover:opacity-90"
             style={{
               height: 48,
@@ -242,7 +242,7 @@ export default function LandingPage() {
             <ArrowRight className="ml-2 h-4 w-4" strokeWidth={2} />
           </Link>
           <Link
-            href="/signup/sponsor"
+            href="/for-brands"
             className="inline-flex items-center justify-center transition-colors hover:bg-[#e8e6e0]"
             style={{
               height: 48,

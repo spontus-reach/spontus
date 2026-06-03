@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Calendar, Mail } from "lucide-react";
 import { VerificationStatusBadge } from "@/components/team/verification-status-badge";
@@ -26,15 +27,8 @@ export function TeamProfileHero({ team }: { team: TeamProfile }) {
             Team photo
           </div>
         )}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(to top, white 0%, rgba(255,255,255,0.4) 40%, transparent 70%)",
-          }}
-        />
       </div>
-      <div className="-mt-16 px-8 pb-8">
+      <div className="px-8 pb-8 pt-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
@@ -80,28 +74,30 @@ export function TeamProfileHero({ team }: { team: TeamProfile }) {
             </div>
           </div>
           <div className="flex gap-2">
-            <button
-              disabled
-              className="inline-flex h-10 cursor-not-allowed items-center justify-center rounded-lg px-4 text-sm font-medium opacity-50"
+            <Link
+              href="/login?mode=signin"
+              className="inline-flex h-10 items-center justify-center rounded-lg px-4 text-sm font-medium transition-colors hover:bg-[#e8e6e0]"
               style={{
                 background: "transparent",
                 border: "0.5px solid #b5b3ab",
                 color: "#1a1a18",
               }}
+              title="Sign in to contact this team"
             >
               <Mail className="mr-1.5 h-4 w-4" /> Contact team
-            </button>
-            <button
-              disabled
-              className="inline-flex h-10 cursor-not-allowed items-center justify-center rounded-lg px-4 text-sm font-medium opacity-50"
+            </Link>
+            <Link
+              href="/login?mode=signin"
+              className="inline-flex h-10 items-center justify-center rounded-lg px-4 text-sm font-medium transition-colors hover:opacity-80"
               style={{
                 background: "transparent",
                 border: "1px solid #1a3a6e",
                 color: "#1a3a6e",
               }}
+              title="Sign in to invite this team to a listing"
             >
               Invite to listing
-            </button>
+            </Link>
           </div>
         </div>
       </div>

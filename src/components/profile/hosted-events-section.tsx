@@ -1,5 +1,14 @@
 import type { TeamEvent } from "@/lib/types";
 
+function formatDate(dateStr: string): string {
+  const d = new Date(dateStr + "T00:00:00");
+  return d.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 export function HostedEventsSection({ events }: { events: TeamEvent[] }) {
   if (events.length === 0) return null;
 
@@ -17,7 +26,7 @@ export function HostedEventsSection({ events }: { events: TeamEvent[] }) {
                 {evt.name}
               </div>
               <div className="text-xs" style={{ color: "#6b6960" }}>
-                {evt.startsOn} &middot; {evt.location}
+                {evt.startsOn ? formatDate(evt.startsOn) : ""} &middot; {evt.location}
               </div>
             </div>
             {evt.expectedAttendance && (

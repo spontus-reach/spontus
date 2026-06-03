@@ -92,7 +92,7 @@ export function ApplicationCard({ application }: { application: Application }) {
 
   const content = (
     <div
-      className="flex items-center gap-4 rounded-lg p-4"
+      className="flex items-center gap-4 rounded-lg p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
       style={{ border: "0.5px solid #d5d3cd", background: "white" }}
     >
       <div

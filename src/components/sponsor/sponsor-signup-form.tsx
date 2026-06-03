@@ -17,9 +17,13 @@ import {
   SPONSOR_INDUSTRY_CATEGORIES,
   SPONSOR_MEMBER_ROLES,
 } from "@/lib/constants";
-import type { SponsorMemberRole } from "@/lib/types";
+import type { SponsorMemberRole, SponsorSignupData } from "@/lib/types";
 
-export function SponsorSignupForm() {
+type SponsorSignupFormProps = {
+  onSubmit?: (data: SponsorSignupData) => void | Promise<void>;
+};
+
+export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps) {
   const router = useRouter();
   const [companyName, setCompanyName] = useState("");
   const [contactName, setContactName] = useState("");
@@ -28,8 +32,22 @@ export function SponsorSignupForm() {
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [industryCategory, setIndustryCategory] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const data: SponsorSignupData = {
+      companyName,
+      contactName,
+      role: role as SponsorMemberRole,
+      email,
+      websiteUrl,
+      industryCategory,
+    };
+
+    if (onSubmit) {
+      await onSubmit(data);
+      return;
+    }
+
     router.push("/sponsor/onboarding");
   }
 

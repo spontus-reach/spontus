@@ -45,7 +45,7 @@ export function ApplicantCard({
 
   return (
     <div
-      className={`rounded-xl p-5 ${isTerminal && application.status === "declined" ? "opacity-60" : ""}`}
+      className={`rounded-xl p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${isTerminal && application.status === "declined" ? "opacity-60" : ""}`}
       style={{ border: "0.5px solid #d5d3cd", background: "white" }}
     >
       <div className="flex items-start gap-4">

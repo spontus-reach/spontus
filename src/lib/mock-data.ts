@@ -352,6 +352,10 @@ export function getSponsorById(id: string): SponsorProfile | undefined {
   return MOCK_SPONSORS.find((s) => s.id === id);
 }
 
+export function getSeedSponsorById(id: string): SponsorProfile | undefined {
+  return [...MOCK_SPONSORS, ...MOCK_SEED_SPONSORS].find((s) => s.id === id);
+}
+
 export function getListingById(id: string): SponsorshipListing | undefined {
   return MOCK_LISTINGS.find((l) => l.id === id);
 }
@@ -391,6 +395,22 @@ export const MOCK_SEED_APPLICATIONS: Application[] = [
     status: 'submitted',
     fitNote:
       'Cal Poly Triathlon matches the endurance audience and can support social content plus product sampling at MTS.',
+    submittedAt: '2026-05-24',
+  },
+  {
+    id: 'app-seed-fluid-rugby',
+    listingId: 'lst-fluid-fall',
+    teamId: 'cp-rugby',
+    status: 'submitted',
+    fitNote:
+      'Strong sideline crowd at home matches. We can offer jersey logos and game-day banners.',
+    submittedAt: '2026-05-23',
+  },
+  {
+    id: 'app-seed-fluid-swim',
+    listingId: 'lst-fluid-fall',
+    teamId: 'cp-swim',
+    status: 'submitted',
     submittedAt: '2026-05-24',
   },
   {

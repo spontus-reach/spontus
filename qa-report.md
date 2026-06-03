@@ -110,3 +110,56 @@ May 28, 2026
 
 ## QA branch
 Full pass run on `chore/qa-full-pass-main-20260528`. Use this branch for any follow-up fixes found during QA without touching `main` until reviewed.
+
+---
+
+# Production QA — spontus.io (May 31, 2026)
+
+## Environment
+- **URL:** `https://spontus.io` (also checked `https://spontus.netlify.app` — nav behavior matches)
+- **Branch:** `main` (`c8fb868` after PR #27 — Admin removed from nav)
+- **Browser:** Playwright MCP; desktop `1440×900`, mobile `390×844`
+- **Supabase:** Configured on production (auth + signup API active)
+
+## Demo readiness summary
+- **Ready to show publicly:** **Yes** — landing, listings, team profiles, signup/login UI, listing detail with Apply CTA.
+- **Ready for live signups at volume:** **Caution** — Supabase **email rate limit** hit during automated QA; real users may see `email rate limit exceeded` if many signups are attempted in a short window.
+- **Admin:** Removed from all navigation (PR #27). Internal demo at `/admin/verification` via direct URL only.
+- **Applications / applicants:** Still empty on production if DB not seeded (acceptable for browse-only demos).
+
+## Code changes this pass
+- **PR #27** merged: `fix(nav): remove Admin from public navigation` — [`top-nav.tsx`](src/components/layout/top-nav.tsx), [`mobile-nav.tsx`](src/components/layout/mobile-nav.tsx)
+
+## Route results (logged out, cookies cleared)
+
+| Route | Result | Notes |
+| --- | --- | --- |
+| `/` | Pass | Hero, CTAs, team grid; **no Admin** in nav |
+| `/team/listings` | Pass | Listings feed loads |
+| `/team/listings/lst-fluid-fall` | Pass | Apply CTA present |
+| `/teams/cal-poly-triathlon` | Pass | Public profile |
+| `/teams/cal-poly-mens-rugby` | Pass | Public profile |
+| `/signup/team` | Pass with note | Form validates; submit returned **email rate limit exceeded** (Supabase) |
+| `/signup/sponsor` | Pass | Form renders; submit disabled until all fields valid (not submitted — avoid rate limit) |
+| `/login` | Pass | Password + Magic link tabs; invalid password shows error |
+| `/team/listings/lst-does-not-exist` | Pass | HTTP 404 |
+| `/admin/verification` (direct URL) | Pass | Verification dashboard loads; **0 Admin links** on home nav after visit |
+
+## Flow results
+
+| Flow | Result | Notes |
+| --- | --- | --- |
+| Nav — no Admin (desktop) | Pass | For Teams, For Sponsors, Browse Listings only |
+| Nav — auth area (desktop) | Pass | Sign in + Get started (brief `...` while auth loads) |
+| Mobile hamburger | Pass | Opens drawer with Browse Listings; **no Admin** |
+| Login — invalid password | Pass | Error message shown (no crash) |
+| Login — magic link | Partial | **Rate limited** during QA (`email rate limit exceeded`) |
+| Team signup submit | Partial | Form enabled and submitted; blocked by Supabase rate limit before `/team/onboarding` |
+| Sponsor signup UI | Pass | All fields visible; submit correctly disabled when incomplete |
+| Admin direct URL | Pass | `/admin/verification` works; not linked from nav |
+| spontus.io vs netlify.app | Pass | Both domains: no Admin in nav when logged out |
+
+## Recommendation (May 31)
+- **Show to people:** Use spontus.io for browse/listings/profiles/onboarding demos without mentioning Admin in nav.
+- **Internal verification demo:** Bookmark `https://spontus.io/admin/verification`.
+- **Before a signup-heavy event:** Raise Supabase auth email rate limits or disable confirm-email for test window; seed `applications` if demoing accept/decline flows.

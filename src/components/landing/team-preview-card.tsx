@@ -50,18 +50,28 @@ export function TeamPreviewCard({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 8 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.7, ease, delay: index * 0.06 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.4, ease, delay: index * 0.04 }}
     >
       <Link
         href={`/teams/${team.slug}`}
-        className="group block overflow-hidden text-left"
+        className="group block overflow-hidden text-left transition-all duration-300"
         style={{
           background: "#e8e6e0",
           border: "0.5px solid #d5d3cd",
           borderRadius: 14,
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.boxShadow = "0 8px 30px rgba(0,0,0,0.08)";
+          e.currentTarget.style.borderColor = "#b5b3ab";
+          e.currentTarget.style.transform = "translateY(-2px)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.boxShadow = "none";
+          e.currentTarget.style.borderColor = "#d5d3cd";
+          e.currentTarget.style.transform = "translateY(0)";
         }}
       >
         <div
