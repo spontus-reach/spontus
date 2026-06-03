@@ -29,3 +29,16 @@
 ## Result
 
 Pass. Clear filters resets the admin verification queue to the broad all-status view, and status, side, and search filters continue to work after reset.
+
+## Rebase Validation
+
+**Date:** 2026-06-02
+**Base:** `origin/main` at `3736a394`
+
+After rebasing `fix/admin-verification-clear-filters` onto the latest `origin/main`, the focused verification-filter test coverage still passes and confirms:
+
+- The default filter state uses status `all`.
+- Verified, submitted for verification, needs changes, and suspended entities remain included in the broad queue.
+- Status, marketplace-side, and search filters continue to narrow the queue after reset.
+
+Interactive browser QA was not rerun during this rebase validation because browser automation was unavailable in the session. The original manual QA pass above remains the recorded route-level browser verification for this issue.
