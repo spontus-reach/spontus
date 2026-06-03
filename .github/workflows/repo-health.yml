@@ -30,7 +30,7 @@ jobs:
         run: npx --yes markdownlint-cli2
 
       - name: Check links
-        uses: lycheeverse/lychee-action@v2
+        uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411
         with:
           args: --config .lychee.toml "**/*.md"
         env:

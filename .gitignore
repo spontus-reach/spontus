@@ -37,8 +37,11 @@ yarn-error.log*
 .env*
 !.env.example
 
-# editor / tooling
-.cursor/
+# local agent/debug artifacts
+dev_output.log
+fcc-server-*.log
+typecheck_*.log
+typecheck_*.txt
 
 # vercel
 .vercel

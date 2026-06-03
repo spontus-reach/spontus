@@ -1,0 +1,44 @@
+name: Workflow Security Review
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/**"
+      - "tools/workflow-security.js"
+      - "tools/workflow-security.test.js"
+      - "tools/lib/workflow-security.js"
+      - "package.json"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/**"
+      - "tools/workflow-security.js"
+      - "tools/workflow-security.test.js"
+      - "tools/lib/workflow-security.js"
+      - "package.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Workflow security review
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run workflow security review
+        run: npm run security:workflows

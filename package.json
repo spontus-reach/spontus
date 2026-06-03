@@ -9,6 +9,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "node --test",
+    "security:workflows": "node tools/workflow-security.js",
     "validate:skills": "node tools/validate-skills.js"
   },
   "dependencies": {

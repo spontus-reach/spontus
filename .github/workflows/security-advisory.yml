@@ -1,0 +1,107 @@
+name: Security Advisory Labels
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  advisory:
+    name: Advisory security review
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Review changed files
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          gh api --paginate "repos/${GH_REPO}/pulls/${PR_NUMBER}/files" \
+            --jq '.[].filename' > changed-files.txt
+
+          labels=()
+          sensitive_files=()
+
+          while IFS= read -r file; do
+            case "$file" in
+              .github/*)
+                labels+=("workflow-risk" "security-review")
+                sensitive_files+=("$file")
+                ;;
+              package.json|package-lock.json|next.config.ts|.env.example|SECURITY.md|.gitleaks.toml)
+                labels+=("security-review")
+                sensitive_files+=("$file")
+                ;;
+              src/lib/supabase*|src/lib/auth*|src/app/api/*|supabase/*)
+                labels+=("auth" "security-review")
+                sensitive_files+=("$file")
+                ;;
+            esac
+          done < changed-files.txt
+
+          if [[ "${#labels[@]}" -eq 0 ]]; then
+            echo "No security-sensitive files changed." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          unique_labels="$(printf '%s\n' "${labels[@]}" | sort -u | paste -sd, -)"
+
+          IFS=',' read -ra label_array <<< "$unique_labels"
+          for label in "${label_array[@]}"; do
+            case "$label" in
+              security-review)
+                gh label create "$label" --color "d73a4a" --description "Security-sensitive change needs explicit review" 2>/dev/null || true
+                ;;
+              workflow-risk)
+                gh label create "$label" --color "b60205" --description "GitHub workflow or automation risk" 2>/dev/null || true
+                ;;
+              auth)
+                gh label create "$label" --color "5319e7" --description "Authentication, authorization, or access-control change" 2>/dev/null || true
+                ;;
+            esac
+          done
+
+          gh issue edit "$PR_NUMBER" --add-label "$unique_labels"
+
+          {
+            echo "Security-sensitive files changed:"
+            for file in "${sensitive_files[@]}"; do
+              safe_file="${file//$'\r'/ }"
+              safe_file="${safe_file//$'\n'/ }"
+              safe_file="${safe_file//\`/\'}"
+              printf -- "- `%s`\n" "$safe_file"
+            done
+            echo
+            echo "Please make sure the PR Verification section explains the security review performed, including workflow/token permissions, dependency risk, auth/access-control impact, and secret-handling impact where relevant."
+          } > advisory-comment.md
+
+          existing_comment_id="$(
+            gh api "repos/${GH_REPO}/issues/${PR_NUMBER}/comments" \
+              --jq '.[] | select(.body | contains("Security-sensitive files changed:")) | .id' \
+              | head -n 1
+          )"
+
+          if [[ -n "${existing_comment_id:-}" ]]; then
+            gh api --method PATCH "repos/${GH_REPO}/issues/comments/${existing_comment_id}" \
+              --field body="$(cat advisory-comment.md)" >/dev/null
+          else
+            gh issue comment "$PR_NUMBER" --body-file advisory-comment.md
+          fi
+
+          cat advisory-comment.md >> "$GITHUB_STEP_SUMMARY"

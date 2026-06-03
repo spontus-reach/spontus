@@ -52,7 +52,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Run lychee
-        uses: lycheeverse/lychee-action@v2
+        uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411
         with:
           args: --config .lychee.toml "**/*.md"
         env:

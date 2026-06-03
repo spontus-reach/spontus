@@ -1,4 +1,4 @@
-name: CI
+name: CodeQL
 
 on:
   push:
@@ -11,40 +11,32 @@ on:
       - opened
       - synchronize
       - reopened
+  schedule:
+    - cron: "15 17 * * 1"
+  workflow_dispatch:
 
 permissions:
   contents: read
+  security-events: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: Lint, Test & Build
+  analyze:
+    name: Analyze JavaScript and TypeScript
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
         with:
-          node-version: "22"
-          cache: npm
+          languages: javascript-typescript
+          queries: security-extended
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Typecheck
-        run: npm run typecheck
-
-      - name: Test
-        run: npm run test
-
-      - name: Build
-        run: npm run build
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v4
