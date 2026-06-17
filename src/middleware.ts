@@ -1,9 +1,28 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { isPlatformAdminEmail } from "@/lib/admin-access";
 
 export async function middleware(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const pathname = request.nextUrl.pathname;
+
+  const authCode = request.nextUrl.searchParams.get("code");
+  const tokenHash = request.nextUrl.searchParams.get("token_hash");
+  if (
+    (authCode || tokenHash) &&
+    !pathname.startsWith("/auth/callback")
+  ) {
+    const callbackUrl = request.nextUrl.clone();
+    callbackUrl.pathname = "/auth/callback";
+    return NextResponse.redirect(callbackUrl);
+  }
+
+  if (pathname.startsWith("/admin")) {
+    if (!supabaseUrl || !supabaseAnonKey) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+  }
 
   if (!supabaseUrl || !supabaseAnonKey) {
     return NextResponse.next({ request });
@@ -28,7 +47,21 @@ export async function middleware(request: NextRequest) {
     },
   });
 
-  await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (pathname.startsWith("/admin")) {
+    if (!user) {
+      const loginUrl = new URL("/login", request.url);
+      loginUrl.searchParams.set("mode", "signin");
+      loginUrl.searchParams.set("redirect", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+    if (!isPlatformAdminEmail(user.email)) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+  }
 
   return supabaseResponse;
 }

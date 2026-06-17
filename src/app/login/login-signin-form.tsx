@@ -11,14 +11,17 @@ import { isSupabaseConfigured } from "@/lib/supabase";
 
 type LoginSignInFormProps = {
   redirect?: string | null;
+  initialError?: string | null;
 };
 
-export function LoginSignInForm({ redirect }: LoginSignInFormProps) {
+export function LoginSignInForm({ redirect, initialError }: LoginSignInFormProps) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(initialError ?? "");
+  const [resetSent, setResetSent] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
 
   if (!isSupabaseConfigured()) {
     return (
@@ -48,6 +51,7 @@ export function LoginSignInForm({ redirect }: LoginSignInFormProps) {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setResetSent(false);
 
     const supabase = createClient();
     const { error: authError } = await supabase.auth.signInWithPassword({
@@ -63,6 +67,33 @@ export function LoginSignInForm({ redirect }: LoginSignInFormProps) {
 
     router.push(afterAuthPath());
     router.refresh();
+  }
+
+  async function handleForgotPassword() {
+    const trimmed = email.trim();
+    if (!trimmed) {
+      setError("Enter your email above, then click forgot password.");
+      return;
+    }
+
+    setResetLoading(true);
+    setError("");
+    setResetSent(false);
+
+    const supabase = createClient();
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(
+      trimmed,
+      {
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent("/auth/update-password")}`,
+      }
+    );
+
+    setResetLoading(false);
+    if (resetError) {
+      setError(resetError.message);
+      return;
+    }
+    setResetSent(true);
   }
 
   return (
@@ -98,9 +129,20 @@ export function LoginSignInForm({ redirect }: LoginSignInFormProps) {
             />
           </div>
           <div>
-            <label className="text-sm font-medium" style={{ color: "#1a1a18" }}>
-              Password
-            </label>
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium" style={{ color: "#1a1a18" }}>
+                Password
+              </label>
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                disabled={resetLoading}
+                className="text-xs underline"
+                style={{ color: "#1a3a6e" }}
+              >
+                {resetLoading ? "Sending…" : "Forgot password?"}
+              </button>
+            </div>
             <Input
               type="password"
               value={password}
@@ -113,6 +155,11 @@ export function LoginSignInForm({ redirect }: LoginSignInFormProps) {
           {error && (
             <p className="text-sm" style={{ color: "#dc2626" }}>
               {error}
+            </p>
+          )}
+          {resetSent && (
+            <p className="text-sm" style={{ color: "#0F6E56" }}>
+              Password reset email sent. Check your inbox.
             </p>
           )}
           <Button
