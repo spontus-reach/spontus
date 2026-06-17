@@ -9,10 +9,12 @@ import { isSupabaseConfigured } from "@/lib/supabase";
 export default function TeamSignupPage() {
   const router = useRouter();
   const [authError, setAuthError] = useState("");
+  const [authNotice, setAuthNotice] = useState("");
 
   async function handleSubmit(data: {
     fullName: string;
     email: string;
+    password: string;
     university: string;
     teamName: string;
     sport: string;
@@ -24,7 +26,7 @@ export default function TeamSignupPage() {
       const supabase = createClient();
       const { error } = await supabase.auth.signUp({
         email: data.email,
-        password: crypto.randomUUID(),
+        password: data.password,
         options: {
           data: {
             full_name: data.fullName,
@@ -38,6 +40,12 @@ export default function TeamSignupPage() {
         setAuthError(error.message);
         return;
       }
+
+      setAuthError("");
+      setAuthNotice(
+        "Check your email to confirm your account. After confirming, sign in with the password you chose."
+      );
+      return;
     }
 
     router.push("/team/onboarding");
@@ -46,6 +54,14 @@ export default function TeamSignupPage() {
   return (
     <>
       <TeamSignupForm onSubmit={handleSubmit} />
+      {authNotice && (
+        <p
+          className="mx-auto mt-4 max-w-md text-center text-sm"
+          style={{ color: "#0F6E56" }}
+        >
+          {authNotice}
+        </p>
+      )}
       {authError && (
         <p
           className="mx-auto mt-4 max-w-md text-center text-sm"

@@ -9,12 +9,14 @@ import { isSupabaseConfigured } from "@/lib/supabase";
 export default function SponsorSignupPage() {
   const router = useRouter();
   const [authError, setAuthError] = useState("");
+  const [authNotice, setAuthNotice] = useState("");
 
   async function handleSubmit(data: {
     companyName: string;
     contactName: string;
     role: string;
     email: string;
+    password: string;
     websiteUrl: string;
     industryCategory: string;
   }) {
@@ -24,7 +26,7 @@ export default function SponsorSignupPage() {
       const supabase = createClient();
       const { error } = await supabase.auth.signUp({
         email: data.email,
-        password: crypto.randomUUID(),
+        password: data.password,
         options: {
           data: {
             full_name: data.contactName,
@@ -38,6 +40,12 @@ export default function SponsorSignupPage() {
         setAuthError(error.message);
         return;
       }
+
+      setAuthError("");
+      setAuthNotice(
+        "Check your email to confirm your account. After confirming, sign in with the password you chose."
+      );
+      return;
     }
 
     router.push("/sponsor/onboarding");
@@ -46,6 +54,14 @@ export default function SponsorSignupPage() {
   return (
     <>
       <SponsorSignupForm onSubmit={handleSubmit} />
+      {authNotice && (
+        <p
+          className="mx-auto mt-4 max-w-md text-center text-sm"
+          style={{ color: "#0F6E56" }}
+        >
+          {authNotice}
+        </p>
+      )}
       {authError && (
         <p
           className="mx-auto mt-4 max-w-md text-center text-sm"

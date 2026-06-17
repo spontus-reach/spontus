@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SpontusLogo } from "@/components/brand/spontus-logo";
 
 export function Footer() {
   return (
@@ -10,12 +11,7 @@ export function Footer() {
         <div className="grid gap-10 md:grid-cols-2">
           {/* Brand column */}
           <div>
-            <div
-              className="flex items-center gap-2"
-              style={{ fontSize: 16, fontWeight: 600, color: "#1a1a18" }}
-            >
-              <span>Spontus</span>
-            </div>
+            <SpontusLogo variant="lockup" height={26} />
             <p className="mt-3" style={{ lineHeight: 1.6, maxWidth: 280 }}>
               The sponsorship marketplace for college club sports. Connecting
               verified teams with brands that want to reach them.

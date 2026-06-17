@@ -16,19 +16,9 @@ export default function AdminVerificationPage() {
         >
           Verification
         </h1>
-        <span
-          className="rounded-full px-2.5 py-0.5 text-[10px] font-medium"
-          style={{ background: "#e8e6e0", color: "#6b6960" }}
-        >
-          Internal demo
-        </span>
       </div>
-      <p className="mb-1" style={{ color: "#6b6960", fontSize: 14 }}>
+      <p className="mb-8" style={{ color: "#6b6960", fontSize: 14 }}>
         Review teams and sponsors before they participate in the marketplace.
-      </p>
-      <p className="mb-8 text-xs" style={{ color: "#8a8880" }}>
-        Demo-only admin view. Real access control comes later. State resets on
-        refresh.
       </p>
 
       <VerificationDashboard />
