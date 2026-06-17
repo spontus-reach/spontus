@@ -5,12 +5,14 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Menu, X, LogOut } from "lucide-react";
 import { useAuth } from "@/components/providers/auth-provider";
+import { useIsAdmin } from "@/hooks/use-is-admin";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const { user, signOut } = useAuth();
+  const { isAdmin } = useIsAdmin();
 
   function close() {
     setOpen(false);
@@ -98,6 +100,15 @@ export function MobileNav() {
                   onClick={close}
                 >
                   My Applications
+                </NavLink>
+              )}
+              {isAdmin && (
+                <NavLink
+                  href="/admin/verification"
+                  active={pathname.startsWith("/admin")}
+                  onClick={close}
+                >
+                  Admin
                 </NavLink>
               )}
             </nav>

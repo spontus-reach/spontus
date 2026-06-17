@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { X, MapPin, Globe, Users, Calendar } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -96,6 +97,15 @@ export function VerificationDetailPanel({
               <TeamDetails team={entity} />
             ) : (
               <SponsorDetails sponsor={entity as SponsorProfile} />
+            )}
+            {entityType === "team" && isTeam(entity) && (
+              <Link
+                href={`/admin/teams/${entity.slug}/edit`}
+                className="mt-4 inline-flex text-sm underline"
+                style={{ color: "#1a3a6e" }}
+              >
+                Edit team profile
+              </Link>
             )}
           </Card>
 

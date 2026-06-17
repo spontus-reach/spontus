@@ -24,6 +24,7 @@ interface SponsorSignupFormProps {
     contactName: string;
     role: string;
     email: string;
+    password: string;
     websiteUrl: string;
     industryCategory: string;
   }) => void;
@@ -68,9 +69,12 @@ export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps = {}) {
   const [contactName, setContactName] = useState("");
   const [role, setRole] = useState<SponsorMemberRole | "">("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [industryCategory, setIndustryCategory] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   function handleFormSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -81,13 +85,22 @@ export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps = {}) {
     }
     // Check if there's no error after setting it (using the computed error variable)
     if (email && !getWorkEmailValidationError(email)) {
-      // Call the onSubmit handler if provided
+      if (password.length < 8) {
+        setPasswordError("Password must be at least 8 characters.");
+        return;
+      }
+      if (password !== confirmPassword) {
+        setPasswordError("Passwords do not match.");
+        return;
+      }
+      setPasswordError("");
       if (onSubmit) {
         onSubmit({
           companyName,
           contactName,
           role,
           email,
+          password,
           websiteUrl,
           industryCategory
         });
@@ -96,7 +109,14 @@ export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps = {}) {
   }
 
   const isValid =
-    companyName && contactName && role && email && websiteUrl && industryCategory;
+    companyName &&
+    contactName &&
+    role &&
+    email &&
+    password.length >= 8 &&
+    confirmPassword.length >= 8 &&
+    websiteUrl &&
+    industryCategory;
 
   return (
     <div className="mx-auto max-w-xl px-6 py-16">
@@ -173,6 +193,35 @@ export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps = {}) {
             />
             {emailError && (
               <p className="mt-1 text-xs text-destructive">{emailError}</p>
+            )}
+          </Field>
+
+          <Field label="Password">
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (passwordError) setPasswordError("");
+              }}
+              placeholder="At least 8 characters"
+              autoComplete="new-password"
+            />
+          </Field>
+
+          <Field label="Confirm password">
+            <Input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+                if (passwordError) setPasswordError("");
+              }}
+              placeholder="Repeat password"
+              autoComplete="new-password"
+            />
+            {passwordError && (
+              <p className="mt-1 text-xs text-destructive">{passwordError}</p>
             )}
           </Field>
 
