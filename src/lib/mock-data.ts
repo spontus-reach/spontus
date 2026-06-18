@@ -78,6 +78,7 @@ export const MOCK_TEAMS: TeamProfile[] = [
     verificationStatus: 'verified',
     profileCompleteness: 92,
     photo: '/teams/cal-poly-triathlon.png',
+    bannerImage: '/teams/cal-poly-triathlon-banner.png',
     pastSponsors: [
       'Sailfish',
       'Garmin',
@@ -155,6 +156,8 @@ export const MOCK_TEAMS: TeamProfile[] = [
     verificationStatus: 'submitted_for_verification',
     profileCompleteness: 68,
     photo: '/teams/cal-poly-mens-soccer.png',
+    bannerImage: '/teams/cal-poly-mens-soccer-banner.png',
+    bannerZoom: 1.25,
     pastSponsors: [],
   },
   {
@@ -190,6 +193,7 @@ export const MOCK_TEAMS: TeamProfile[] = [
     verificationStatus: 'verified',
     profileCompleteness: 55,
     photo: '/teams/cal-poly-mens-rugby.png',
+    bannerImage: '/teams/cal-poly-mens-rugby-banner.png',
     pastSponsors: ['Rhino Rugby', 'SLO Brew', 'Central Coast Physical Therapy', 'Firestone Grill'],
   },
   {
@@ -233,6 +237,8 @@ export const MOCK_TEAMS: TeamProfile[] = [
     verificationStatus: 'submitted_for_verification',
     profileCompleteness: 60,
     photo: '/teams/cal-poly-club-swim.png',
+    bannerImage: '/teams/cal-poly-club-swim-banner.png',
+    bannerZoom: 1.25,
     pastSponsors: [
       'TYR',
       'Speedo',
