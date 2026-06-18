@@ -109,11 +109,11 @@ export const MOCK_TEAMS: TeamProfile[] = [
       'WCSA regular season (Fall), NIRSA Regional Championship (November), NIRSA National Championship qualifier',
     season: 'Fall',
     websiteUrl: 'https://calpoly.campuslabs.com/engage/organization/menssoccer',
-    instagramUrl: 'https://www.instagram.com/calpolymsoccer/',
+    instagramUrl: 'https://www.instagram.com/calpolysoccerclub/',
     livestreamUrl: 'https://veo.co/calpolymenssoccer',
-    combinedReach: 9324,
+    combinedReach: 2261,
     socialLinks: [
-      { platform: 'Instagram', url: 'https://www.instagram.com/calpolymsoccer/', followerCount: 9324 },
+      { platform: 'Instagram', url: 'https://www.instagram.com/calpolysoccerclub/', followerCount: 2261 },
     ],
     events: [
       {
@@ -230,7 +230,7 @@ export const MOCK_TEAMS: TeamProfile[] = [
     preferredSponsorCategories: ['Apparel', 'Nutrition', 'Recovery/Fitness', 'Equipment'],
     excludedSponsorCategories: ['Supplements we cannot verify', 'Tobacco/Nicotine'],
     dealTypesInterestedIn: ['Free product for team use', 'Discount codes', 'Gift cards'],
-    verificationStatus: 'needs_changes',
+    verificationStatus: 'submitted_for_verification',
     profileCompleteness: 60,
     photo: 'https://images.unsplash.com/photo-1519315901367-f34ff9154487?auto=format&fit=crop&w=1200&q=70',
     pastSponsors: [
