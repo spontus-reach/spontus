@@ -19,13 +19,10 @@ export const MOCK_TEAMS: TeamProfile[] = [
       'West Regional Championships (April), USAT Collegiate Nationals (April), March Triathlon Series — host (March)',
     season: 'Year-round',
     websiteUrl: 'https://calpolytriathlon.com',
-    instagramUrl: 'https://instagram.com/calpolytriathlon',
-    tiktokUrl: 'https://tiktok.com/@calpolytri',
-    combinedReach: 8000,
+    instagramUrl: 'https://www.instagram.com/cptri/',
+    combinedReach: 2234,
     socialLinks: [
-      { platform: 'Instagram', url: 'https://instagram.com/calpolytriathlon', followerCount: 3200 },
-      { platform: 'TikTok', url: 'https://tiktok.com/@calpolytri', followerCount: 1800 },
-      { platform: 'Newsletter', url: '', followerCount: 640 },
+      { platform: 'Instagram', url: 'https://www.instagram.com/cptri/', followerCount: 2234 },
     ],
     events: [
       {
@@ -112,13 +109,11 @@ export const MOCK_TEAMS: TeamProfile[] = [
       'WCSA regular season (Fall), NIRSA Regional Championship (November), NIRSA National Championship qualifier',
     season: 'Fall',
     websiteUrl: 'https://calpoly.campuslabs.com/engage/organization/menssoccer',
-    instagramUrl: 'https://instagram.com/cpmenssoccer',
+    instagramUrl: 'https://www.instagram.com/calpolysoccerclub/',
     livestreamUrl: 'https://veo.co/calpolymenssoccer',
-    combinedReach: 12000,
+    combinedReach: 2261,
     socialLinks: [
-      { platform: 'Instagram', url: 'https://instagram.com/cpmenssoccer', followerCount: 2100 },
-      { platform: 'Veo Livestream', url: 'https://veo.co/calpolymenssoccer', followerCount: 8400 },
-      { platform: 'TikTok', url: 'https://tiktok.com/@cpmenssoccer', followerCount: 1500 },
+      { platform: 'Instagram', url: 'https://www.instagram.com/calpolysoccerclub/', followerCount: 2261 },
     ],
     events: [
       {
@@ -176,10 +171,10 @@ export const MOCK_TEAMS: TeamProfile[] = [
       'D1A club rugby competing in the Pacific Western Rugby Conference. Home matches at Mustang Field draw consistent sideline crowds. Strong alumni donor base and local business partnerships.',
     league: 'Pacific Western Rugby Conference',
     season: 'Spring',
-    combinedReach: 4200,
+    instagramUrl: 'https://www.instagram.com/calpolyrugby/',
+    combinedReach: 4801,
     socialLinks: [
-      { platform: 'Instagram', url: 'https://instagram.com/cpmenrugby', followerCount: 3200 },
-      { platform: 'TikTok', url: '', followerCount: 1000 },
+      { platform: 'Instagram', url: 'https://www.instagram.com/calpolyrugby/', followerCount: 4801 },
     ],
     events: [],
     hostedEvents: [],
@@ -211,9 +206,10 @@ export const MOCK_TEAMS: TeamProfile[] = [
       'Travels to CSCA Nationals every spring. 20+ past product sponsors over the last 4 seasons. Great for sampling and gear — we have a captive audience of 40 athletes who train daily.',
     league: 'College Swimming Club Association',
     season: 'Fall & Spring',
-    combinedReach: 3200,
+    instagramUrl: 'https://www.instagram.com/cpswimclub/',
+    combinedReach: 1857,
     socialLinks: [
-      { platform: 'Instagram', url: 'https://instagram.com/cpclubswim', followerCount: 2600 },
+      { platform: 'Instagram', url: 'https://www.instagram.com/cpswimclub/', followerCount: 1857 },
     ],
     events: [
       {
@@ -234,7 +230,7 @@ export const MOCK_TEAMS: TeamProfile[] = [
     preferredSponsorCategories: ['Apparel', 'Nutrition', 'Recovery/Fitness', 'Equipment'],
     excludedSponsorCategories: ['Supplements we cannot verify', 'Tobacco/Nicotine'],
     dealTypesInterestedIn: ['Free product for team use', 'Discount codes', 'Gift cards'],
-    verificationStatus: 'needs_changes',
+    verificationStatus: 'submitted_for_verification',
     profileCompleteness: 60,
     photo: '/teams/cal-poly-club-swim.png',
     pastSponsors: [
