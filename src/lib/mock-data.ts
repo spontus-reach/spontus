@@ -80,7 +80,7 @@ export const MOCK_TEAMS: TeamProfile[] = [
     ],
     verificationStatus: 'verified',
     profileCompleteness: 92,
-    photo: 'https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&w=1200&q=70',
+    photo: '/teams/cal-poly-triathlon.png',
     pastSponsors: [
       'Sailfish',
       'Garmin',
@@ -159,7 +159,7 @@ export const MOCK_TEAMS: TeamProfile[] = [
     ],
     verificationStatus: 'submitted_for_verification',
     profileCompleteness: 68,
-    photo: 'https://images.unsplash.com/photo-1517927033932-b3d18e61fb3a?auto=format&fit=crop&w=1200&q=70',
+    photo: '/teams/cal-poly-mens-soccer.png',
     pastSponsors: [],
   },
   {
@@ -194,7 +194,7 @@ export const MOCK_TEAMS: TeamProfile[] = [
     dealTypesInterestedIn: ['Cash sponsorship', 'Free product for team use', 'Discount codes'],
     verificationStatus: 'verified',
     profileCompleteness: 55,
-    photo: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1200&q=70',
+    photo: '/teams/cal-poly-mens-rugby.png',
     pastSponsors: ['Rhino Rugby', 'SLO Brew', 'Central Coast Physical Therapy', 'Firestone Grill'],
   },
   {
@@ -236,7 +236,7 @@ export const MOCK_TEAMS: TeamProfile[] = [
     dealTypesInterestedIn: ['Free product for team use', 'Discount codes', 'Gift cards'],
     verificationStatus: 'needs_changes',
     profileCompleteness: 60,
-    photo: 'https://images.unsplash.com/photo-1519315901367-f34ff9154487?auto=format&fit=crop&w=1200&q=70',
+    photo: '/teams/cal-poly-club-swim.png',
     pastSponsors: [
       'TYR',
       'Speedo',

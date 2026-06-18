@@ -74,40 +74,51 @@ export function TeamPreviewCard({
           e.currentTarget.style.transform = "translateY(0)";
         }}
       >
-        <div
-          className="relative"
-          style={{ aspectRatio: "16 / 9", overflow: "hidden" }}
-        >
-          {team.photo ? (
-            <Image
-              src={team.photo}
-              alt={team.name}
-              fill
-              sizes="(min-width: 768px) 544px, calc(100vw - 48px)"
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-          ) : (
+        <div style={{ padding: "20px" }}>
+          <div className="flex items-center gap-3.5">
             <div
-              className="flex h-full w-full items-center justify-center"
-              style={{ background: "#e8e6e0", color: "#6b6960" }}
+              className="relative shrink-0"
+              style={{
+                width: 64,
+                height: 64,
+                borderRadius: 12,
+                overflow: "hidden",
+                background: "#ffffff",
+                border: "0.5px solid #d5d3cd",
+              }}
             >
-              {team.sport}
+              {team.photo ? (
+                <Image
+                  src={team.photo}
+                  alt={`${team.name} logo`}
+                  fill
+                  sizes="64px"
+                  className="object-contain p-1.5 transition-transform duration-500 group-hover:scale-105"
+                />
+              ) : (
+                <div
+                  className="flex h-full w-full items-center justify-center"
+                  style={{ fontSize: 11, color: "#6b6960" }}
+                >
+                  {team.sport}
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        <div style={{ padding: "18px 20px" }}>
-          <div
-            style={{
-              fontSize: 16,
-              fontWeight: 500,
-              color: "#1a1a18",
-              letterSpacing: "-0.01em",
-            }}
-          >
-            {team.name}
-          </div>
-          <div style={{ fontSize: 12, fontWeight: 400, color: "#6b6960" }}>
-            {team.university}
+            <div className="min-w-0">
+              <div
+                style={{
+                  fontSize: 16,
+                  fontWeight: 500,
+                  color: "#1a1a18",
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                {team.name}
+              </div>
+              <div style={{ fontSize: 12, fontWeight: 400, color: "#6b6960" }}>
+                {team.university}
+              </div>
+            </div>
           </div>
           <div
             className="mt-4 flex items-center gap-5"
