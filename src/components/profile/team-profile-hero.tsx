@@ -10,14 +10,17 @@ export function TeamProfileHero({ team }: { team: TeamProfile }) {
       className="overflow-hidden rounded-xl"
       style={{ border: "0.5px solid #d5d3cd", background: "white" }}
     >
-      <div className="relative h-64">
+      <div
+        className="relative h-64"
+        style={{ background: "#ffffff", borderBottom: "0.5px solid #d5d3cd" }}
+      >
         {team.photo ? (
           <Image
             src={team.photo}
-            alt={team.name}
+            alt={`${team.name} logo`}
             fill
             sizes="(min-width: 1024px) 896px, calc(100vw - 48px)"
-            className="object-cover"
+            className="object-contain p-10"
           />
         ) : (
           <div
