@@ -1,7 +1,9 @@
 import type { SponsorProfile, TeamProfile } from "@/lib/types";
 
-const TEAMS_KEY = "spontus.marketplace.teams";
-const SPONSORS_KEY = "spontus.marketplace.sponsors";
+// Bump the version suffix whenever the seed schema changes (e.g. new fields like
+// bannerImage) so stale persisted snapshots don't override fresh mock-data.
+const TEAMS_KEY = "spontus.marketplace.teams.v2";
+const SPONSORS_KEY = "spontus.marketplace.sponsors.v2";
 
 function canUseStorage(): boolean {
   return typeof window !== "undefined";
