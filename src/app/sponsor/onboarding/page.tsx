@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { SponsorProfileForm } from "@/components/sponsor/sponsor-profile-form";
 import { VerificationStatusBadge } from "@/components/team/verification-status-badge";
+import { useVerification } from "@/components/providers/verification-provider";
+import { useIdentity } from "@/components/providers/identity-provider";
 import type { SponsorProfileDraft } from "@/lib/types";
 
 export default function SponsorOnboardingPage() {
@@ -13,15 +15,26 @@ export default function SponsorOnboardingPage() {
     typicalOfferTypes: [],
   });
 
+  const { getSponsorById, submitForVerification } = useVerification();
+  const { activeSponsorId } = useIdentity();
+  const liveSponsor = getSponsorById(activeSponsorId ?? "");
+  const liveStatus =
+    liveSponsor?.verificationStatus ?? draft.verificationStatus ?? "draft";
+  const canSubmit = liveStatus === "draft" || liveStatus === "needs_changes";
+
   function updateDraft(patch: Partial<SponsorProfileDraft>) {
     setDraft((prev) => ({ ...prev, ...patch }));
   }
 
   function handleSubmitForVerification() {
-    setDraft((prev) => ({
-      ...prev,
-      verificationStatus: "submitted_for_verification",
-    }));
+    if (activeSponsorId) {
+      submitForVerification("sponsor", activeSponsorId);
+    } else {
+      setDraft((prev) => ({
+        ...prev,
+        verificationStatus: "submitted_for_verification",
+      }));
+    }
   }
 
   return (
@@ -39,16 +52,14 @@ export default function SponsorOnboardingPage() {
             >
               {draft.brandName || draft.companyName || "Your sponsor profile"}
             </h1>
-            <VerificationStatusBadge
-              status={draft.verificationStatus ?? "draft"}
-            />
+            <VerificationStatusBadge status={liveStatus} />
           </div>
           <p className="mt-1 text-sm" style={{ color: "#6b6960" }}>
             Build your sponsor profile
           </p>
         </div>
         <div className="flex gap-2">
-          {draft.verificationStatus === "draft" && (
+          {canSubmit && (
             <Button
               variant="outline"
               onClick={handleSubmitForVerification}

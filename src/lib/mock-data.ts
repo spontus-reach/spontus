@@ -1,4 +1,6 @@
-import type { TeamProfile, SponsorProfile, SponsorshipListing } from './types';
+import type { Application, TeamProfile, SponsorProfile, SponsorshipListing } from './types';
+
+export const ACTIVE_TEAM_ID = 'cp-tri';
 
 export const MOCK_TEAMS: TeamProfile[] = [
   {
@@ -253,6 +255,10 @@ export function getTeamBySlug(slug: string): TeamProfile | undefined {
   return MOCK_TEAMS.find((t) => t.slug === slug);
 }
 
+export function getTeamById(id: string): TeamProfile | undefined {
+  return MOCK_TEAMS.find((t) => t.id === id);
+}
+
 // --- Sponsor-side mock data (Slice 2) ---
 
 export const MOCK_SPONSORS: SponsorProfile[] = [
@@ -346,10 +352,74 @@ export function getSponsorById(id: string): SponsorProfile | undefined {
   return MOCK_SPONSORS.find((s) => s.id === id);
 }
 
+export function getSeedSponsorById(id: string): SponsorProfile | undefined {
+  return [...MOCK_SPONSORS, ...MOCK_SEED_SPONSORS].find((s) => s.id === id);
+}
+
 export function getListingById(id: string): SponsorshipListing | undefined {
   return MOCK_LISTINGS.find((l) => l.id === id);
+}
+
+export const getSeedListingById = getListingById;
+
+export function getOpenListings(): SponsorshipListing[] {
+  return MOCK_LISTINGS.filter((l) => l.status === 'open');
 }
 
 export function getListingsForSponsor(sponsorId: string): SponsorshipListing[] {
   return MOCK_LISTINGS.filter((l) => l.sponsorId === sponsorId);
 }
+
+export const MOCK_SEED_SPONSORS: SponsorProfile[] = [
+  {
+    id: 'sp-sierra-cycle',
+    companyName: 'Sierra Cycle Works',
+    brandName: 'Sierra Cycle Works',
+    oneLiner: 'Bike service and gear for Central Coast athletes.',
+    description:
+      'Regional cycling shop looking for verified endurance teams with event visibility and authentic athlete content.',
+    websiteUrl: 'https://sierracycle.example',
+    industryCategory: 'Apparel & gear',
+    targetAudience: 'Cyclists, triathletes, and outdoor students',
+    geographicFocus: 'Central Coast',
+    typicalOfferTypes: ['Discount codes', 'Event prizes'],
+    verificationStatus: 'submitted_for_verification',
+  },
+];
+
+export const MOCK_SEED_APPLICATIONS: Application[] = [
+  {
+    id: 'app-seed-fluid-tri',
+    listingId: 'lst-fluid-fall',
+    teamId: 'cp-tri',
+    status: 'submitted',
+    fitNote:
+      'Cal Poly Triathlon matches the endurance audience and can support social content plus product sampling at MTS.',
+    submittedAt: '2026-05-24',
+  },
+  {
+    id: 'app-seed-fluid-rugby',
+    listingId: 'lst-fluid-fall',
+    teamId: 'cp-rugby',
+    status: 'submitted',
+    fitNote:
+      'Strong sideline crowd at home matches. We can offer jersey logos and game-day banners.',
+    submittedAt: '2026-05-23',
+  },
+  {
+    id: 'app-seed-fluid-swim',
+    listingId: 'lst-fluid-fall',
+    teamId: 'cp-swim',
+    status: 'submitted',
+    submittedAt: '2026-05-24',
+  },
+  {
+    id: 'app-seed-coffee-rugby',
+    listingId: 'lst-slo-coffee',
+    teamId: 'cp-rugby',
+    status: 'under_review',
+    fitNote:
+      'Rugby has strong local attendance and can place banners at home matches.',
+    submittedAt: '2026-05-25',
+  },
+];

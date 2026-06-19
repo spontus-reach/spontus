@@ -20,6 +20,7 @@ interface TeamSignupFormProps {
   onSubmit?: (data: {
     fullName: string;
     email: string;
+    password: string;
     university: string;
     teamName: string;
     sport: string;
@@ -59,11 +60,14 @@ export function getEmailValidationError(value: string): string {
 export function TeamSignupForm({ onSubmit }: TeamSignupFormProps = {}) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [university, setUniversity] = useState("");
   const [teamName, setTeamName] = useState("");
   const [sport, setSport] = useState("");
   const [role, setRole] = useState<TeamMemberRole | "">("");
   const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   function isEduEmail(value: string) {
     const normalized = value.trim().toLowerCase();
@@ -83,11 +87,20 @@ export function TeamSignupForm({ onSubmit }: TeamSignupFormProps = {}) {
     }
     // Check if there's no error after setting it (using the computed error variable)
     if (email && !getEmailValidationError(email)) {
-      // Call the onSubmit handler if provided
+      if (password.length < 8) {
+        setPasswordError("Password must be at least 8 characters.");
+        return;
+      }
+      if (password !== confirmPassword) {
+        setPasswordError("Passwords do not match.");
+        return;
+      }
+      setPasswordError("");
       if (onSubmit) {
         onSubmit({
           fullName,
           email,
+          password,
           university,
           teamName,
           sport,
@@ -100,6 +113,8 @@ export function TeamSignupForm({ onSubmit }: TeamSignupFormProps = {}) {
   const isValid = Boolean(
     fullName.trim() &&
       isEduEmail(email) &&
+      password.length >= 8 &&
+      confirmPassword.length >= 8 &&
       university.trim() &&
       teamName.trim() &&
       sport.trim() &&
@@ -145,6 +160,35 @@ export function TeamSignupForm({ onSubmit }: TeamSignupFormProps = {}) {
             />
             {emailError && (
               <p className="mt-1 text-xs text-destructive">{emailError}</p>
+            )}
+          </Field>
+
+          <Field label="Password">
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (passwordError) setPasswordError("");
+              }}
+              placeholder="At least 8 characters"
+              autoComplete="new-password"
+            />
+          </Field>
+
+          <Field label="Confirm password">
+            <Input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+                if (passwordError) setPasswordError("");
+              }}
+              placeholder="Repeat password"
+              autoComplete="new-password"
+            />
+            {passwordError && (
+              <p className="mt-1 text-xs text-destructive">{passwordError}</p>
             )}
           </Field>
 

@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+.playwright-mcp/
+login-snapshot.yml
 
 # next.js
 /.next/
@@ -37,8 +39,11 @@ yarn-error.log*
 .env*
 !.env.example
 
-# editor / tooling
-.cursor/
+# local agent/debug artifacts
+dev_output.log
+fcc-server-*.log
+typecheck_*.log
+typecheck_*.txt
 
 # vercel
 .vercel
@@ -47,3 +52,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .gstack/
+
+# Local Netlify folder
+.netlify

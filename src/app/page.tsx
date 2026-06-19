@@ -13,10 +13,10 @@ const ease = [0.22, 1, 0.36, 1] as const;
 
 function fadeUp(delay = 0) {
   return {
-    initial: { opacity: 0, y: 12 },
+    initial: { opacity: 0, y: 8 },
     whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, margin: "-60px" as const },
-    transition: { duration: 0.7, ease, delay },
+    viewport: { once: true, margin: "-40px" as const },
+    transition: { duration: 0.4, ease, delay },
   };
 }
 
@@ -31,7 +31,7 @@ export default function LandingPage() {
       {triTeam && (
         <section
           className="mx-auto max-w-[1120px] px-6"
-          style={{ paddingBottom: 160 }}
+          style={{ paddingBottom: 88 }}
         >
           <motion.div {...fadeUp(0)} className="grid gap-12 md:grid-cols-12">
             <div className="md:col-span-5">
@@ -41,53 +41,30 @@ export default function LandingPage() {
                   aspectRatio: "4 / 5",
                   position: "relative",
                   overflow: "hidden",
-                  background: "#e8e6e0",
+                  background: "#ffffff",
+                  border: "0.5px solid #d5d3cd",
                 }}
               >
                 {triTeam.photo && (
                   <Image
                     src={triTeam.photo}
-                    alt={triTeam.name}
+                    alt={`${triTeam.name} logo`}
                     fill
                     sizes="(min-width: 768px) 420px, calc(100vw - 48px)"
-                    className="object-cover"
+                    className="object-contain p-16"
                   />
                 )}
                 <div
-                  className="absolute inset-0"
+                  className="absolute top-6 left-6"
                   style={{
-                    background:
-                      "linear-gradient(to top, rgba(20,20,20,0.75) 0%, rgba(20,20,20,0.15) 45%, transparent 70%)",
+                    fontSize: 11,
+                    fontWeight: 500,
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                    color: "#8a8880",
                   }}
-                />
-                <div
-                  className="absolute right-6 bottom-6 left-6"
-                  style={{ color: "#f0efeb" }}
                 >
-                  <div
-                    style={{
-                      fontSize: 11,
-                      fontWeight: 500,
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      opacity: 0.7,
-                    }}
-                  >
-                    Featured team
-                  </div>
-                  <div
-                    className="mt-2"
-                    style={{
-                      fontSize: 28,
-                      fontWeight: 500,
-                      lineHeight: 1.1,
-                      letterSpacing: "-0.02em",
-                    }}
-                  >
-                    Cal Poly
-                    <br />
-                    Triathlon
-                  </div>
+                  Featured team
                 </div>
               </div>
             </div>
@@ -180,7 +157,7 @@ export default function LandingPage() {
       {/* Active teams grid */}
       <section
         className="mx-auto max-w-[1120px] px-6"
-        style={{ paddingBottom: 160 }}
+        style={{ paddingBottom: 88 }}
       >
         <motion.div {...fadeUp(0)} className="flex items-end justify-between">
           <h2
@@ -205,7 +182,7 @@ export default function LandingPage() {
       {/* Closing CTA */}
       <section
         className="mx-auto max-w-[1120px] px-6 text-center"
-        style={{ paddingBottom: 160 }}
+        style={{ paddingBottom: 88 }}
       >
         <motion.h2
           {...fadeUp(0)}
@@ -226,7 +203,7 @@ export default function LandingPage() {
           className="mt-10 flex items-center justify-center gap-6"
         >
           <Link
-            href="/signup/team"
+            href="/for-teams"
             className="inline-flex items-center justify-center transition-opacity hover:opacity-90"
             style={{
               height: 48,
@@ -242,7 +219,7 @@ export default function LandingPage() {
             <ArrowRight className="ml-2 h-4 w-4" strokeWidth={2} />
           </Link>
           <Link
-            href="/signup/sponsor"
+            href="/for-brands"
             className="inline-flex items-center justify-center transition-colors hover:bg-[#e8e6e0]"
             style={{
               height: 48,

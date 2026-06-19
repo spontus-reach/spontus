@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,7 @@ import { LookingForForm } from "@/components/team/looking-for-form";
 import { MediaUploadForm } from "@/components/team/media-upload-form";
 import { VerificationStatusBadge } from "@/components/team/verification-status-badge";
 import { useVerification } from "@/components/providers/verification-provider";
-import { ACTIVE_TEAM_ID } from "@/lib/mock-data";
+import { useIdentity } from "@/components/providers/identity-provider";
 import type { TeamProfileDraft, TeamSponsorshipAsset } from "@/lib/types";
 
 function computeCompleteness(
@@ -121,6 +121,39 @@ export default function TeamOnboardingPage() {
 
   const [activeSection, setActiveSection] = useState("basics");
   const [hostedEventsReviewed, setHostedEventsReviewed] = useState(false);
+  const [registeredTeamId, setRegisteredTeamId] = useState<string | null>(null);
+  const hasRegisteredRef = useRef(false);
+
+  const {
+    getTeamById,
+    submitForVerification,
+    updateTeamProfile,
+    registerTeamFromSignup,
+  } = useVerification();
+  const { activeTeamId } = useIdentity();
+  const effectiveTeamId = activeTeamId ?? registeredTeamId;
+
+  useEffect(() => {
+    if (hasRegisteredRef.current) return;
+    if (!draft.name || !draft.university || !draft.sport) return;
+    if (effectiveTeamId && getTeamById(effectiveTeamId)) {
+      hasRegisteredRef.current = true;
+      return;
+    }
+    const team = registerTeamFromSignup(draft);
+    setRegisteredTeamId(team.id);
+    hasRegisteredRef.current = true;
+  }, [
+    draft,
+    effectiveTeamId,
+    getTeamById,
+    registerTeamFromSignup,
+  ]);
+
+  useEffect(() => {
+    if (!effectiveTeamId) return;
+    updateTeamProfile(effectiveTeamId, draft);
+  }, [draft, effectiveTeamId, updateTeamProfile]);
 
   function updateDraft(patch: Partial<TeamProfileDraft>) {
     setDraft((prev) => ({ ...prev, ...patch }));
@@ -142,13 +175,12 @@ export default function TeamOnboardingPage() {
     return result;
   }, [draft, hostedEventsReviewed]);
 
-  const { getTeamById, submitForVerification } = useVerification();
-  const liveTeam = getTeamById(ACTIVE_TEAM_ID);
+  const liveTeam = getTeamById(effectiveTeamId ?? "");
   const liveStatus = liveTeam?.verificationStatus ?? draft.verificationStatus ?? "draft";
   const canSubmit = liveStatus === "draft" || liveStatus === "needs_changes";
 
   function handleSubmitForVerification() {
-    submitForVerification("team", ACTIVE_TEAM_ID);
+    if (effectiveTeamId) submitForVerification("team", effectiveTeamId);
   }
 
   function handleMarkComplete() {
@@ -185,12 +217,18 @@ export default function TeamOnboardingPage() {
               Submit for verification
             </Button>
           )}
-          <Link href="/team/listings">
+          <Link href="/browse">
             <Button variant="outline" style={{ borderColor: "#d5d3cd" }}>
               Browse listings
             </Button>
           </Link>
-          <Link href="/teams/cal-poly-triathlon">
+          <Link
+            href={
+              liveTeam
+                ? `/teams/${liveTeam.slug}`
+                : "/teams/cal-poly-triathlon"
+            }
+          >
             <Button style={{ background: "#1a3a6e", color: "#f0efeb" }}>
               Preview profile
             </Button>

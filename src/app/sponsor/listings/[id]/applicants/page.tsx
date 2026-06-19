@@ -1,22 +1,47 @@
+"use client";
+
+import { use } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { ApplicantsGrid } from "@/components/sponsor/applicants-grid";
 import { getListingById } from "@/lib/mock-data";
-import { ACTIVE_SPONSOR_ID } from "@/lib/constants";
+import { useIdentity } from "@/components/providers/identity-provider";
+import { useVerification } from "@/components/providers/verification-provider";
 
 type PageProps = {
   params: Promise<{ id: string }>;
 };
 
-export default async function ApplicantsPage({ params }: PageProps) {
-  const { id } = await params;
+export default function ApplicantsPage({ params }: PageProps) {
+  const { id } = use(params);
   const listing = getListingById(id);
+  const { activeSponsorId } = useIdentity();
+  const { getSponsorById } = useVerification();
+  const sponsor = listing ? getSponsorById(listing.sponsorId) : undefined;
 
-  if (!listing || listing.sponsorId !== ACTIVE_SPONSOR_ID) {
+  if (!listing || listing.sponsorId !== activeSponsorId) {
     return (
       <div className="mx-auto max-w-5xl px-6 py-16 text-center">
         <p style={{ color: "#6b6960", fontSize: 15 }}>
           Listing not found or you do not have access to review these
+          applicants.
+        </p>
+        <Link
+          href="/sponsor/onboarding"
+          className="mt-4 inline-block text-sm underline"
+          style={{ color: "#1a3a6e" }}
+        >
+          Back to sponsor profile
+        </Link>
+      </div>
+    );
+  }
+
+  if (!sponsor || sponsor.verificationStatus !== "verified") {
+    return (
+      <div className="mx-auto max-w-5xl px-6 py-16 text-center">
+        <p style={{ color: "#6b6960", fontSize: 15 }}>
+          Your sponsor profile must be verified before you can review
           applicants.
         </p>
         <Link
@@ -42,28 +67,14 @@ export default async function ApplicantsPage({ params }: PageProps) {
       </Link>
 
       <div className="mb-6">
-        <div
-          className="text-xs font-medium uppercase tracking-wider"
-          style={{ color: "#6b6960" }}
-        >
+        <span className="text-xs font-medium uppercase tracking-wider" style={{ color: "#8a8880" }}>
           Listing
-        </div>
-        <h1
-          className="mt-1"
-          style={{
-            fontSize: 26,
-            fontWeight: 600,
-            letterSpacing: "-0.01em",
-            color: "#1a1a18",
-          }}
-        >
+        </span>
+        <h1 className="mt-1 text-2xl font-semibold" style={{ color: "#1a1a18" }}>
           {listing.title}
         </h1>
         <p className="mt-1 text-sm" style={{ color: "#6b6960" }}>
-          {listing.numberOfTeams ?? "?"} spots &middot;{" "}
-          {listing.applicationDeadline
-            ? `Deadline ${listing.applicationDeadline}`
-            : "No deadline"}
+          Deadline {listing.applicationDeadline}
         </p>
       </div>
 

@@ -9,13 +9,12 @@ const ease = [0.22, 1, 0.36, 1] as const;
 export function Hero() {
   return (
     <section
-      className="mx-auto max-w-[1120px] px-6 text-center"
-      style={{ paddingTop: 72, paddingBottom: 144 }}
+      className="mx-auto max-w-[1120px] px-6 pt-12 pb-16 text-center md:pt-[56px] md:pb-[88px]"
     >
       <motion.div
-        initial={{ opacity: 0, y: 8 }}
+        initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease }}
+        transition={{ duration: 0.35, ease }}
       >
         <span
           style={{
@@ -34,12 +33,11 @@ export function Hero() {
       </motion.div>
 
       <motion.h1
-        initial={{ opacity: 0, y: 14 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease, delay: 0.08 }}
-        className="mx-auto mt-8"
+        transition={{ duration: 0.4, ease, delay: 0.04 }}
+        className="mx-auto mt-8 text-[40px] md:text-[56px] lg:text-[76px]"
         style={{
-          fontSize: 76,
           fontWeight: 500,
           lineHeight: 1.02,
           letterSpacing: "-0.035em",
@@ -51,9 +49,9 @@ export function Hero() {
       </motion.h1>
 
       <motion.p
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease, delay: 0.18 }}
+        transition={{ duration: 0.4, ease, delay: 0.08 }}
         className="mx-auto mt-8"
         style={{
           fontSize: 17,
@@ -68,13 +66,13 @@ export function Hero() {
       </motion.p>
 
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease, delay: 0.28 }}
+        transition={{ duration: 0.4, ease, delay: 0.12 }}
         className="mt-10 flex items-center justify-center gap-6"
       >
         <Link
-          href="/signup/team"
+          href="/for-teams"
           className="inline-flex items-center justify-center transition-opacity hover:opacity-90"
           style={{
             height: 48,
@@ -90,7 +88,7 @@ export function Hero() {
           <ArrowRight className="ml-2 h-4 w-4" strokeWidth={2} />
         </Link>
         <Link
-          href="/signup/sponsor"
+          href="/for-brands"
           className="inline-flex items-center justify-center transition-colors hover:bg-[#e8e6e0]"
           style={{
             height: 48,

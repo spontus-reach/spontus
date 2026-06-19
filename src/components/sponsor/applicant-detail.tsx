@@ -13,7 +13,8 @@ import { DeclineReasonModal } from "./decline-reason-modal";
 import { useApplications } from "@/components/providers/applications-provider";
 import { useVerification } from "@/components/providers/verification-provider";
 import { getAssetOverlap } from "@/lib/asset-overlap";
-import { APPLICATION_STATUS_LABELS, ACTIVE_SPONSOR_ID, getDeclineReasonLabel } from "@/lib/constants";
+import { APPLICATION_STATUS_LABELS, getDeclineReasonLabel } from "@/lib/constants";
+import { useIdentity } from "@/components/providers/identity-provider";
 import { getSeedListingById } from "@/lib/mock-data";
 import type { DeclineReason } from "@/lib/types";
 
@@ -28,6 +29,7 @@ export function ApplicantDetail({
     declineApplication,
   } = useApplications();
   const { getTeamById, getSponsorById } = useVerification();
+  const { activeSponsorId } = useIdentity();
   const [showAccept, setShowAccept] = useState(false);
   const [showDecline, setShowDecline] = useState(false);
 
@@ -53,7 +55,7 @@ export function ApplicantDetail({
   }
 
   if (
-    listing.sponsorId !== ACTIVE_SPONSOR_ID ||
+    listing.sponsorId !== activeSponsorId ||
     sponsor?.verificationStatus !== "verified"
   ) {
     return (

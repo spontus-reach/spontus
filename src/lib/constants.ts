@@ -3,6 +3,8 @@ import type {
   SponsorshipAssetCategory,
   VerificationStatus,
   ListingStatus,
+  ApplicationStatus,
+  DeclineReason,
 } from './types';
 
 export const SPONSORSHIP_ASSET_DEFINITIONS: SponsorshipAssetDefinition[] = [
@@ -104,6 +106,38 @@ export const LISTING_STATUS_LABELS: Record<ListingStatus, string> = {
   paused: 'Paused',
   closed: 'Closed',
 };
+
+export const APPLICATION_STATUS_LABELS: Record<ApplicationStatus, string> = {
+  draft: 'Draft',
+  submitted: 'Submitted',
+  under_review: 'Under review',
+  accepted: 'Accepted',
+  declined: 'Declined',
+  withdrawn: 'Withdrawn',
+};
+
+export const DECLINE_REASONS: { value: DeclineReason; label: string }[] = [
+  { value: 'not_right_fit_this_season', label: 'Not the right fit this season' },
+  { value: 'not_a_fit', label: 'Not the right sponsor fit' },
+  { value: 'too_far', label: 'Outside target geography' },
+  { value: 'insufficient_reach', label: 'Audience reach is too low' },
+  { value: 'assets_do_not_match', label: 'Requested assets do not match' },
+  { value: 'budget_or_timing', label: 'Budget or timing does not work' },
+  { value: 'other', label: 'Other' },
+];
+
+export function getDeclineReasonLabel(reason?: DeclineReason): string {
+  if (!reason) {
+    return 'No reason provided';
+  }
+
+  return (
+    DECLINE_REASONS.find((declineReason) => declineReason.value === reason)
+      ?.label ?? 'Other'
+  );
+}
+
+export const ACTIVE_SPONSOR_ID = 'sp-fluid';
 
 export const VERIFICATION_STATUS_LABELS: Record<VerificationStatus, string> = {
   draft: 'Draft',

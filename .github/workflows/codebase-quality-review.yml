@@ -1,0 +1,97 @@
+name: Codebase Quality Review
+
+on:
+  schedule:
+    - cron: "30 16 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Weekly quality review
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run quality checks
+        shell: bash
+        run: |
+          set +e
+
+          mkdir -p quality-logs
+          echo '{"generatedAt":"'"$(date -u +%Y-%m-%dT%H:%M:%SZ)"'","runUrl":"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}","results":[' > quality-results.json
+
+          first=true
+          run_check() {
+            name="$1"
+            shift
+            log_file="quality-logs/${name//[^a-zA-Z0-9_-]/_}.log"
+            "$@" > "$log_file" 2>&1
+            status=$?
+
+            if [[ "$first" == true ]]; then
+              first=false
+            else
+              echo "," >> quality-results.json
+            fi
+
+            printf '{"name":"%s","status":%s}' "$name" "$status" >> quality-results.json
+            return "$status"
+          }
+
+          failed=0
+          run_check "npm run lint" npm run lint || failed=1
+          run_check "npm run typecheck" npm run typecheck || failed=1
+          run_check "npm run test" npm run test || failed=1
+          run_check "npm run build" npm run build || failed=1
+          run_check "npm run security:workflows" npm run security:workflows || failed=1
+
+          echo ']}' >> quality-results.json
+          node tools/codebase-quality-report.js quality-results.json > quality-report.md
+          echo "$failed" > quality-exit-code.txt
+
+      - name: Update weekly quality issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          title="Weekly codebase quality review"
+          gh label create "repo-health" --color "0e8a16" --description "Repository health and recurring quality review" 2>/dev/null || true
+
+          issue_number="$(
+            gh issue list --state open --search "$title in:title" --json number,title \
+              --jq ".[] | select(.title == \"$title\") | .number" \
+              | head -n 1
+          )"
+
+          if [[ -n "${issue_number:-}" ]]; then
+            gh api --method PATCH "repos/${GH_REPO}/issues/${issue_number}" \
+              --field body="$(cat quality-report.md)" >/dev/null
+          else
+            gh issue create --title "$title" --label "repo-health" --body-file quality-report.md >/dev/null
+          fi
+
+      - name: Preserve quality workflow result
+        shell: bash
+        run: exit "$(cat quality-exit-code.txt)"

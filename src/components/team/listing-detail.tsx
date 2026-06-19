@@ -13,7 +13,8 @@ import {
   CATEGORY_LABELS,
 } from "@/lib/constants";
 import { getAssetOverlap } from "@/lib/asset-overlap";
-import { getTeamById, getSponsorById, ACTIVE_TEAM_ID } from "@/lib/mock-data";
+import { getTeamById, getSponsorById } from "@/lib/mock-data";
+import { useIdentity } from "@/components/providers/identity-provider";
 import type {
   SponsorshipListing,
   SponsorshipAssetCategory,
@@ -35,6 +36,7 @@ export function ListingDetail({ listing }: { listing: SponsorshipListing }) {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [existingApp, setExistingApp] = useState<Application | null>(null);
   const { getApplicationForListing, createApplication } = useApplications();
+  const { activeTeamId } = useIdentity();
 
   useEffect(() => {
     async function fetchDetails() {
@@ -46,8 +48,8 @@ export function ListingDetail({ listing }: { listing: SponsorshipListing }) {
           setSponsor(sponsorData ?? null);
         }
         // Fetch active team
-        if (ACTIVE_TEAM_ID) {
-          const teamData = await getTeamById(ACTIVE_TEAM_ID);
+        if (activeTeamId) {
+          const teamData = await getTeamById(activeTeamId);
           setActiveTeam(teamData ?? null);
           // If we have the team, check for existing application
           if (teamData) {
@@ -69,7 +71,7 @@ export function ListingDetail({ listing }: { listing: SponsorshipListing }) {
     }
 
     fetchDetails();
-  }, [listing.sponsorId, listing.id, getApplicationForListing]);
+  }, [listing.sponsorId, listing.id, getApplicationForListing, activeTeamId]);
 
   if (loading) {
     return (
@@ -92,15 +94,19 @@ export function ListingDetail({ listing }: { listing: SponsorshipListing }) {
     listing.applicationDeadline &&
     new Date(listing.applicationDeadline) < new Date();
 
-  function handleApply(fitNote?: string): boolean {
+  async function handleApply(fitNote?: string): Promise<boolean> {
     if (teamStatus !== "verified" || !sponsorVerified) return false;
-    return createApplication(listing.id, ACTIVE_TEAM_ID, fitNote) !== null;
+    const created = await createApplication(listing.id, activeTeamId ?? "", fitNote);
+    if (!created) return false;
+
+    setExistingApp(created);
+    return true;
   }
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-10">
       <Link
-        href="/team/listings"
+        href="/browse"
         className="mb-6 inline-flex items-center gap-1 text-sm transition-colors hover:opacity-70"
         style={{ color: "#6b6960" }}
       >

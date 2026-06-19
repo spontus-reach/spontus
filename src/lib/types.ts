@@ -76,6 +76,10 @@ export type TeamProfile = {
   verificationStatus: VerificationStatus;
   profileCompleteness: number;
   photo?: string;
+  /** Banner image shown on the team detail page hero. Shown with object-contain (full height, letterboxed sides). Falls back to `photo` if unset. */
+  bannerImage?: string;
+  /** Optional zoom factor for the banner image (e.g. 1.25 = zoomed in 25%). Defaults to 1 (no zoom). */
+  bannerZoom?: number;
   pastSponsors: string[];
 };
 
@@ -146,6 +150,46 @@ export type SponsorshipListing = {
 };
 
 export type ListingDraft = Partial<SponsorshipListing>;
+
+export type ApplicationStatus =
+  | 'draft'
+  | 'submitted'
+  | 'under_review'
+  | 'accepted'
+  | 'declined'
+  | 'withdrawn';
+
+export type DeclineReason =
+  | 'not_right_fit_this_season'
+  | 'not_a_fit'
+  | 'too_far'
+  | 'insufficient_reach'
+  | 'assets_do_not_match'
+  | 'budget_or_timing'
+  | 'other';
+
+export type Application = {
+  id: string;
+  listingId: string;
+  teamId: string;
+  status: ApplicationStatus;
+  fitNote?: string;
+  declineReason?: DeclineReason;
+  submittedAt?: string;
+  reviewedAt?: string;
+};
+
+export type VerificationEntityType = 'team' | 'sponsor';
+
+export type VerificationReviewNote = {
+  id: string;
+  entityType: VerificationEntityType;
+  entityId: string;
+  status: VerificationStatus;
+  note?: string;
+  reviewedAt: string;
+  reviewedBy: string;
+};
 
 export type SponsorMemberRole =
   | 'owner'
