@@ -109,14 +109,17 @@ export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps = {}) {
   }
 
   const isValid =
-    companyName &&
-    contactName &&
-    role &&
-    email &&
+    companyName.trim() !== "" &&
+    contactName.trim() !== "" &&
+    role !== "" &&
+    email.trim() !== "" &&
+    websiteUrl.trim() !== "" &&
+    industryCategory !== "" &&
     password.length >= 8 &&
     confirmPassword.length >= 8 &&
-    websiteUrl &&
-    industryCategory;
+    password === confirmPassword &&
+    !emailError &&
+    !passwordError;
 
   return (
     <div className="mx-auto max-w-xl px-6 py-16">
