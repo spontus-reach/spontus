@@ -76,6 +76,10 @@ export type TeamProfile = {
   verificationStatus: VerificationStatus;
   profileCompleteness: number;
   photo?: string;
+  /** Banner image shown on the team detail page hero. Shown with object-contain (full height, letterboxed sides). Falls back to `photo` if unset. */
+  bannerImage?: string;
+  /** Optional zoom factor for the banner image (e.g. 1.25 = zoomed in 25%). Defaults to 1 (no zoom). */
+  bannerZoom?: number;
   pastSponsors: string[];
 };
 

@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Field } from "@/components/forms/form-field";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -17,48 +16,107 @@ import {
   SPONSOR_INDUSTRY_CATEGORIES,
   SPONSOR_MEMBER_ROLES,
 } from "@/lib/constants";
-import type { SponsorMemberRole, SponsorSignupData } from "@/lib/types";
+import type { SponsorMemberRole } from "@/lib/types";
 
-type SponsorSignupFormProps = {
-  onSubmit?: (data: SponsorSignupData) => void | Promise<void>;
-};
+interface SponsorSignupFormProps {
+  onSubmit?: (data: {
+    companyName: string;
+    contactName: string;
+    role: string;
+    email: string;
+    password: string;
+    websiteUrl: string;
+    industryCategory: string;
+  }) => void;
+}
 
-export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps) {
-  const router = useRouter();
+export function getWorkEmailValidationError(value: string): string {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return "Email is required";
+  }
+
+  if (!trimmed.includes("@")) {
+    return "Please enter a valid email address";
+  }
+
+  const [localPart, domainPart] = trimmed.split("@");
+  if (!localPart || !domainPart) {
+    return "Please enter a valid email address";
+  }
+
+  // Check if it's a .edu email (not allowed for sponsors)
+  if (domainPart.endsWith(".edu")) {
+    return "Work email cannot be a .edu address";
+  }
+
+  // Domain should have at least one dot and valid parts
+  if (!domainPart.includes(".")) {
+    return "Please enter a valid email address with domain";
+  }
+
+  const domainParts = domainPart.split(".");
+  if (domainParts.length < 2 ||
+      domainParts.some(part => part.length === 0)) {
+    return "Please enter a valid email address";
+  }
+
+  return "";
+}
+
+export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps = {}) {
   const [companyName, setCompanyName] = useState("");
   const [contactName, setContactName] = useState("");
   const [role, setRole] = useState<SponsorMemberRole | "">("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [industryCategory, setIndustryCategory] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleFormSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const data: SponsorSignupData = {
-      companyName,
-      contactName,
-      role: role as SponsorMemberRole,
-      email,
-      websiteUrl,
-      industryCategory,
-    };
-
-    if (onSubmit) {
-      await onSubmit(data);
-      return;
+    // Validate email before proceeding
+    if (email) {
+      const error = getWorkEmailValidationError(email);
+      setEmailError(error);
     }
-
-    router.push("/sponsor/onboarding");
+    // Check if there's no error after setting it (using the computed error variable)
+    if (email && !getWorkEmailValidationError(email)) {
+      if (password.length < 8) {
+        setPasswordError("Password must be at least 8 characters.");
+        return;
+      }
+      if (password !== confirmPassword) {
+        setPasswordError("Passwords do not match.");
+        return;
+      }
+      setPasswordError("");
+      if (onSubmit) {
+        onSubmit({
+          companyName,
+          contactName,
+          role,
+          email,
+          password,
+          websiteUrl,
+          industryCategory
+        });
+      }
+    }
   }
 
-  const isValid = Boolean(
-    companyName.trim() &&
-      contactName.trim() &&
-      role &&
-      email.trim() &&
-      websiteUrl.trim() &&
-      industryCategory
-  );
+  const isValid =
+    companyName &&
+    contactName &&
+    role &&
+    email &&
+    password.length >= 8 &&
+    confirmPassword.length >= 8 &&
+    websiteUrl &&
+    industryCategory;
 
   return (
     <div className="mx-auto max-w-xl px-6 py-16">
@@ -80,7 +138,7 @@ export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps) {
         className="mt-8 p-6"
         style={{ border: "0.5px solid #d5d3cd", background: "white" }}
       >
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleFormSubmit} className="space-y-5">
           <Field label="Company name">
             <Input
               placeholder="Fluid Nutrition"
@@ -120,8 +178,51 @@ export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps) {
               type="email"
               placeholder="jordan@fluidnutrition.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (emailError) {
+                  const error = getWorkEmailValidationError(e.target.value);
+                  setEmailError(error);
+                }
+              }}
+              onBlur={(e) => {
+                const error = getWorkEmailValidationError(e.target.value);
+                setEmailError(error);
+              }}
+              className={emailError ? "border-destructive" : ""}
             />
+            {emailError && (
+              <p className="mt-1 text-xs text-destructive">{emailError}</p>
+            )}
+          </Field>
+
+          <Field label="Password">
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (passwordError) setPasswordError("");
+              }}
+              placeholder="At least 8 characters"
+              autoComplete="new-password"
+            />
+          </Field>
+
+          <Field label="Confirm password">
+            <Input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+                if (passwordError) setPasswordError("");
+              }}
+              placeholder="Repeat password"
+              autoComplete="new-password"
+            />
+            {passwordError && (
+              <p className="mt-1 text-xs text-destructive">{passwordError}</p>
+            )}
           </Field>
 
           <Field label="Company website">
@@ -163,6 +264,21 @@ export function SponsorSignupForm({ onSubmit }: SponsorSignupFormProps) {
           </div>
         </form>
       </Card>
+    </div>
+  );
+}
+
+function Field({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <Label className="mb-1.5 block text-sm">{label}</Label>
+      {children}
     </div>
   );
 }

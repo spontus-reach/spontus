@@ -15,6 +15,9 @@ export const metadata: Metadata = {
   title: "Spontus — Sponsorship marketplace for college club sports",
   description:
     "Verified teams find relevant sponsors. Sponsors discover teams worth backing. The sponsorship marketplace for college club sports teams.",
+  icons: {
+    icon: "/brand/spontus-mark-square.svg",
+  },
 };
 
 export default function RootLayout({

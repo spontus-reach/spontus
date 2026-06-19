@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ArrowRight, Zap } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { SpontusLogo } from "@/components/brand/spontus-logo";
 
 type MarketplaceGateProps = {
   redirect?: string;
@@ -11,21 +12,7 @@ export function MarketplaceGate({ redirect = "/browse" }: MarketplaceGateProps) 
 
   return (
     <section className="mx-auto flex min-h-[50vh] max-w-[1120px] flex-col items-center justify-center px-6 py-24 text-center">
-      <Link href="/" className="flex items-center gap-2" aria-label="Spontus home">
-        <div
-          className="flex items-center justify-center"
-          style={{
-            width: 32,
-            height: 32,
-            borderRadius: 8,
-            background: "#1a3a6e",
-            color: "#f0efeb",
-          }}
-        >
-          <Zap className="h-4 w-4" strokeWidth={2.5} fill="currentColor" />
-        </div>
-        <span style={{ fontWeight: 500, fontSize: 20, color: "#1a1a18" }}>Spontus</span>
-      </Link>
+      <SpontusLogo variant="lockup" height={36} />
       <h1 className="mt-10 max-w-[16ch] text-4xl font-medium tracking-tight text-[#1a1a18] md:text-5xl">
         Your next sponsorship starts here.
       </h1>

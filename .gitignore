@@ -52,3 +52,6 @@ typecheck_*.txt
 *.tsbuildinfo
 next-env.d.ts
 .gstack/
+
+# Local Netlify folder
+.netlify

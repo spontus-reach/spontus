@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Zap, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
+import { SpontusLogo } from "@/components/brand/spontus-logo";
 import { useAuth } from "@/components/providers/auth-provider";
+import { useIsAdmin } from "@/hooks/use-is-admin";
 import { MobileNav } from "./mobile-nav";
 
 function AuthNav() {
@@ -72,6 +74,7 @@ function AuthNav() {
 export function TopNav() {
   const pathname = usePathname();
   const { user } = useAuth();
+  const { isAdmin } = useIsAdmin();
   const isTeamRoute =
     pathname === "/for-teams" ||
     pathname.startsWith("/team") ||
@@ -88,30 +91,7 @@ export function TopNav() {
       style={{ borderBottom: "0.5px solid #d5d3cd" }}
     >
       <div className="mx-auto flex h-16 max-w-[1120px] items-center justify-between px-6">
-        <Link href="/" className="flex items-center gap-2">
-          <div
-            className="flex items-center justify-center"
-            style={{
-              width: 26,
-              height: 26,
-              borderRadius: 6,
-              background: "#1a3a6e",
-              color: "#f0efeb",
-            }}
-          >
-            <Zap className="h-3.5 w-3.5" strokeWidth={2.5} fill="currentColor" />
-          </div>
-          <span
-            style={{
-              fontWeight: 500,
-              fontSize: 18,
-              color: "#1a1a18",
-              letterSpacing: "-0.01em",
-            }}
-          >
-            Spontus
-          </span>
-        </Link>
+        <SpontusLogo variant="lockup" height={30} />
 
         <nav className="hidden items-center gap-8 md:flex">
           <Link
@@ -152,6 +132,18 @@ export function TopNav() {
               }`}
             >
               My Applications
+            </Link>
+          )}
+          {isAdmin && (
+            <Link
+              href="/admin/verification"
+              className={`text-sm transition-colors ${
+                pathname.startsWith("/admin")
+                  ? "text-[#1a1a18]"
+                  : "text-[#6b6960] hover:text-[#1a1a18]"
+              }`}
+            >
+              Admin
             </Link>
           )}
         </nav>

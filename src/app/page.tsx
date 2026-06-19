@@ -41,53 +41,30 @@ export default function LandingPage() {
                   aspectRatio: "4 / 5",
                   position: "relative",
                   overflow: "hidden",
-                  background: "#e8e6e0",
+                  background: "#ffffff",
+                  border: "0.5px solid #d5d3cd",
                 }}
               >
                 {triTeam.photo && (
                   <Image
                     src={triTeam.photo}
-                    alt={triTeam.name}
+                    alt={`${triTeam.name} logo`}
                     fill
                     sizes="(min-width: 768px) 420px, calc(100vw - 48px)"
-                    className="object-cover"
+                    className="object-contain p-16"
                   />
                 )}
                 <div
-                  className="absolute inset-0"
+                  className="absolute top-6 left-6"
                   style={{
-                    background:
-                      "linear-gradient(to top, rgba(20,20,20,0.75) 0%, rgba(20,20,20,0.15) 45%, transparent 70%)",
+                    fontSize: 11,
+                    fontWeight: 500,
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                    color: "#8a8880",
                   }}
-                />
-                <div
-                  className="absolute right-6 bottom-6 left-6"
-                  style={{ color: "#f0efeb" }}
                 >
-                  <div
-                    style={{
-                      fontSize: 11,
-                      fontWeight: 500,
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      opacity: 0.7,
-                    }}
-                  >
-                    Featured team
-                  </div>
-                  <div
-                    className="mt-2"
-                    style={{
-                      fontSize: 28,
-                      fontWeight: 500,
-                      lineHeight: 1.1,
-                      letterSpacing: "-0.02em",
-                    }}
-                  >
-                    Cal Poly
-                    <br />
-                    Triathlon
-                  </div>
+                  Featured team
                 </div>
               </div>
             </div>

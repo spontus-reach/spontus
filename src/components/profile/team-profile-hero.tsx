@@ -5,19 +5,24 @@ import { VerificationStatusBadge } from "@/components/team/verification-status-b
 import type { TeamProfile } from "@/lib/types";
 
 export function TeamProfileHero({ team }: { team: TeamProfile }) {
+  const banner = team.bannerImage ?? team.photo;
   return (
     <div
       className="overflow-hidden rounded-xl"
       style={{ border: "0.5px solid #d5d3cd", background: "white" }}
     >
-      <div className="relative h-64">
-        {team.photo ? (
+      <div
+        className="relative h-64 overflow-hidden"
+        style={{ background: "#ffffff", borderBottom: "0.5px solid #d5d3cd" }}
+      >
+        {banner ? (
           <Image
-            src={team.photo}
+            src={banner}
             alt={team.name}
             fill
             sizes="(min-width: 1024px) 896px, calc(100vw - 48px)"
-            className="object-cover"
+            className="object-contain"
+            style={team.bannerZoom ? { transform: `scale(${team.bannerZoom})` } : undefined}
           />
         ) : (
           <div
