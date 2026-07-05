@@ -143,9 +143,7 @@ export function SponsorProfileForm({
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M22 6l-1.5 1.5M17 11l1.5-1.5M12 17v-6m2 6H4" />
                         </svg>
                         <span className="whitespace-nowrap">
-                          {@ts-ignore
-                            data.instagramUrl.replace(/^https?:\/\/instagram\.com\//, "@")
-                          }
+                          {data.instagramUrl.replace(/^https?:\/\/instagram\.com\//, "@")}
                         </span>
                       </span>
                     )}
