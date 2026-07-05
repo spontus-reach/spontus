@@ -24,6 +24,7 @@ export function ApplicationModal({
   const [fitNote, setFitNote] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const overlap = getAssetOverlap(listing.requestedAssets, team.sponsorshipAssets);
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -65,12 +66,17 @@ export function ApplicationModal({
   }, [onClose]);
 
   async function handleSubmit() {
-    const success = await onSubmit(fitNote.trim() || undefined);
-    if (success) {
-      setSubmitted(true);
-      setError(false);
-    } else {
-      setError(true);
+    setLoading(true);
+    setError(false);
+    try {
+      const success = await onSubmit(fitNote.trim() || undefined);
+      if (success) {
+        setSubmitted(true);
+      } else {
+        setError(true);
+      }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -109,14 +115,11 @@ export function ApplicationModal({
 
         <div className="max-h-[70vh] overflow-y-auto px-6 py-5">
           {!submitted ? (
-            <div className="space-y-5">
+            <div className="space-y-6">
               <TeamProfilePreview team={team} />
 
               <div>
-                <div
-                  className="text-xs font-medium uppercase tracking-wider"
-                  style={{ color: "#6b6960" }}
-                >
+                <div className="text-xs font-medium uppercase tracking-wider" style={{ color: "#6b6960" }}>
                   Asset overlap
                 </div>
                 <p className="mt-1 text-sm" style={{ color: "#1a1a18" }}>
@@ -125,32 +128,46 @@ export function ApplicationModal({
                   <span className="font-semibold">{overlap.totalCount}</span>{" "}
                   requested assets
                 </p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {overlap.items.map((item) => (
-                    <span
-                      key={item.assetId}
-                      className="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs"
-                      style={
-                        item.matched
-                          ? {
-                              background: "rgba(34,197,94,0.12)",
-                              color: "#16a34a",
-                              border: "0.5px solid rgba(34,197,94,0.3)",
-                            }
-                          : {
-                              background: "#e8e6e0",
-                              color: "#6b6960",
-                              border: "0.5px solid #d5d3cd",
-                            }
-                      }
-                    >
-                      {item.matched ? (
-                        <Check className="h-2.5 w-2.5" />
-                      ) : null}
-                      {item.label}
-                    </span>
-                  ))}
+                <div className="mt-2 flex items-center space-x-4">
+                  <div className="w-3 h-3 bg-green-200 rounded" />
+                  <span className="text-xs">Matched</span>
+                  <div className="w-3 h-3 bg-gray-200 rounded" />
+                  <span className="text-xs">Not matched</span>
                 </div>
+                <div className="mt-2">
+                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div
+                      className="h-2.5 rounded-full bg-green-500"
+                      style={{ width: `${(overlap.matchedCount / overlap.totalCount) * 100}%` }}
+                    ></div>
+                  </div>
+                  <p className="mt-1 text-xs text-center text-muted-foreground">
+                    {Math.round((overlap.matchedCount / overlap.totalCount) * 100)}% match
+                  </p>
+                </div>
+                {overlap.totalCount > 0 && (
+                  <div className="mt-3 space-y-1">
+                    {overlap.items.map((item) => (
+                      <div
+                        key={item.assetId}
+                        className="flex items-center gap-2 px-2 py-1 rounded-sm"
+                        style={{
+                          background: item.matched
+                            ? "rgba(34,197,94,0.1)"
+                            : "rgba(239,68,68,0.1)",
+                        }}
+                      >
+                        {item.matched && (
+                          <Check className="h-3 w-3 text-green-500" />
+                        )}
+                        {!item.matched && (
+                          <X className="h-3 w-3 text-red-500" />
+                        )}
+                        <span className="text-sm">{item.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div>
@@ -175,14 +192,18 @@ export function ApplicationModal({
 
               <Button
                 onClick={handleSubmit}
+                disabled={loading}
                 className="w-full"
-                style={{ background: "#22c55e", color: "#0a0a0a" }}
+                style={{
+                  background: loading ? "#9ca3af" : "#22c55e",
+                  color: "#0a0a0a",
+                }}
               >
-                Send Application
+                {loading ? "Submitting..." : "Send Application"}
               </Button>
 
               {error && (
-                <p className="text-center text-sm" style={{ color: "#dc2626" }}>
+                <p className="mt-2 text-center text-sm" style={{ color: "#dc2626" }}>
                   You have already applied to this listing.
                 </p>
               )}
@@ -210,6 +231,10 @@ export function ApplicationModal({
             </div>
           )}
         </div>
+      </div>
+    </div>
+  );
+}div>
       </div>
     </div>
   );

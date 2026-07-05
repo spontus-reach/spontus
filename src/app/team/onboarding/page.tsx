@@ -343,19 +343,19 @@ export default function TeamOnboardingPage() {
 function sectionDescription(id: string): string {
   switch (id) {
     case "basics":
-      return "The essentials sponsors see first.";
+      return "First impressions matter. Share your team's core identity.";
     case "social":
-      return "Standardized numbers so sponsors can compare apples to apples.";
+      return "Show your reach with trusted metrics sponsors trust.";
     case "competition":
-      return "Where you race, when you race, who watches.";
+      return "Highlight your competition calendar and achievements.";
     case "assets":
-      return "This is the core of your profile. Toggle what your team can offer. Add notes if helpful.";
+      return "Choose what you can offer sponsors—this is your value proposition.";
     case "hosted":
-      return "If your team hosts a race, tournament, or showcase, sponsors care a lot.";
+      return "Events you host are golden opportunities for sponsor activation.";
     case "looking":
-      return "Helps sponsors self-select before reaching out.";
+      return "Help sponsors see if you're a great match for their goals.";
     case "media":
-      return "Upload 3-6 photos that show vibe + scale.";
+      return "Bring your team to life with photos that capture energy and community.";
     default:
       return "";
   }

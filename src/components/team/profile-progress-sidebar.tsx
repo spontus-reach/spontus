@@ -1,22 +1,23 @@
 "use client";
 
-import { Check, ChevronRight } from "lucide-react";
+import { Check, ChevronRight, Users, Share2, Calendar, Package, Eye, Image } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 
 export type BuilderSection = {
   id: string;
   label: string;
+  icon: React.ComponentType<{ className?: string }>;
 };
 
 export const BUILDER_SECTIONS: BuilderSection[] = [
-  { id: "basics", label: "Basics" },
-  { id: "social", label: "Social & reach" },
-  { id: "competition", label: "Competition & events" },
-  { id: "assets", label: "Sponsorship asset menu" },
-  { id: "hosted", label: "Hosted events" },
-  { id: "looking", label: "What we're looking for" },
-  { id: "media", label: "Photos & media" },
+  { id: "basics", label: "Basics", icon: Users },
+  { id: "social", label: "Social & reach", icon: Share2 },
+  { id: "competition", label: "Competition & events", icon: Calendar },
+  { id: "assets", label: "Sponsorship asset menu", icon: Package },
+  { id: "hosted", label: "Hosted events", icon: Calendar },
+  { id: "looking", label: "What we're looking for", icon: Eye },
+  { id: "media", label: "Photos & media", icon: Image },
 ];
 
 type Props = {
@@ -39,11 +40,13 @@ export function ProfileProgressSidebar({
           <span className="text-muted-foreground">Profile completeness</span>
           <span className="font-semibold">{completeness}%</span>
         </div>
-        <Progress value={completeness} className="mt-3 h-2" />
+        <div className="mt-3">
+          <Progress value={completeness} className="h-2.5" />
+        </div>
       </Card>
 
       <Card className="border-border bg-card p-2">
-        <nav className="flex flex-col">
+        <nav className="flex flex-col space-y-1">
           {BUILDER_SECTIONS.map((s) => {
             const isActive = activeSection === s.id;
             const isDone = completedSections[s.id];
@@ -54,23 +57,32 @@ export function ProfileProgressSidebar({
                 onClick={() => onNavigate(s.id)}
                 className={`flex items-center justify-between rounded-md px-3 py-2 text-sm transition-colors ${
                   isActive
-                    ? "bg-accent text-foreground"
+                    ? "bg-accent/90 text-foreground"
                     : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
                 }`}
               >
-                <span className="flex items-center gap-2">
-                  <span
-                    className={`flex h-4 w-4 items-center justify-center rounded-full border ${
-                      isDone
-                        ? "border-spontus-green bg-spontus-green text-background"
-                        : "border-border"
-                    }`}
-                  >
-                    {isDone && <Check className="h-3 w-3" />}
-                  </span>
-                  {s.label}
-                </span>
-                {isActive && <ChevronRight className="h-4 w-4" />}
+                <div className="flex items-center gap-3">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-md ${
+                    isDone
+                      ? "border-spontus-green bg-spontus-green/20"
+                      : "border-border/50"
+                  }">
+                    {isDone ? (
+                      <Check className="h-3.5 w-3.5 text-spontus-green" />
+                    ) : (
+                      <s.icon className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
+                    )}
+                  </div>
+                  <div className="flex-1 space-x-2">
+                    <span className="font-medium">{s.label}</span>
+                    {isDone && (
+                      <span className="text-xs text-spontus-green">Done</span>
+                    )}
+                  </div>
+                </div>
+                {isActive && (
+                  <ChevronRight className="h-4 w-4 flex-shrink-0" />
+                )}
               </button>
             );
           })}
