@@ -64,6 +64,10 @@ interface VerificationContextValue {
     entityType: VerificationEntityType,
     entityId: string
   ) => VerificationReviewNote | undefined;
+  getNotesForEntity: (
+    entityType: VerificationEntityType,
+    entityId: string
+  ) => VerificationReviewNote[];
 }
 
 const VerificationContext = createContext<VerificationContextValue | null>(null);
@@ -184,6 +188,17 @@ export function VerificationProvider({
     []
   );
 
+  const getNotesForEntity = useCallback(
+    (entityType: VerificationEntityType, entityId: string) => {
+      return reviewNotes
+        .filter((n) => n.entityType === entityType && n.entityId === entityId)
+        .sort((a, b) => new Date(b.reviewedAt).getTime() - new Date(a.reviewedAt).getTime());
+    },
+    [reviewNotes]
+  );
+
+  const registerTeamFromSignup = useCallback((draft: TeamProfileDraft): TeamProfile => {
+
   const registerTeamFromSignup = useCallback((draft: TeamProfileDraft): TeamProfile => {
     const slug =
       slugifyTeamName(draft.name ?? "team") || "team";
@@ -214,10 +229,7 @@ export function VerificationProvider({
       status: VerificationStatus,
       note?: string
     ) => {
-      if (
-        (status === "needs_changes" || status === "suspended") &&
-        !note
-      ) {
+      if (!note) {
         return;
       }
 
@@ -301,6 +313,7 @@ export function VerificationProvider({
       updateTeamProfile,
       registerTeamFromSignup,
       getLatestNote,
+      getNotesForEntity,
     }),
     [
       teams,
@@ -318,6 +331,7 @@ export function VerificationProvider({
       updateTeamProfile,
       registerTeamFromSignup,
       getLatestNote,
+      getNotesForEntity,
     ]
   );
 

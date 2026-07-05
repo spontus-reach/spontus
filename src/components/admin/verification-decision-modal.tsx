@@ -24,8 +24,8 @@ const CONFIG: Record<
     title: "Verify profile",
     description:
       "This team or sponsor will be allowed to participate in the marketplace.",
-    placeholder: "Optional note about this verification decision...",
-    noteRequired: false,
+    placeholder: "Please provide a note for this verification decision...",
+    noteRequired: true,
     confirmLabel: "Verify profile",
     confirmColor: "#22c55e",
     status: "verified",

@@ -35,9 +35,9 @@ export function VerificationDetailPanel({
   entity,
   onClose,
 }: Props) {
-  const { updateVerificationStatus, getLatestNote } = useVerification();
+  const { updateVerificationStatus, getNotesForEntity } = useVerification();
   const [decision, setDecision] = useState<DecisionType | null>(null);
-  const latestNote = getLatestNote(entityType, entity.id);
+  const notes = getNotesForEntity(entityType, entity.id);
   const entityName =
     entityType === "team"
       ? (entity as TeamProfile).name
@@ -120,8 +120,8 @@ export function VerificationDetailPanel({
             />
           </Card>
 
-          {/* Latest note */}
-          {latestNote && (
+          {/* Review history */}
+          {notes.length > 0 && (
             <Card
               className="p-5"
               style={{ border: "0.5px solid #d5d3cd", background: "white" }}
@@ -132,7 +132,7 @@ export function VerificationDetailPanel({
               >
                 Review history
               </h3>
-              <VerificationNote note={latestNote} />
+              <VerificationNote notes={notes} />
             </Card>
           )}
 
