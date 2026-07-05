@@ -27,7 +27,7 @@ skills:
 agent-config:
   - changed-files:
       - any-glob-to-any-file:
-          - "AGENTS.md"
+          - "CONTEXT7-MCP.md"
           - ".agents/**"
 
 agents:

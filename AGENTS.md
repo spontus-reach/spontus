@@ -1,16 +1,53 @@
-<!-- context7 -->
-Use Context7 MCP to fetch current documentation whenever the user asks about a library, framework, SDK, API, CLI tool, or cloud service -- even well-known ones like React, Next.js, Prisma, Express, Tailwind, Django, or Spring Boot. This includes API syntax, configuration, version migration, library-specific debugging, setup instructions, and CLI tool usage. Use even when you think you know the answer -- your training data may not reflect recent changes. Prefer this over web search for library docs.
+# Agent Registry
 
-Do not use for: refactoring, writing scripts from scratch, debugging business logic, code review, or general programming concepts.
+This file serves as the entry point for discovering all available Spontus agents.
 
-## Steps
+## Canonical Roster
+See the full list of agents and their responsibilities in:
+[docs/agents/agent-roster.md](./docs/agents/agent-roster.md)
 
-1. Always start with `resolve-library-id` using the library name and the user's question, unless the user provides an exact library ID in `/org/project` format
-2. Pick the best match (ID format: `/org/project`) by: exact name match, description relevance, code snippet count, source reputation (High/Medium preferred), and benchmark score (higher is better). If results don't look right, try alternate names or queries (e.g., "next.js" not "nextjs", or rephrase the question). Use version-specific IDs when the user mentions a version
-3. `query-docs` with the selected library ID and the user's full question (not single words)
-4. Answer using the fetched docs
-<!-- context7 -->
+## How to invoke an agent
+- Use the slash‑command `/agent:<agent-id>` (e.g., `/agent:spontus-architecture`)
+- Or start an interactive session with `/office-hours` and select the desired agent from the menu.
 
-## Team Skills
+## Agent‑to‑skill mapping
 
-Project-level team skills live in `.agents/skills`. Use those repo-local skills first so everyone working in this repository gets the same agent behavior.
+| Agent ID            | Skill directory (relative to `.agent/skills`) |
+|---------------------|-----------------------------------------------|
+| spontus-architecture| spontus-architecture                          |
+| spontus-code-review | spontus-code-review                           |
+| spontus-data-integrity| spontus-data-integrity                      |
+| spontus-debug-diagnose| spontus-debug-diagnose                    |
+| spontus-documentation| spontus-documentation                       |
+| spontus-security-access-control| spontus-security-access-control   |
+| spontus-sponsor-side-ux| spontus-sponsor-side-ux                   |
+| spontus-team-side-ux| spontus-team-side-ux                         |
+| spontus-product-strategist| spontus-product-strategist            |
+| spontus-domain-model-steward| spontus-domain-model-steward        |
+| spontus-mvp-slice-planner| spontus-mvp-slice-planner              |
+| spontus-admin-verification| spontus-admin-verification             |
+| spontus-asset-taxonomy| spontus-asset-taxonomy                      |
+| spontus-frontend-implementation| spontus-frontend-implementation   |
+| spontus-frontend-qa| spontus-frontend-qa                           |
+| spontus-react-next-performance| spontus-react-next-performance    |
+| spontus-backend-supabase| spontus-backend-supabase                 |
+| spontus-security-access-control| spontus-security-access-control   |
+| spontus-tdd         | spontus-tdd                                   |
+| spontus-debug-diagnose| spontus-debug-diagnose                    |
+| spontus-documentation| spontus-documentation                       |
+| spontus-decision-log| spontus-decision-log                          |
+| spontus-issue-triage| spontus-issue-triage                          |
+| spontus-prd         | spontus-prd                                   |
+| spontus-research-synthesis| spontus-research-synthesis            |
+| spontus-gtm         | spontus-gtm                                   |
+| spontus-competitive-research| spontus-competitive-research        |
+| spontus-figma-design-review| spontus-figma-design-review          |
+| spontus-figma-annotation| spontus-figma-annotation                  |
+| spontus-figma-component-audit| spontus-figma-component-audit      |
+| spontus-prototype   | spontus-prototype                             |
+| spontus-architecture| spontus-architecture                          |
+| spontus-deployment  | spontus-deployment                            |
+| spontus-dependency-tooling| spontus-dependency-tooling              |
+| spontus-handoff     | spontus-handoff                               |
+| spontus-skill-authoring| spontus-skill-authoring                   |
+| spontus-context7-docs| spontus-context7-docs                        |

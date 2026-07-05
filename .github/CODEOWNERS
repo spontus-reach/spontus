@@ -7,7 +7,7 @@
 
 # Agent and team-skill instructions.
 /.agents/ @BrianLiDesign
-/AGENTS.md @BrianLiDesign
+/CONTEXT7-MCP.md @BrianLiDesign
 
 # Local validation tooling.
 /tools/ @BrianLiDesign

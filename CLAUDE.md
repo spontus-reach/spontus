@@ -56,6 +56,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Place new components in feature-appropriate directories under `src/components`
 - Add utilities to `src/lib` when reusable across features
 - Follow commit message convention: `type(scope): description` (see CONTRIBUTING.md)
+- See AGENTS.md for a complete list of available agents and how to invoke them.
 - Keep PRs focused with proper verification and testing sections
 
 ## Common Directories
